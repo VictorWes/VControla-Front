@@ -1,5 +1,7 @@
 🚀 VControla - Frontend (Angular)
-Status do Projeto: 🏗️ Em fase de Setup e Arquitetura de Módulos.
+Status do Projeto: 
+
+🏗️ Em fase de Setup e Arquitetura de Módulos.
 
 O VControla-Front é o braço visual do ecossistema VControla. Uma aplicação Single Page (SPA) focada em UX financeira, permitindo o controle de gastos, ganhos e faturas de cartão de crédito de forma intuitiva.
 
