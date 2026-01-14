@@ -1,59 +1,40 @@
-# VcontrolaFrontend
+🚀 VControla - Frontend (Angular)
+Status do Projeto: 
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.19.
+🏗️ Em fase de Setup e Arquitetura de Módulos.
 
-## Development server
+O VControla-Front é o braço visual do ecossistema VControla. Uma aplicação Single Page (SPA) focada em UX financeira, permitindo o controle de gastos, ganhos e faturas de cartão de crédito de forma intuitiva.
 
-To start a local development server, run:
+🎯 Objetivos do Frontend
+Gestão de Transações: Visualização clara de receitas e despesas com filtros por período.
 
-```bash
-ng serve
-```
+Dashboard Financeiro: Gráficos e indicadores de saldo real vs. saldo previsto.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Controle de Cartão: Interface para gerenciar limites e datas de fechamento.
 
-## Code scaffolding
+Parcelamentos: Visualização agrupada de compras parceladas através do transactionGroupId.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+🏗️ Arquitetura e Padrões
+Diferente do padrão standalone simplificado, este projeto utiliza a arquitetura robusta de NgModules para garantir escalabilidade e separação de responsabilidades:
 
-```bash
-ng generate component component-name
-```
+CoreModule: Serviços globais, interceptors e guardas de rota (Singleton).
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+SharedModule: Componentes reutilizáveis, pipes e diretivas exportáveis.
 
-```bash
-ng generate --help
-```
+Feature Modules: Módulos carregados via Lazy Loading (Dashboard, Transações, Configurações).
 
-## Building
+🔌 Conexão com o Backend
+A integração será feita através do HttpClientModule, consumindo a API REST do VControla (Spring Boot).
 
-To build the project run:
+Base URL: http://localhost:8080/api
 
-```bash
-ng build
-```
+Models: Interfaces TypeScript rigorosas que espelham as entidades JPA do backend.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Interceptors: Tratamento global de erros e inserção automática de tokens JWT.
 
-## Running unit tests
+🛠️ Tecnologias Utilizadas
+Angular 17+ (com RxJS para reatividade).
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Arquitetura: Baseada em Módulos (NgModule).
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Estilização: SCSS (Sass) e Angular Material.
