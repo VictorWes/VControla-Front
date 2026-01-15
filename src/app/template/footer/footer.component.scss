@@ -1,11 +1,11 @@
 .footer-container {
   background-color: #ffffff;
-  border-top: 1px solid #e0e0e0; // Uma linha sutil para separar do conteúdo
-  padding: 20px 32px; // Espaçamento interno
+  border-top: 1px solid #e0e0e0;
+  padding: 20px 32px;
   display: flex;
-  justify-content: space-between; // Joga um conteúdo para cada ponta
+  justify-content: space-between;
   align-items: center;
-  margin-top: auto; // O Segredo do "Sticky Footer" (explico abaixo)
+  margin-top: auto;
 
   font-size: 0.85rem;
   color: #757575;
@@ -26,13 +26,13 @@
       transition: color 0.2s;
 
       &:hover {
-        color: #2196f3; // Azul do seu header ao passar o mouse
+        color: #2196f3;
       }
     }
   }
 }
 
-// Ajuste para mobile (se a tela for pequena, empilha tudo)
+
 @media (max-width: 600px) {
   .footer-container {
     flex-direction: column;
