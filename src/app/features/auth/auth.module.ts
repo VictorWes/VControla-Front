@@ -8,9 +8,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { CadastroComponent } from './pages/cadastro/cadastro.component';
+import { FormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
-  declarations: [LoginComponent],
+  declarations: [LoginComponent, CadastroComponent],
   imports: [
     CommonModule,
     AuthRoutingModule,
@@ -18,6 +21,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
+    FormsModule,
+    MatSnackBarModule,
   ],
 })
 export class AuthModule {}
