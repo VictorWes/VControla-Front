@@ -1,0 +1,46 @@
+<div class="dashboard-container">
+
+  <section class="summary-header">
+    <div class="welcome">
+      <h2>Bom dia, Victor! ☁️</h2>
+      <div class="stats">
+        <div class="stat-item">
+          <span>Receitas no mês</span>
+          <p class="text-success">R$ 0,00</p>
+        </div>
+        <div class="stat-item">
+          <span>Despesas no mês</span>
+          <p class="text-danger">R$ 0,00</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+       <h3>Acesso rápido</h3>
+       <div class="action-buttons">
+         <button mat-fab color="warn"><mat-icon>remove</mat-icon></button>
+         <button mat-fab color="primary"><mat-icon>add</mat-icon></button>
+         <button mat-fab><mat-icon>sync</mat-icon></button>
+       </div>
+    </div>
+  </section>
+
+  <div class="dashboard-grid">
+    <app-v-card titulo="Minhas contas">
+      <div class="empty-state">
+        <mat-icon>account_balance</mat-icon>
+        <p>Adicione sua primeira conta</p>
+        <button mat-button color="primary">Gerenciar contas</button>
+      </div>
+    </app-v-card>
+
+    <app-v-card titulo="Meus cartões">
+      <div class="empty-state">
+        <mat-icon>credit_card</mat-icon>
+        <p>Adicione seu primeiro cartão</p>
+        <button mat-button color="primary">Gerenciar cartões</button>
+      </div>
+    </app-v-card>
+  </div>
+
+</div>

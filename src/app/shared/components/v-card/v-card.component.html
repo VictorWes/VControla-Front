@@ -1,0 +1,6 @@
+<mat-card class="v-card-container">
+  <mat-card-header *ngIf="titulo">
+    <mat-card-title>{{ titulo }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content> <ng-content></ng-content> </mat-card-content>
+</mat-card>
