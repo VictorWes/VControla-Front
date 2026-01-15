@@ -33,3 +33,15 @@
   padding: 20px;
   background-color: #fafafa;
 }
+
+.content-wrapper {
+  display: flex; // Ativa o modo flexível
+  flex-direction: column; // Organiza os itens (Página + Footer) em coluna
+  min-height: 100%; // Garante que o container ocupe a altura toda
+  background-color: #fafafa; // Fundo cinza claro da aplicação
+}
+
+.page-content {
+  flex: 1; // IMPORTANTE: Isso diz "ocupe todo o espaço vazio disponível"
+  padding: 20px; // O espaçamento interno que você já tinha
+}
