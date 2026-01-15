@@ -1,19 +1,26 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LayoutComponent } from './layout/layout.component';
-import { RouterModule } from '@angular/router';
+import { TemplateRoutingModule } from './template-routing.module';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [LayoutComponent],
   imports: [
     CommonModule,
-    RouterModule,
+    TemplateRoutingModule,
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDividerModule,
+    MatIcon,
   ],
   exports: [LayoutComponent],
 })
