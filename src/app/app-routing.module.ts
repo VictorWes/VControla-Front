@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './template/layout/layout.component';
 import { authGuard } from './core/guards/auth.guard';
 
+
 const routes: Routes = [
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
 
