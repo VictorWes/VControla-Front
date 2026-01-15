@@ -6,20 +6,28 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    children:[
+    children: [
       {
-        path: '', redirectTo: 'dashboard', pathMatch: 'full'
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
       },
       {
         path: 'dashboard',
-        loadChildren: () => import('./features/dashboard.module').then(m => m.DashboardModule)
-      }
-    ]
-  }
+        loadChildren: () =>
+          import('./features/dashboard.module').then((m) => m.DashboardModule),
+      },
+    ],
+  },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./features/auth/auth.module').then((m) => m.AuthModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

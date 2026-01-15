@@ -1,0 +1,32 @@
+<div class="login-container">
+  <mat-card class="login-box">
+    <div class="login-header">
+      <h1>VControla</h1>
+    </div>
+
+    <form class="login-form">
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail</mat-label>
+        <input matInput placeholder="exemplo@email.com" type="email" />
+        <mat-icon matSuffix>email</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input matInput type="password" placeholder="Sua senha secreta" />
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+
+      <div class="forgot-password">
+        <a routerLink="/auth/recuperar-senha">Esqueci minha senha</a>
+      </div>
+
+      <button mat-flat-button color="primary" class="btn-submit">ENTRAR</button>
+    </form>
+
+    <div class="login-footer">
+      <span>Ainda não tem conta?</span>
+      <a routerLink="/auth/cadastro">Cadastre-se</a>
+    </div>
+  </mat-card>
+</div>
