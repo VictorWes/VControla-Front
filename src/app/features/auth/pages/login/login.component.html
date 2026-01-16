@@ -4,16 +4,30 @@
       <h1>VControla</h1>
     </div>
 
-    <form class="login-form">
+    <form class="login-form" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline">
         <mat-label>E-mail</mat-label>
-        <input matInput placeholder="exemplo@email.com" type="email" />
+        <input
+          matInput
+          placeholder="exemplo@email.com"
+          type="email"
+          [(ngModel)]="loginData.email"
+          name="email"
+          required
+        />
         <mat-icon matSuffix>email</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Senha</mat-label>
-        <input matInput type="password" placeholder="Sua senha secreta" />
+        <input
+          matInput
+          type="password"
+          placeholder="senha"
+          [(ngModel)]="loginData.senha"
+          name="senha"
+          required
+        />
         <mat-icon matSuffix>lock</mat-icon>
       </mat-form-field>
 
@@ -21,7 +35,9 @@
         <a routerLink="/auth/recuperar-senha">Esqueci minha senha</a>
       </div>
 
-      <button mat-flat-button color="primary" class="btn-submit">ENTRAR</button>
+      <button mat-flat-button color="primary" class="btn-submit" type="submit">
+        ENTRAR
+      </button>
     </form>
 
     <div class="login-footer">
