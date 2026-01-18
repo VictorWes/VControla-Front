@@ -1,6 +1,8 @@
 <div class="layout-container">
   <mat-toolbar color="primary" class="header">
-    <span>VControla</span>
+    <span routerLink="/sistema/dashboard/home" style="cursor: pointer"
+      >VControla</span
+    >
     <span class="spacer"></span>
     <button mat-icon-button>
       <span class="spacer"></span>
@@ -11,7 +13,7 @@
   <mat-sidenav-container class="sidenav-container">
     <mat-sidenav mode="side" opened class="sidenav">
       <mat-nav-list>
-        <a mat-list-item routerLink="/dashboard">
+        <a mat-list-item routerLink="/sistema/dashboard/home">
           <mat-icon matListItemIcon>dashboard</mat-icon>
           <span matListItemTitle>Dashboard</span>
         </a>
