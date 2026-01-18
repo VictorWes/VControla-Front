@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Conta, TipoConta } from '../../../../core/models/conta.model';
 
-
-
 @Component({
   selector: 'app-conta-dialog',
   standalone: false,
@@ -13,9 +11,9 @@ import { Conta, TipoConta } from '../../../../core/models/conta.model';
 export class ContaDialogComponent {
   tiposDeConta = Object.values(TipoConta);
 
-  novaConta: Conta = {
+  novaConta: any = {
     nome: '',
-    saldo: 0,
+    saldo: null,
     tipo: TipoConta.CONTA_CORRENTE,
   };
 
