@@ -1,1 +1,115 @@
-<p>transacao-lista works!</p>
+<div class="page-container">
+  <header class="page-header">
+    <h2>Lançamentos</h2>
+
+    <div class="date-navigator">
+      <button mat-icon-button><mat-icon>chevron_left</mat-icon></button>
+      <span>Janeiro 2026</span>
+      <button mat-icon-button><mat-icon>chevron_right</mat-icon></button>
+    </div>
+
+    <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
+  </header>
+
+  <div class="filter-bar">
+    <div class="filters-left">
+      <div class="custom-select-wrapper">
+        <mat-icon>account_balance</mat-icon>
+        <select [(ngModel)]="filtroConta" (change)="filtrarTransacoes()">
+          <option [ngValue]="null">Todas contas/cartões</option>
+          <option *ngFor="let conta of listaContas" [ngValue]="conta.id">
+            {{ conta.nome }}
+          </option>
+        </select>
+        <mat-icon class="arrow">expand_more</mat-icon>
+      </div>
+    </div>
+
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Buscar lançamento..."
+        [(ngModel)]="termoBusca"
+        (keyup)="filtrarTransacoes()"
+      />
+      <mat-icon>search</mat-icon>
+    </div>
+  </div>
+
+  <div class="transactions-list">
+    <div *ngIf="transacoesFiltradas.length > 0" class="list-header">
+      <small>Data</small>
+      <small>Descrição</small>
+      <small class="text-right">Valor</small>
+    </div>
+
+    <div class="transacao-row" *ngFor="let item of transacoesFiltradas">
+      <div class="row-left">
+        <div class="data-box">
+          <span class="dia">{{ item.data | date: "dd" }}</span>
+          <span class="mes">{{ item.data | date: "MMM" }}</span>
+        </div>
+
+        <div
+          class="status-icon"
+          [class.efetivado]="
+            item.status === 'PENDENTE' || item.status === 'PAGO' ||  item.status === 'CANCELADO'
+          "
+          [matTooltip]="item.status"
+        >
+          <mat-icon
+            *ngIf="item.status === 'PENDENTE' || item.status === 'PAGO' ||  item.status === 'CANCELADO'"
+            >check</mat-icon
+          >
+          <mat-icon
+            *ngIf="item.status !== 'PENDENTE' && item.status !== 'PAGO' && item.status !== 'CANCELADO'"
+            >schedule</mat-icon
+          >
+        </div>
+
+        <div class="info">
+          <span class="descricao">{{ item.descricao }}</span>
+
+          <span class="conta-tag">
+            <mat-icon class="tiny-icon">account_balance</mat-icon>
+            {{ item.contaNome }}
+            <span *ngIf="item.numeroParcela" class="parcela-badge">{{
+              item.numeroParcela
+            }}</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="row-right">
+        <span
+          class="valor"
+          [class.receita]="item.tipo === 'RECEITAS'"
+          [class.gasto]="item.tipo === 'GASTOS'"
+        >
+          {{ item.tipo === "RECEITAS" ? "+" : "-" }}
+          R$ {{ item.valor | number: "1.2-2" }}
+        </span>
+
+        <mat-icon
+          class="status-check"
+          [class.done]="
+            item.status === 'PENDENTE' ||
+            item.status === 'PAGO' ||
+            item.status === 'CANCELADO'
+          "
+        >
+          thumb_up
+        </mat-icon>
+      </div>
+    </div>
+
+    <div *ngIf="transacoesFiltradas.length === 0" class="empty-state">
+      <mat-icon>search_off</mat-icon>
+      <p>Nenhum lançamento encontrado.</p>
+    </div>
+  </div>
+
+  <button mat-fab color="primary" class="fab-add">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

@@ -3,7 +3,7 @@ export interface Transacao {
   descricao: string;
   valor: number;
   tipo: 'GASTOS' | 'RECEITAS';
-  status: 'PENDENTE' | 'PAGOO' | 'CANCELADO';
+  status: 'PENDENTE' | 'PAGO' | 'CANCELADO';
   data: string;
   contaId: string;
   contaNome?: string;
