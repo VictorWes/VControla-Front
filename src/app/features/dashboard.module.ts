@@ -18,6 +18,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MatCardModule,
     MatDialogModule,
     MatDividerModule,
+    MatMenuModule,
   ],
 })
 export class DashboardModule {}

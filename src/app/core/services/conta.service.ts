@@ -17,4 +17,12 @@ export class ContaService {
   criar(conta: Conta): Observable<void> {
     return this.http.post<void>(this.API_URL, conta);
   }
+
+  atualizar(id: string, conta: Conta): Observable<void> {
+    return this.http.put<void>(`${this.API_URL}/${id}`, conta);
+  }
+
+  excluir(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
 }

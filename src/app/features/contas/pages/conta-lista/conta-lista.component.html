@@ -14,16 +14,35 @@
 
   <div class="contas-grid">
 
-    <mat-card class="conta-card" *ngFor="let conta of listaContas">
-      <div class="card-content">
-        <div class="banco-icon">
-          <mat-icon>{{ getIcone(conta.tipo) }}</mat-icon>
+    <<mat-card class="conta-card" *ngFor="let conta of listaContas">
+
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+
+        <div class="card-content">
+          <div class="banco-icon">
+            <mat-icon>{{ getIcone(conta.tipo) }}</mat-icon>
+          </div>
+          <div class="conta-info">
+            <span class="nome">{{ conta.nome }}</span>
+            <span class="tipo">{{ formatarTipo(conta.tipo) }}</span>
+          </div>
         </div>
 
-        <div class="conta-info">
-          <span class="nome">{{ conta.nome }}</span>
-          <span class="tipo">{{ formatarTipo(conta.tipo) }}</span>
-        </div>
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Opções">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="editarConta(conta)">
+            <mat-icon>edit</mat-icon>
+            <span>Editar</span>
+          </button>
+          <button mat-menu-item (click)="excluirConta(conta)">
+            <mat-icon color="warn">delete</mat-icon>
+            <span>Excluir</span>
+          </button>
+        </mat-menu>
+
       </div>
 
       <div class="conta-saldo">

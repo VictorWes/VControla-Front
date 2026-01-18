@@ -69,4 +69,36 @@ export class ContaListaComponent implements OnInit {
     };
     return labels[tipo] || tipo;
   }
+
+  editarConta(conta: Conta) {
+    const dialogRef = this.dialog.open(ContaDialogComponent, {
+      width: '400px',
+      data: conta,
+    });
+    dialogRef.afterClosed().subscribe((contaEditada) => {
+      if (contaEditada) {
+        this.contaService.atualizar(conta.id!, contaEditada).subscribe({
+          next: () => {
+            this.buscarContas();
+          },
+          error: (err) => alert('Erro ao atualizar: ' + err.message),
+        });
+      }
+    });
+  }
+
+  excluirConta(conta: Conta) {
+    const confirmou = confirm(
+      `Tem certeza que deseja excluir a conta "${conta.nome}"?`,
+    );
+
+    if (confirmou && conta.id) {
+      this.contaService.excluir(conta.id).subscribe({
+        next: () => {
+          this.buscarContas();
+        },
+        error: (err) => alert('Erro ao excluir: ' + err.message),
+      });
+    }
+  }
 }

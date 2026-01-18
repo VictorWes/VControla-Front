@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Conta, TipoConta } from '../../../../core/models/conta.model';
 
 @Component({
@@ -10,6 +10,7 @@ import { Conta, TipoConta } from '../../../../core/models/conta.model';
 })
 export class ContaDialogComponent {
   tiposDeConta = Object.values(TipoConta);
+  isEdicao = false;
 
   novaConta: any = {
     nome: '',
@@ -17,7 +18,14 @@ export class ContaDialogComponent {
     tipo: TipoConta.CONTA_CORRENTE,
   };
 
-  constructor(public dialogRef: MatDialogRef<ContaDialogComponent>) {}
+  constructor(public dialogRef: MatDialogRef<ContaDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: Conta
+  ) {
+    if (data) {
+      this.isEdicao = true;
+      this.novaConta = { ...data };
+    }
+  }
 
   cancelar(): void {
     this.dialogRef.close();
