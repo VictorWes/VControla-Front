@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>Nova conta</h2>
+
+<mat-dialog-content>
+  <div class="form-container" style="display: flex; flex-direction: column; gap: 16px; min-width: 350px; padding-top: 10px;">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nome da conta</mat-label>
+      <input matInput placeholder="Ex: Nubank, Cofre" [(ngModel)]="novaConta.nome" required>
+      <mat-icon matSuffix>edit</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Saldo atual</mat-label>
+      <span matPrefix>R$ &nbsp;</span>
+      <input matInput type="number" placeholder="0.00" [(ngModel)]="novaConta.saldo" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo da conta</mat-label>
+      <mat-select [(ngModel)]="novaConta.tipo" required>
+        <mat-option *ngFor="let tipo of tiposDeConta" [value]="tipo">
+          {{ tipo }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="salvar()" [disabled]="!novaConta.nome">
+    Salvar
+  </button>
+</mat-dialog-actions>

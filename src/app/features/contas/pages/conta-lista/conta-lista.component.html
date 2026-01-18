@@ -1,0 +1,44 @@
+<div class="page-container">
+
+  <header class="header-section">
+    <div>
+      <h1>Minhas Contas</h1>
+      <p>Gerencie seus saldos e tipos de conta</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="abrirModalNovaConta()">
+      <mat-icon>add</mat-icon> Nova conta
+    </button>
+  </header>
+
+  <mat-divider></mat-divider>
+
+  <div class="contas-grid">
+
+    <mat-card class="conta-card" *ngFor="let conta of listaContas">
+      <div class="card-content">
+        <div class="banco-icon">
+          <mat-icon>{{ getIcone(conta.tipo) }}</mat-icon>
+        </div>
+
+        <div class="conta-info">
+          <span class="nome">{{ conta.nome }}</span>
+          <span class="tipo">{{ formatarTipo(conta.tipo) }}</span>
+        </div>
+      </div>
+
+      <div class="conta-saldo">
+        <small>Saldo atual</small>
+        <span class="valor" [class.positivo]="conta.saldo >= 0" [class.negativo]="conta.saldo < 0">
+          R$ {{ conta.saldo | number:'1.2-2' }}
+        </span>
+      </div>
+    </mat-card>
+
+    <div *ngIf="listaContas.length === 0" class="empty-state">
+      <mat-icon>account_balance_wallet</mat-icon>
+      <h3>Nenhuma conta cadastrada</h3>
+      <p>Clique no botão "Nova conta" para começar.</p>
+    </div>
+
+  </div>
+</div>
