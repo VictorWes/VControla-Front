@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './template/layout/layout.component';
 import { authGuard } from './core/guards/auth.guard';
 
-
 const routes: Routes = [
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
 
@@ -24,6 +23,13 @@ const routes: Routes = [
         path: 'dashboard',
         loadChildren: () =>
           import('./features/dashboard.module').then((m) => m.DashboardModule),
+      },
+      {
+        path: 'transacoes',
+        loadChildren: () =>
+          import('./features/transacoes/transacoes.module').then(
+            (m) => m.TransacoesModule,
+          ),
       },
     ],
   },
