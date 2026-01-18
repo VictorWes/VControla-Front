@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
+import { Conta } from '../../../../core/models/conta.model';
+import { ContaService } from '../../../../core/services/conta.service';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -8,13 +10,19 @@ import { OnInit } from '@angular/core';
   styleUrl: './dashboard-home.component.scss',
 })
 export class DashboardHomeComponent implements OnInit {
+  contas: Conta[] = [];
+  saldoTotal: number = 0;
+
   nomeUsuario: string = '';
   saudacao: string = '';
+
+  constructor(private contaService: ContaService) {}
 
   ngOnInit(): void {
     const nomeCompleto = localStorage.getItem('user_nome') || 'Usuário';
     this.nomeUsuario = nomeCompleto.split(' ')[0];
     this.definirSaudacao();
+    this.carregarResumo();
   }
 
   definirSaudacao() {
@@ -27,5 +35,19 @@ export class DashboardHomeComponent implements OnInit {
     } else {
       this.saudacao = 'Boa noite';
     }
+  }
+
+  carregarResumo() {
+    this.contaService.listar().subscribe({
+      next: (lista) => {
+        console.log('Contas encontradas:', lista);
+        this.saldoTotal = lista.reduce(
+          (total, conta) => total + conta.saldo,
+          0,
+        );
+        this.contas = lista.slice(0, 3);
+      },
+      error: (err) => console.error('Erro ao carregar dashboard:', err),
+    });
   }
 }

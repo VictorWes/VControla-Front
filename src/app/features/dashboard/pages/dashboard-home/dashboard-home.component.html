@@ -4,23 +4,23 @@
       <h2>{{ saudacao }}, {{ nomeUsuario }}</h2>
       <div class="stats">
         <div class="stat-item">
-          <span>Receitas no mês</span>
+          <small>Receitas no mês</small>
           <p class="text-success">R$ 0,00</p>
         </div>
         <div class="stat-item">
-          <span>Despesas no mês</span>
+          <small>Despesas no mês</small>
           <p class="text-danger">R$ 0,00</p>
         </div>
       </div>
     </div>
 
     <div class="quick-actions">
-      <h3>Acesso rápido</h3>
+      <span>ACESSO RÁPIDO</span>
       <div class="action-buttons">
-        <button mat-fab class="btn-expense">
+        <button mat-fab class="btn-expense" color="warn">
           <mat-icon>remove</mat-icon>
         </button>
-        <button mat-fab class="btn-income">
+        <button mat-fab class="btn-income" color="accent">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -29,10 +29,32 @@
 
   <div class="dashboard-grid">
     <app-v-card titulo="Minhas contas">
-      <div class="empty-state">
+      <div *ngIf="contas.length > 0" class="lista-resumo">
+        <div class="conta-row" *ngFor="let conta of contas">
+          <div class="conta-info">
+            <mat-icon class="icon-small">account_balance_wallet</mat-icon>
+            <span>{{ conta.nome }}</span>
+          </div>
+          <span class="conta-valor" [class.negativo]="conta.saldo < 0">
+            R$ {{ conta.saldo | number: "1.2-2" }}
+          </span>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="card-footer">
+          <div class="total-box">
+            <small>Saldo Geral</small>
+            <strong>R$ {{ saldoTotal | number: "1.2-2" }}</strong>
+          </div>
+          <button mat-button color="primary" routerLink="../contas">
+            Ver todas
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="contas.length === 0" class="empty-state">
         <mat-icon>account_balance</mat-icon>
         <p>Adicione sua primeira conta</p>
-        <button mat-button color="primary" routerLink="../contas">
+        <button mat-flat-button color="primary" routerLink="../contas">
           Gerenciar contas
         </button>
       </div>
