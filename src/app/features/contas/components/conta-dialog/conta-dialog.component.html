@@ -56,6 +56,13 @@
             <span>{{ novaConta.tipo.nome }}</span>
           </div>
         </mat-select-trigger>
+
+        <mat-option *ngFor="let tipo of tiposDeConta" [value]="tipo">
+          <div style="display: flex; align-items: center; gap: 8px">
+            <mat-icon>{{ tipo.icone }}</mat-icon>
+            <span>{{ tipo.nome }}</span>
+          </div>
+        </mat-option>
       </mat-select>
     </mat-form-field>
   </div>
