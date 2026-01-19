@@ -19,12 +19,15 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
+import { TipoContaDialogComponent } from './contas/components/tipo-conta-dialog/tipo-conta-dialog.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
     DashboardHomeComponent,
     ContaListaComponent,
     ContaDialogComponent,
+    TipoContaDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -43,6 +46,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatDialogModule,
     MatDividerModule,
     MatMenuModule,
+    MatSnackBarModule,
+    MatSelectModule
   ],
 })
 export class DashboardModule {}

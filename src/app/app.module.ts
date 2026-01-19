@@ -8,10 +8,15 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { MatMenuModule } from '@angular/material/menu';
 
-
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, TemplateModule, AppRoutingModule, HttpClientModule, MatMenuModule],
+  imports: [
+    BrowserModule,
+    TemplateModule,
+    AppRoutingModule,
+    HttpClientModule,
+    MatMenuModule,
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

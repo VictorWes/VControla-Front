@@ -3,6 +3,9 @@ import { Conta } from '../../../../core/models/conta.model';
 import { ContaService } from '../../../../core/services/conta.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ContaDialogComponent } from '../../components/conta-dialog/conta-dialog.component';
+import { TipoContaDialogComponent } from '../../components/tipo-conta-dialog/tipo-conta-dialog.component';
+import { TipoContaService } from '../../../../core/services/tipo-conta.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-conta-lista',
@@ -16,6 +19,8 @@ export class ContaListaComponent implements OnInit {
   constructor(
     private contaService: ContaService,
     private dialog: MatDialog,
+    private tipoContaService: TipoContaService,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -100,5 +105,29 @@ export class ContaListaComponent implements OnInit {
         error: (err) => alert('Erro ao excluir: ' + err.message),
       });
     }
+  }
+
+  abrirNovaCarteira() {
+    const dialogRef = this.dialog.open(TipoContaDialogComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((nomeDigitado) => {
+      if (nomeDigitado) {
+        this.tipoContaService.criar(nomeDigitado).subscribe({
+          next: () => {
+            this.snackBar.open('Carteira criada com sucesso!', 'OK', {
+              duration: 3000,
+            });
+          },
+          error: (err) => {
+            console.error('Erro', err);
+            this.snackBar.open('Erro ao criar carteira.', 'Fechar', {
+              duration: 3000,
+            });
+          },
+        });
+      }
+    });
   }
 }

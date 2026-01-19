@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Nova Carteira</h2>
+
+<mat-dialog-content>
+  <p style="color: #666; font-size: 0.9rem; margin-bottom: 16px;">
+    Crie um identificador para organizar seu dinheiro manual (ex: "Cofre", "Viagem", "Reserva").
+  </p>
+
+  <mat-form-field appearance="outline" style="width: 100%;">
+    <mat-label>Nome da Carteira</mat-label>
+    <input matInput [(ngModel)]="nomeCarteira" placeholder="Ex: Reserva de Emergência" cdkFocusInitial autocomplete="off">
+    <mat-icon matSuffix>edit</mat-icon>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" [disabled]="!nomeCarteira" (click)="salvar()">
+    Criar
+  </button>
+</mat-dialog-actions>

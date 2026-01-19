@@ -1,30 +1,42 @@
 <div class="page-container">
-
   <header class="header-section">
     <div>
       <h1>Minhas Contas</h1>
       <p>Gerencie seus saldos e tipos de conta</p>
     </div>
-    <button mat-flat-button color="primary" (click)="abrirModalNovaConta()">
-      <mat-icon>add</mat-icon> Nova conta
-    </button>
+
+    <div class="header-actions">
+      <button mat-stroked-button color="primary" (click)="abrirNovaCarteira()">
+        <mat-icon>account_balance_wallet</mat-icon>
+        Nova Carteira
+      </button>
+      <button mat-flat-button color="primary" (click)="abrirModalNovaConta()">
+        <mat-icon>add</mat-icon> Nova conta
+      </button>
+    </div>
   </header>
 
   <mat-divider></mat-divider>
 
   <div class="contas-grid">
-
-    <<mat-card class="conta-card" *ngFor="let conta of listaContas">
-
-      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-
+    <mat-card class="conta-card" *ngFor="let conta of listaContas">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+        "
+      >
         <div class="card-content">
           <div class="banco-icon">
-            <mat-icon>{{ getIcone(conta.tipo) }}</mat-icon>
+            <mat-icon>{{
+              conta.tipo?.icone || "account_balance_wallet"
+            }}</mat-icon>
           </div>
+
           <div class="conta-info">
             <span class="nome">{{ conta.nome }}</span>
-            <span class="tipo">{{ formatarTipo(conta.tipo) }}</span>
+            <span class="tipo">{{ conta.tipo?.nome || "Tipo Manual" }}</span>
           </div>
         </div>
 
@@ -42,22 +54,26 @@
             <span>Excluir</span>
           </button>
         </mat-menu>
-
       </div>
 
       <div class="conta-saldo">
         <small>Saldo atual</small>
-        <span class="valor" [class.positivo]="conta.saldo >= 0" [class.negativo]="conta.saldo < 0">
-          R$ {{ conta.saldo | number:'1.2-2' }}
+        <span
+          class="valor"
+          [class.positivo]="conta.saldo >= 0"
+          [class.negativo]="conta.saldo < 0"
+        >
+          R$ {{ conta.saldo | number: "1.2-2" }}
         </span>
       </div>
     </mat-card>
 
     <div *ngIf="listaContas.length === 0" class="empty-state">
-      <mat-icon>account_balance_wallet</mat-icon>
+      <mat-icon style="font-size: 48px; height: 48px; width: 48px; color: #ccc"
+        >account_balance</mat-icon
+      >
       <h3>Nenhuma conta cadastrada</h3>
       <p>Clique no botão "Nova conta" para começar.</p>
     </div>
-
   </div>
 </div>

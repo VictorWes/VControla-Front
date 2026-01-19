@@ -1,6 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Conta, TipoConta } from '../../../../core/models/conta.model';
+import { Conta } from '../../../../core/models/conta.model';
+import { TipoContaService } from '../../../../core/services/tipo-conta.service';
+import { TipoConta } from '../../../../core/models/tipo-conta.model';
 
 @Component({
   selector: 'app-conta-dialog',
@@ -9,17 +11,19 @@ import { Conta, TipoConta } from '../../../../core/models/conta.model';
   styleUrl: './conta-dialog.component.scss',
 })
 export class ContaDialogComponent {
-  tiposDeConta = Object.values(TipoConta);
+  tiposDeConta: TipoConta[] = [];
   isEdicao = false;
 
   novaConta: any = {
     nome: '',
     saldo: null,
-    tipo: TipoConta.CONTA_CORRENTE,
+    tipo: null,
   };
 
-  constructor(public dialogRef: MatDialogRef<ContaDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Conta
+  constructor(
+    public dialogRef: MatDialogRef<ContaDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: Conta,
+    private tipoContaService: TipoContaService,
   ) {
     if (data) {
       this.isEdicao = true;
@@ -27,11 +31,33 @@ export class ContaDialogComponent {
     }
   }
 
+  ngOnInit(): void {
+    this.tipoContaService.listar().subscribe({
+      next: (lista) => {
+        this.tiposDeConta = lista;
+
+        if (!this.isEdicao && lista.length > 0) {
+          this.novaConta.tipo = lista[0];
+        }
+      },
+      error: (err) => console.error('Erro ao buscar tipos', err),
+    });
+  }
+
   cancelar(): void {
     this.dialogRef.close();
   }
 
   salvar(): void {
-    this.dialogRef.close(this.novaConta);
+    const contaParaSalvar = {
+      ...this.novaConta,
+      tipoId: this.novaConta.tipo?.id,
+    };
+
+    this.dialogRef.close(contaParaSalvar);
+  }
+
+  compararTipos(o1: any, o2: any): boolean {
+    return o1 && o2 ? o1.id === o2.id : o1 === o2;
   }
 }
