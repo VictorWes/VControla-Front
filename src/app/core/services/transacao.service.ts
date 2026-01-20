@@ -7,7 +7,7 @@ import { Transacao } from '../models/transacao.model';
   providedIn: 'root',
 })
 export class TransacaoService {
-  private readonly API_URL = 'http://localhost:8080/contas';
+  private readonly API_URL = 'http://localhost:8080/transacoes';
 
   constructor(private http: HttpClient) {}
 

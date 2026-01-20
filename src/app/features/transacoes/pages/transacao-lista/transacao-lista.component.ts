@@ -43,8 +43,10 @@ export class TransacaoListaComponent implements OnInit {
   }
 
   carregarTransacoes() {
-    if (!this.contaSelecionada) return;
-    console.log('Carregando transações da conta:', this.contaSelecionada.nome);
+    this.transacaoService.listar().subscribe((transacoes) => {
+      this.listaTransacoes = transacoes;
+      this.filtrarTransacoes();
+    });
   }
   filtrarTransacoes() {
     this.transacoesFiltradas = this.listaTransacoes.filter((item) => {
@@ -68,7 +70,7 @@ export class TransacaoListaComponent implements OnInit {
       data: {
         tipo: tipo,
         contas: this.listaContas,
-        contaSelecionada: this.contaSelecionada,
+        contaSelecionada: null,
       },
     });
 
@@ -80,12 +82,24 @@ export class TransacaoListaComponent implements OnInit {
   }
 
   criarTransacao(transacao: any) {
-    this.transacaoService.criar(transacao).subscribe({
+    const payload: Transacao = {
+      descricao: transacao.descricao,
+      valor: transacao.valor,
+      data: transacao.data,
+      contaId: transacao.contaId,
+      tipo: transacao.tipo,
+      status: 'PAGO',
+    };
+
+    this.transacaoService.criar(payload).subscribe({
       next: () => {
-        console.log('Transação criada com sucesso!');
-        this.carregarTransacoes(); // Atualiza a lista na hora!
+        console.log('Transação criada com sucesso');
+        this.carregarContas(); // Recarrega as contas para atualizar os saldos
+        this.carregarTransacoes(); // Recarrega as transações
       },
-      error: (err) => console.error('Erro ao criar transação', err),
+      error: (err) => {
+        console.error('Erro ao criar transação:', err);
+      },
     });
   }
 }
