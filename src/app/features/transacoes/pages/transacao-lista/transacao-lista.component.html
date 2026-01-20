@@ -23,9 +23,10 @@
         <mat-label>Selecione a conta</mat-label>
         <mat-select
           [(ngModel)]="contaSelecionada"
-          (selectionChange)="carregarTransacoes()"
+          (selectionChange)="filtrarTransacoes()"
         >
           <mat-option [value]="null">Todas as contas</mat-option>
+
           <mat-option *ngFor="let conta of listaContas" [value]="conta">
             {{ conta.nome }}
           </mat-option>

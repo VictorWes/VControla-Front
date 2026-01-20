@@ -16,9 +16,7 @@ export class TransacaoListaComponent implements OnInit {
   listaContas: Conta[] = [];
   listaTransacoes: Transacao[] = [];
   transacoesFiltradas: Transacao[] = [];
-  contaSelecionada: any = null;
-
-  filtroConta: string | null = null;
+  contaSelecionada: Conta | null = null;
   termoBusca: string = '';
 
   constructor(
@@ -35,9 +33,8 @@ export class TransacaoListaComponent implements OnInit {
   carregarContas() {
     this.contaService.listar().subscribe((contas) => {
       this.listaContas = contas;
-      if (this.listaContas.length > 0) {
+      if (this.listaContas.length > 0 && !this.contaSelecionada) {
         this.contaSelecionada = this.listaContas[0];
-        this.carregarTransacoes();
       }
     });
   }
@@ -49,19 +46,34 @@ export class TransacaoListaComponent implements OnInit {
     });
   }
   filtrarTransacoes() {
-    this.transacoesFiltradas = this.listaTransacoes.filter((item) => {
-      const matchConta = this.filtroConta
-        ? item.contaId === this.filtroConta
-        : true;
+    this.transacoesFiltradas = this.listaTransacoes
+      .filter((item) => {
+        const matchConta = this.contaSelecionada
+          ? item.contaId === this.contaSelecionada.id
+          : true;
 
-      const termo = this.termoBusca.toLowerCase().trim();
-      const matchBusca =
-        item.descricao.toLowerCase().includes(termo) ||
-        (item.contaNome && item.contaNome.toLowerCase().includes(termo)) ||
-        item.valor.toString().includes(termo);
+        const termo = this.termoBusca.toLowerCase().trim();
+        const matchBusca =
+          item.descricao.toLowerCase().includes(termo) ||
+          (item.contaNome && item.contaNome.toLowerCase().includes(termo)) ||
+          item.valor.toString().includes(termo);
 
-      return matchConta && matchBusca;
-    });
+        return matchConta && matchBusca;
+      })
+      .sort((a, b) => {
+        const dataA = new Date(a.data).getTime();
+        const dataB = new Date(b.data).getTime();
+
+        if (dataA !== dataB) {
+          return dataB - dataA;
+        }
+
+        if (a.id && b.id) {
+          return b.id.localeCompare(a.id);
+        }
+
+        return 0;
+      });
   }
 
   abrirNovaTransacao(tipo: 'GASTOS' | 'RECEITAS') {
@@ -94,8 +106,16 @@ export class TransacaoListaComponent implements OnInit {
     this.transacaoService.criar(payload).subscribe({
       next: () => {
         console.log('Transação criada com sucesso');
-        this.carregarContas(); // Recarrega as contas para atualizar os saldos
-        this.carregarTransacoes(); // Recarrega as transações
+
+        const contaDaTransacao = this.listaContas.find(
+          (c) => c.id === transacao.contaId,
+        );
+        if (contaDaTransacao) {
+          this.contaSelecionada = contaDaTransacao;
+        }
+
+        this.carregarContas();
+        this.carregarTransacoes();
       },
       error: (err) => {
         console.error('Erro ao criar transação:', err);
