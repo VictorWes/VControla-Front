@@ -5,6 +5,7 @@ import { UsuarioRequest } from '../models/usuario-request.model';
 import { LoginResponse } from '../models/login-response.model';
 import { LoginRequest } from '../models/login-request.model';
 import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,10 @@ import { tap } from 'rxjs/operators';
 export class AuthService {
   private readonly API_URL = 'http://localhost:8080/usuarios';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
 
   cadastrar(dados: UsuarioRequest): Observable<any> {
     return this.http.post(this.API_URL, dados);
@@ -28,5 +32,20 @@ export class AuthService {
         }
       }),
     );
+  }
+
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('access_token');
+    return !!token;
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('access_token');
+  }
+
+  logout(): void {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user_nome');
+    this.router.navigate(['/auth/login']);
   }
 }

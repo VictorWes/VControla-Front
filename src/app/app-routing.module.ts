@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './template/layout/layout.component';
 import { authGuard } from './core/guards/auth.guard';
+import { redirectGuard } from './core/guards/redirect.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
+  { path: '', pathMatch: 'full', canActivate: [redirectGuard], children: [] },
 
   {
     path: 'auth',
