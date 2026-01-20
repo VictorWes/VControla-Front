@@ -18,4 +18,12 @@ export class TransacaoService {
   criar(transacao: Transacao): Observable<void> {
     return this.http.post<void>(this.API_URL, transacao);
   }
+
+  excluir(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
+
+  atualizar(id: string, transacao: any): Observable<void> {
+    return this.http.put<void>(`${this.API_URL}/${id}`, transacao);
+  }
 }

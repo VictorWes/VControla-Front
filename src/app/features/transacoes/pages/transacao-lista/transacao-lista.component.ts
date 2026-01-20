@@ -33,9 +33,6 @@ export class TransacaoListaComponent implements OnInit {
   carregarContas() {
     this.contaService.listar().subscribe((contas) => {
       this.listaContas = contas;
-      if (this.listaContas.length > 0 && !this.contaSelecionada) {
-        this.contaSelecionada = this.listaContas[0];
-      }
     });
   }
 
@@ -120,6 +117,68 @@ export class TransacaoListaComponent implements OnInit {
       error: (err) => {
         console.error('Erro ao criar transação:', err);
       },
+    });
+  }
+
+  excluirTransacao(item: any) {
+    if (
+      confirm(
+        `Tem certeza que deseja excluir "${item.descricao}"? O saldo será revertido.`,
+      )
+    ) {
+      this.transacaoService.excluir(item.id).subscribe({
+        next: () => {
+          this.carregarContas();
+          this.carregarTransacoes();
+        },
+        error: (err) => alert('Erro ao excluir'),
+      });
+    }
+  }
+
+  editarTransacao(item: any) {
+    const dialogRef = this.dialog.open(TransacaoCadastroComponent, {
+      width: '400px',
+      data: {
+        tipo: item.tipo, 
+        contas: this.listaContas,
+
+
+        transacaoParaEditar: item,
+
+        contaSelecionada: null,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+
+        if (item.id) {
+          this.atualizarTransacao(item.id, result);
+        } else {
+          this.criarTransacao(result);
+        }
+      }
+    });
+  }
+
+  atualizarTransacao(id: string, transacao: any) {
+    const payload = {
+      descricao: transacao.descricao,
+      valor: transacao.valor,
+      data: transacao.data,
+      contaId: transacao.contaId,
+      tipo: transacao.tipo,
+      status: 'PAGO',
+    };
+
+    this.transacaoService.atualizar(id, payload).subscribe({
+      next: () => {
+        this.contaSelecionada = null; // Reseta filtro
+        this.carregarContas();
+        this.carregarTransacoes();
+      },
+      error: (err) => alert('Erro ao atualizar'),
     });
   }
 }

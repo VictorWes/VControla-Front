@@ -9,6 +9,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class TransacaoCadastroComponent implements OnInit {
   novaTransacao: any = {
+    id: null, // <--- 1. IMPORTANTE: Adicionei o ID aqui
     tipo: '',
     valor: null,
     descricao: '',
@@ -28,13 +29,35 @@ export class TransacaoCadastroComponent implements OnInit {
   ) {
     this.novaTransacao.tipo = data.tipo;
     this.todasContas = data.contas || [];
+
+    if (data.transacaoParaEditar) {
+      const t = data.transacaoParaEditar;
+
+      this.novaTransacao = {
+        id: t.id,
+        descricao: t.descricao,
+        valor: t.valor,
+        data: t.data,
+        contaId: t.contaId,
+        tipo: t.tipo,
+      };
+
+      const contaOriginal = this.todasContas.find((c) => c.id === t.contaId);
+
+      if (contaOriginal && contaOriginal.tipo) {
+        this.carteiraSelecionadaId = contaOriginal.tipo.id;
+
+        this.aoSelecionarCarteira(contaOriginal.tipo.id);
+
+        this.novaTransacao.contaId = t.contaId;
+      }
+    } else if (data.contaSelecionada) {
+      this.preencherDadosIniciais(data.contaSelecionada);
+    }
   }
+
   ngOnInit(): void {
     this.extrairCarteirasUnicas();
-
-    if (this.data.contaSelecionada) {
-      this.preencherDadosIniciais(this.data.contaSelecionada);
-    }
   }
 
   salvar(): void {
@@ -46,7 +69,6 @@ export class TransacaoCadastroComponent implements OnInit {
 
     this.todasContas.forEach((conta) => {
       if (conta.tipo) {
-        // Usa o ID do tipo como chave para não duplicar
         if (!map.has(conta.tipo.id)) {
           map.set(conta.tipo.id, conta.tipo);
         }
@@ -58,6 +80,7 @@ export class TransacaoCadastroComponent implements OnInit {
 
   aoSelecionarCarteira(tipoId: string) {
     this.carteiraSelecionadaId = tipoId;
+
     this.novaTransacao.contaId = '';
 
     this.contasFiltradas = this.todasContas.filter(
