@@ -4,7 +4,6 @@
   margin: 0 auto;
 }
 
-// 1. Header
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -35,96 +34,111 @@
   }
 }
 
-// 2. Barra de Filtros (Laranja)
 .filter-bar {
-  background-color: #f6a623; /* Laranja Organizze */
-  padding: 12px 20px;
+  background-color: #f5a623;
+  padding: 10px 20px;
   border-radius: 8px 8px 0 0;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
+  justify-content: space-between;
+  gap: 16px;
   color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-  .custom-select-wrapper {
+  .left-group {
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.25);
-    padding: 8px 16px;
-    border-radius: 24px;
-    position: relative;
-    transition: background 0.2s;
+    gap: 10px;
+    flex: 1;
 
-    &:hover {
-      background: rgba(255, 255, 255, 0.35);
+    .bank-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
     }
 
-    mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-      margin-right: 8px;
-    }
+    .custom-field {
+      width: 100%;
+      max-width: 250px;
+      font-size: 14px;
 
-    select {
-      appearance: none;
-      background: transparent;
-      border: none;
-      color: white;
-      font-weight: 500;
-      font-size: 0.95rem;
-      outline: none;
-      cursor: pointer;
-      padding-right: 24px;
+      ::ng-deep {
+        // Remove fundos e bordas padrão do Material
+        .mdc-text-field {
+          background-color: transparent !important;
+        }
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: rgba(255, 255, 255, 0.3) !important; // Borda bem suave
+        }
 
-      option {
-        color: #333;
+        .mat-mdc-select-value-text,
+        .mat-mdc-select-arrow {
+          color: white !important;
+        }
+
+        .mdc-floating-label {
+          color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        .mat-mdc-form-field-subscript-wrapper {
+          display: none;
+        }
       }
-    }
-
-    .arrow {
-      margin-left: -20px;
-      pointer-events: none;
-      font-size: 20px;
     }
   }
 
-  .search-box {
+  .search-group {
+    flex: 2;
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.2);
     padding: 8px 16px;
-    border-radius: 24px;
+    border-radius: 20px;
 
     input {
       background: transparent;
       border: none;
       color: white;
+      width: 100%;
       outline: none;
-      width: 180px;
-      font-size: 0.95rem;
+      font-size: 14px;
+
       &::placeholder {
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0.7);
       }
     }
 
     mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-      opacity: 0.9;
+      color: white;
+      opacity: 0.8;
+    }
+  }
+
+  // --- GRUPO DA DIREITA (Botões) ---
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+
+    .btn-receita {
+      background-color: #4caf50; // Verde
+      color: white;
+    }
+
+    .btn-despesa {
+      background-color: #f44336; // Vermelho
+      color: white;
     }
   }
 }
 
-// 3. Lista
 .transactions-list {
   background: white;
   border-radius: 0 0 8px 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   min-height: 400px;
-  padding-bottom: 60px; // Espaço para o FAB não cobrir o último item
+  padding-bottom: 20px;
 
   .list-header {
     display: flex;
@@ -165,7 +179,6 @@
       align-items: center;
       gap: 16px;
 
-      // Box de Data (Dia/Mes)
       .data-box {
         display: flex;
         flex-direction: column;
@@ -228,7 +241,6 @@
             height: 14px;
             opacity: 0.7;
           }
-
           .parcela-badge {
             background-color: #eee;
             padding: 1px 6px;
@@ -284,9 +296,21 @@
   }
 }
 
-.fab-add {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  z-index: 10;
+@media (max-width: 768px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 8px;
+    margin-bottom: 10px;
+
+    .left-group,
+    .search-group,
+    .action-buttons {
+      width: 100%;
+    }
+
+    .custom-field {
+      max-width: 100% !important;
+    }
+  }
 }

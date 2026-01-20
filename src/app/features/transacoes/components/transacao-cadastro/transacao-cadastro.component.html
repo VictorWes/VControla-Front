@@ -1,0 +1,94 @@
+<h2 mat-dialog-title>
+  {{ data.tipo === "RECEITAS" ? "Nova Receita" : "Nova Despesa" }}
+</h2>
+
+<mat-dialog-content>
+  <div
+    style="display: flex; flex-direction: column; gap: 16px; min-width: 350px"
+  >
+    <mat-form-field appearance="outline">
+      <mat-label>Valor</mat-label>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="novaTransacao.valor"
+        placeholder="0.00"
+        required
+      />
+      <span matPrefix>R$&nbsp;</span>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Descrição</mat-label>
+      <input
+        matInput
+        [(ngModel)]="novaTransacao.descricao"
+        placeholder="Ex: Salário, Jantar..."
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Carteira (Objetivo)</mat-label>
+      <mat-select
+        [ngModel]="carteiraSelecionadaId"
+        (selectionChange)="aoSelecionarCarteira($event.value)"
+        required
+      >
+        <mat-option
+          *ngFor="let carteira of carteirasUnicas"
+          [value]="carteira.id"
+        >
+          <mat-icon>{{ carteira.icone || "folder" }}</mat-icon>
+          {{ carteira.nome }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Conta (Instituição)</mat-label>
+      <mat-select
+        [(ngModel)]="novaTransacao.contaId"
+        [disabled]="!carteiraSelecionadaId"
+        required
+      >
+        <mat-option *ngFor="let conta of contasFiltradas" [value]="conta.id">
+          <mat-icon>account_balance</mat-icon>
+          {{ conta.nome }}
+        </mat-option>
+
+        <mat-option *ngIf="contasFiltradas.length === 0" disabled>
+          Nenhuma conta nesta carteira
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [(ngModel)]="novaTransacao.data"
+      />
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="salvar()"
+    [disabled]="
+      !novaTransacao.valor || !novaTransacao.contaId || !novaTransacao.descricao
+    "
+  >
+    Salvar
+  </button>
+</mat-dialog-actions>

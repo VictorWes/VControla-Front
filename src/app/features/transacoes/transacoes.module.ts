@@ -3,7 +3,11 @@ import { CommonModule } from '@angular/common';
 
 import { TransacoesRoutingModule } from './transacoes-routing.module';
 import { TransacaoListaComponent } from './pages/transacao-lista/transacao-lista.component';
+import { TransacaoCadastroComponent } from './components/transacao-cadastro/transacao-cadastro.component';
 
+import { MatDialogModule } from '@angular/material/dialog'; // Para o Modal// Para o dropdown de contas
+import { MatDatepickerModule } from '@angular/material/datepicker'; // Para o calendário
+import { MatNativeDateModule } from '@angular/material/core'; // Necessário para o calendário funcionar
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,7 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
-  declarations: [TransacaoListaComponent],
+  declarations: [TransacaoListaComponent, TransacaoCadastroComponent],
   imports: [
     CommonModule,
     TransacoesRoutingModule,
@@ -24,6 +28,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatInputModule,
     MatFormFieldModule,
     MatTooltipModule,
+    MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
 })
 export class TransacoesModule {}

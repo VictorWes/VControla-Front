@@ -3,6 +3,8 @@ import { Conta } from '../../../../core/models/conta.model';
 import { Transacao } from '../../../../core/models/transacao.model';
 import { ContaService } from '../../../../core/services/conta.service';
 import { TransacaoService } from '../../../../core/services/transacao.service';
+import { MatDialog } from '@angular/material/dialog';
+import { TransacaoCadastroComponent } from '../../components/transacao-cadastro/transacao-cadastro.component';
 
 @Component({
   selector: 'app-transacao-lista',
@@ -14,6 +16,7 @@ export class TransacaoListaComponent implements OnInit {
   listaContas: Conta[] = [];
   listaTransacoes: Transacao[] = [];
   transacoesFiltradas: Transacao[] = [];
+  contaSelecionada: any = null;
 
   filtroConta: string | null = null;
   termoBusca: string = '';
@@ -21,6 +24,7 @@ export class TransacaoListaComponent implements OnInit {
   constructor(
     private contaService: ContaService,
     private transacaoService: TransacaoService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -29,20 +33,18 @@ export class TransacaoListaComponent implements OnInit {
   }
 
   carregarContas() {
-    this.contaService.listar().subscribe({
-      next: (dados) => (this.listaContas = dados),
-      error: (err) => console.error('Erro ao buscar contas', err),
+    this.contaService.listar().subscribe((contas) => {
+      this.listaContas = contas;
+      if (this.listaContas.length > 0) {
+        this.contaSelecionada = this.listaContas[0];
+        this.carregarTransacoes();
+      }
     });
   }
 
   carregarTransacoes() {
-    this.transacaoService.listar().subscribe({
-      next: (dados) => {
-        this.listaTransacoes = dados;
-        this.filtrarTransacoes(); // Aplica filtros assim que carregar
-      },
-      error: (err) => console.error('Erro ao buscar transações', err),
-    });
+    if (!this.contaSelecionada) return;
+    console.log('Carregando transações da conta:', this.contaSelecionada.nome);
   }
   filtrarTransacoes() {
     this.transacoesFiltradas = this.listaTransacoes.filter((item) => {
@@ -57,6 +59,33 @@ export class TransacaoListaComponent implements OnInit {
         item.valor.toString().includes(termo);
 
       return matchConta && matchBusca;
+    });
+  }
+
+  abrirNovaTransacao(tipo: 'GASTOS' | 'RECEITAS') {
+    const dialogRef = this.dialog.open(TransacaoCadastroComponent, {
+      width: '400px',
+      data: {
+        tipo: tipo,
+        contas: this.listaContas,
+        contaSelecionada: this.contaSelecionada,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.criarTransacao(result);
+      }
+    });
+  }
+
+  criarTransacao(transacao: any) {
+    this.transacaoService.criar(transacao).subscribe({
+      next: () => {
+        console.log('Transação criada com sucesso!');
+        this.carregarTransacoes(); // Atualiza a lista na hora!
+      },
+      error: (err) => console.error('Erro ao criar transação', err),
     });
   }
 }

@@ -12,27 +12,53 @@
   </header>
 
   <div class="filter-bar">
-    <div class="filters-left">
-      <div class="custom-select-wrapper">
-        <mat-icon>account_balance</mat-icon>
-        <select [(ngModel)]="filtroConta" (change)="filtrarTransacoes()">
-          <option [ngValue]="null">Todas contas/cartões</option>
-          <option *ngFor="let conta of listaContas" [ngValue]="conta.id">
+    <div class="left-group">
+      <mat-icon class="bank-icon">account_balance</mat-icon>
+
+      <mat-form-field
+        appearance="outline"
+        subscriptSizing="dynamic"
+        class="custom-field"
+      >
+        <mat-label>Selecione a conta</mat-label>
+        <mat-select
+          [(ngModel)]="contaSelecionada"
+          (selectionChange)="carregarTransacoes()"
+        >
+          <mat-option [value]="null">Todas as contas</mat-option>
+          <mat-option *ngFor="let conta of listaContas" [value]="conta">
             {{ conta.nome }}
-          </option>
-        </select>
-        <mat-icon class="arrow">expand_more</mat-icon>
-      </div>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
-    <div class="search-box">
+    <div class="search-group">
       <input
         type="text"
         placeholder="Buscar lançamento..."
+        class="search-input"
         [(ngModel)]="termoBusca"
         (keyup)="filtrarTransacoes()"
       />
       <mat-icon>search</mat-icon>
+    </div>
+
+    <div class="action-buttons">
+      <button
+        mat-raised-button
+        class="btn-receita"
+        (click)="abrirNovaTransacao('RECEITAS')"
+      >
+        <mat-icon>arrow_upward</mat-icon> Receita
+      </button>
+      <button
+        mat-raised-button
+        class="btn-despesa"
+        (click)="abrirNovaTransacao('GASTOS')"
+      >
+        <mat-icon>arrow_downward</mat-icon> Despesa
+      </button>
     </div>
   </div>
 
@@ -53,29 +79,18 @@
         <div
           class="status-icon"
           [class.efetivado]="
-            item.status === 'PENDENTE' || item.status === 'PAGO' ||  item.status === 'CANCELADO'
+            item.status === 'PENDENTE' || item.status === 'PAGO'
           "
           [matTooltip]="item.status"
         >
-          <mat-icon
-            *ngIf="item.status === 'PENDENTE' || item.status === 'PAGO' ||  item.status === 'CANCELADO'"
-            >check</mat-icon
-          >
-          <mat-icon
-            *ngIf="item.status !== 'PENDENTE' && item.status !== 'PAGO' && item.status !== 'CANCELADO'"
-            >schedule</mat-icon
-          >
+          <mat-icon>check</mat-icon>
         </div>
 
         <div class="info">
           <span class="descricao">{{ item.descricao }}</span>
-
           <span class="conta-tag">
             <mat-icon class="tiny-icon">account_balance</mat-icon>
             {{ item.contaNome }}
-            <span *ngIf="item.numeroParcela" class="parcela-badge">{{
-              item.numeroParcela
-            }}</span>
           </span>
         </div>
       </div>
@@ -89,17 +104,6 @@
           {{ item.tipo === "RECEITAS" ? "+" : "-" }}
           R$ {{ item.valor | number: "1.2-2" }}
         </span>
-
-        <mat-icon
-          class="status-check"
-          [class.done]="
-            item.status === 'PENDENTE' ||
-            item.status === 'PAGO' ||
-            item.status === 'CANCELADO'
-          "
-        >
-          thumb_up
-        </mat-icon>
       </div>
     </div>
 
@@ -108,8 +112,4 @@
       <p>Nenhum lançamento encontrado.</p>
     </div>
   </div>
-
-  <button mat-fab color="primary" class="fab-add">
-    <mat-icon>add</mat-icon>
-  </button>
 </div>
