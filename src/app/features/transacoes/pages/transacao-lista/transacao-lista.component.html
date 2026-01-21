@@ -70,7 +70,7 @@
       <small class="text-right">Valor</small>
     </div>
 
-    <div class="transacao-row" *ngFor="let item of transacoesFiltradas">
+    <div class="transacao-row" *ngFor="let item of transacoesPaginadas">
       <div class="row-left">
         <div class="data-box">
           <span class="dia">{{ item.data | date: "dd" }}</span>
@@ -131,5 +131,15 @@
       <mat-icon>search_off</mat-icon>
       <p>Nenhum lançamento encontrado.</p>
     </div>
+
+    <mat-paginator
+      [length]="transacoesFiltradas.length"
+      [pageSize]="10"
+      [pageSizeOptions]="[5, 10, 20]"
+      (page)="atualizarPagina($event)"
+      showFirstLastButtons
+      aria-label="Selecionar página"
+    >
+    </mat-paginator>
   </div>
 </div>

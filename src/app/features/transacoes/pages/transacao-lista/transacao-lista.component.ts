@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Conta } from '../../../../core/models/conta.model';
-import { Transacao } from '../../../../core/models/transacao.model';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { Conta } from '../../../../core/models/conta.model'; // Ajuste o caminho se necessário
+import { Transacao } from '../../../../core/models/transacao.model'; // Ajuste o caminho se necessário
 import { ContaService } from '../../../../core/services/conta.service';
 import { TransacaoService } from '../../../../core/services/transacao.service';
-import { MatDialog } from '@angular/material/dialog';
 import { TransacaoCadastroComponent } from '../../components/transacao-cadastro/transacao-cadastro.component';
 
 @Component({
@@ -13,11 +14,20 @@ import { TransacaoCadastroComponent } from '../../components/transacao-cadastro/
   styleUrl: './transacao-lista.component.scss',
 })
 export class TransacaoListaComponent implements OnInit {
+  // Variáveis de Controle
   listaContas: Conta[] = [];
-  listaTransacoes: Transacao[] = [];
-  transacoesFiltradas: Transacao[] = [];
   contaSelecionada: Conta | null = null;
   termoBusca: string = '';
+
+  // Variáveis de Dados
+  listaTransacoes: Transacao[] = []; // Dados brutos do Banco (ex: 100 itens)
+  transacoesFiltradas: Transacao[] = []; // Dados filtrados por busca/conta (ex: 11 itens)
+  transacoesPaginadas: Transacao[] = []; // Dados visíveis na tela (ex: 10 itens)
+
+  // Configuração da Paginação
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  tamanhoPagina = 10; // <--- PADRÃO DE 10 ITENS
+  paginaAtual = 0;
 
   constructor(
     private contaService: ContaService,
@@ -42,35 +52,43 @@ export class TransacaoListaComponent implements OnInit {
       this.filtrarTransacoes();
     });
   }
+
   filtrarTransacoes() {
-    this.transacoesFiltradas = this.listaTransacoes
-      .filter((item) => {
-        const matchConta = this.contaSelecionada
-          ? item.contaId === this.contaSelecionada.id
-          : true;
+    this.transacoesFiltradas = this.listaTransacoes.filter((item) => {
+      const matchConta = this.contaSelecionada
+        ? item.contaId === this.contaSelecionada.id
+        : true;
 
-        const termo = this.termoBusca.toLowerCase().trim();
-        const matchBusca =
-          item.descricao.toLowerCase().includes(termo) ||
-          (item.contaNome && item.contaNome.toLowerCase().includes(termo)) ||
-          item.valor.toString().includes(termo);
+      const termo = this.termoBusca.toLowerCase().trim();
+      const matchBusca =
+        item.descricao.toLowerCase().includes(termo) ||
+        (item.contaNome && item.contaNome.toLowerCase().includes(termo)) ||
+        item.valor.toString().includes(termo);
 
-        return matchConta && matchBusca;
-      })
-      .sort((a, b) => {
-        const dataA = new Date(a.data).getTime();
-        const dataB = new Date(b.data).getTime();
+      return matchConta && matchBusca;
+    });
 
-        if (dataA !== dataB) {
-          return dataB - dataA;
-        }
+    if (this.paginator) {
+      this.paginator.firstPage();
+    }
 
-        if (a.id && b.id) {
-          return b.id.localeCompare(a.id);
-        }
+    this.atualizarPagina();
+  }
 
-        return 0;
-      });
+  atualizarPagina(event?: PageEvent) {
+    if (event) {
+      this.paginaAtual = event.pageIndex;
+      this.tamanhoPagina = event.pageSize;
+    } else {
+      this.paginaAtual = 0;
+
+      this.tamanhoPagina = this.tamanhoPagina || 10;
+    }
+
+    const inicio = this.paginaAtual * this.tamanhoPagina;
+    const fim = inicio + this.tamanhoPagina;
+
+    this.transacoesPaginadas = this.transacoesFiltradas.slice(inicio, fim);
   }
 
   abrirNovaTransacao(tipo: 'GASTOS' | 'RECEITAS') {
@@ -91,7 +109,7 @@ export class TransacaoListaComponent implements OnInit {
   }
 
   criarTransacao(transacao: any) {
-    const payload: Transacao = {
+    const payload: any = {
       descricao: transacao.descricao,
       valor: transacao.valor,
       data: transacao.data,
@@ -102,30 +120,16 @@ export class TransacaoListaComponent implements OnInit {
 
     this.transacaoService.criar(payload).subscribe({
       next: () => {
-        console.log('Transação criada com sucesso');
-
-        const contaDaTransacao = this.listaContas.find(
-          (c) => c.id === transacao.contaId,
-        );
-        if (contaDaTransacao) {
-          this.contaSelecionada = contaDaTransacao;
-        }
-
+        this.contaSelecionada = null;
         this.carregarContas();
         this.carregarTransacoes();
       },
-      error: (err) => {
-        console.error('Erro ao criar transação:', err);
-      },
+      error: (err) => console.error(err),
     });
   }
 
   excluirTransacao(item: any) {
-    if (
-      confirm(
-        `Tem certeza que deseja excluir "${item.descricao}"? O saldo será revertido.`,
-      )
-    ) {
+    if (confirm(`Tem certeza que deseja excluir "${item.descricao}"?`)) {
       this.transacaoService.excluir(item.id).subscribe({
         next: () => {
           this.carregarContas();
@@ -140,19 +144,15 @@ export class TransacaoListaComponent implements OnInit {
     const dialogRef = this.dialog.open(TransacaoCadastroComponent, {
       width: '400px',
       data: {
-        tipo: item.tipo, 
+        tipo: item.tipo,
         contas: this.listaContas,
-
-
         transacaoParaEditar: item,
-
         contaSelecionada: null,
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-
         if (item.id) {
           this.atualizarTransacao(item.id, result);
         } else {
@@ -174,7 +174,7 @@ export class TransacaoListaComponent implements OnInit {
 
     this.transacaoService.atualizar(id, payload).subscribe({
       next: () => {
-        this.contaSelecionada = null; // Reseta filtro
+        this.contaSelecionada = null;
         this.carregarContas();
         this.carregarTransacoes();
       },
