@@ -15,6 +15,7 @@ O **VControla Frontend** é a interface visual do ecossistema VControla. Uma apl
 ## 📸 Screenshots
 
 <img width="1911" height="911" alt="DashBoardVC" src="https://github.com/user-attachments/assets/a230f4a0-a3f8-42b1-9384-35c5a8bb060a" />
+<img width="1909" height="905" alt="Transacoes" src="https://github.com/user-attachments/assets/05664b39-419c-43c3-852e-5a722a572037" />
 
 
 
