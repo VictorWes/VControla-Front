@@ -1,40 +1,106 @@
-🚀 VControla - Frontend (Angular)
-Status do Projeto: 
+# 🚀 VControla - Frontend
 
-🏗️ Em fase de Setup e Arquitetura de Módulos.
+![Angular](https://img.shields.io/badge/angular-%23DD0031.svg?style=for-the-badge&logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![RxJS](https://img.shields.io/badge/rxjs-%23B7178C.svg?style=for-the-badge&logo=reactivex&logoColor=white)
+![SASS](https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 
-O VControla-Front é o braço visual do ecossistema VControla. Uma aplicação Single Page (SPA) focada em UX financeira, permitindo o controle de gastos, ganhos e faturas de cartão de crédito de forma intuitiva.
+> **Status do Projeto:** 🏗️ Em desenvolvimento ativo (Fase de MVP e Refinamento de UX)
 
-🎯 Objetivos do Frontend
-Gestão de Transações: Visualização clara de receitas e despesas com filtros por período.
+O **VControla Frontend** é a interface visual do ecossistema VControla. Uma aplicação **Single Page Application (SPA)** robusta, desenvolvida para simplificar a gestão financeira pessoal, oferecendo controle total sobre contas, transações e cartões de crédito com uma experiência de usuário (UX) fluida e intuitiva.
 
-Dashboard Financeiro: Gráficos e indicadores de saldo real vs. saldo previsto.
+---
 
-Controle de Cartão: Interface para gerenciar limites e datas de fechamento.
+## 📸 Screenshots
+<img width="860" height="614" alt="Login" src="https://github.com/user-attachments/assets/d25e6655-52b0-4460-9f99-a64d858f30c2" />
+<img width="572" height="641" alt="Cadastrese" src="https://github.com/user-attachments/assets/32757585-3819-4a9c-8c25-e66b000ffb85" />
 
-Parcelamentos: Visualização agrupada de compras parceladas através do transactionGroupId.
 
-🏗️ Arquitetura e Padrões
-Diferente do padrão standalone simplificado, este projeto utiliza a arquitetura robusta de NgModules para garantir escalabilidade e separação de responsabilidades:
 
-CoreModule: Serviços globais, interceptors e guardas de rota (Singleton).
+<img width="1911" height="911" alt="DashBoardVC" src="https://github.com/user-attachments/assets/a230f4a0-a3f8-42b1-9384-35c5a8bb060a" />
+<img width="1909" height="905" alt="Transacoes" src="https://github.com/user-attachments/assets/05664b39-419c-43c3-852e-5a722a572037" />
 
-SharedModule: Componentes reutilizáveis, pipes e diretivas exportáveis.
 
-Feature Modules: Módulos carregados via Lazy Loading (Dashboard, Transações, Configurações).
 
-🔌 Conexão com o Backend
-A integração será feita através do HttpClientModule, consumindo a API REST do VControla (Spring Boot).
+---
 
-Base URL: http://localhost:8080/api
+## 🎯 Funcionalidades Principais
 
-Models: Interfaces TypeScript rigorosas que espelham as entidades JPA do backend.
+### 💰 Gestão de Transações (CRUD Completo)
+- **Listagem Inteligente:** Tabela interativa com paginação (server-side ou client-side).
+- **Filtros Dinâmicos:** Filtragem instantânea por Conta Bancária e Busca textual (Descrição/Valor).
+- **Operações:** Criação, Edição e Exclusão de receitas e despesas com atualização em tempo real do saldo.
+- **Feedback Visual:** Indicadores de status e modais de confirmação para ações críticas (estorno automático ao excluir).
 
-Interceptors: Tratamento global de erros e inserção automática de tokens JWT.
+### 📊 Dashboard Financeiro (Em breve)
+- Visualização gráfica de receitas vs. despesas.
+- Indicadores de saldo previsto vs. saldo real.
 
-🛠️ Tecnologias Utilizadas
-Angular 17+ (com RxJS para reatividade).
+### 💳 Controle de Contas e Cartões
+- Gerenciamento de múltiplas carteiras (ex: Reserva de Emergência, Casa, Viagem).
+- Associação de contas bancárias a carteiras específicas.
 
-Arquitetura: Baseada em Módulos (NgModule).
+---
 
-Estilização: SCSS (Sass) e Angular Material.
+## 🏗️ Arquitetura e Decisões Técnicas
+
+Diferente da abordagem simplificada (*Standalone Components*), este projeto adota uma arquitetura baseada em **NgModules** para garantir organização empresarial, escalabilidade e clara separação de responsabilidades.
+
+A estrutura é dividida em:
+
+* **CoreModule:** O "coração" da aplicação. Contém serviços globais (Singletons), Interceptors (Auth, Error Handling) e Guards de rota. Carregado apenas uma vez no `AppModule`.
+* **SharedModule:** Componentes visuais reutilizáveis (botões, inputs, cards), Pipes e Diretivas. Importado pelos módulos de funcionalidade.
+* **Feature Modules:** Módulos de negócio (Dashboard, Transações, Contas) carregados sob demanda via **Lazy Loading**, otimizando o tempo de carregamento inicial da aplicação.
+
+### 🔌 Integração com Backend
+A comunicação é feita via `HttpClient` consumindo a API REST Spring Boot.
+- **Interceptors:** Injeção automática de Token JWT e tratamento global de erros HTTP.
+- **Models:** Interfaces TypeScript estritas espelhando as entidades JPA para garantir tipagem forte.
+
+---
+
+## 🛠️ Stack Tecnológica
+
+* **Framework:** Angular 17+
+* **Linguagem:** TypeScript
+* **Estilização:** SCSS (Sass) com arquitetura BEM/Modular.
+* **UI Components:** Angular Material (Customizado).
+* **Reatividade:** RxJS (Observables, Subjects e Operators).
+* **Gerenciamento de Estado:** Baseado em Services (BehaviorSubject).
+
+---
+
+## 📂 Estrutura de Pastas
+
+```text
+src/
+├── app/
+│   ├── core/           # Serviços singleton, interceptors, guards, models globais
+│   ├── shared/         # Componentes UI reutilizáveis (botões, inputs)
+│   ├── features/       # Módulos de negócio (Lazy Loaded)
+│   │   ├── dashboard/
+│   │   ├── transacoes/
+│   │   │   ├── components/  # Modais e componentes específicos
+│   │   │   ├── pages/       # Páginas de rota (Lista)
+│   │   │   └── transacoes.module.ts
+│   │   └── contas/
+│   ├── app.module.ts
+│   └── app-routing.module.ts
+├── assets/
+└── environments/
+
+🛣️ Roadmap e Próximos Passos
+[x] Arquitetura Base (Core/Shared/Features)
+
+[x] CRUD de Contas
+
+[x] CRUD de Transações com Estorno
+
+[x] Filtros e Paginação no Frontend
+
+[ ] Dashboard com Gráficos (Chart.js ou Ngx-Charts)
+
+[ ] Gestão de Faturas de Cartão de Crédito
+
+[ ] Deploy Automático (Vercel/Netlify)
