@@ -89,3 +89,18 @@ src/
 │   └── app-routing.module.ts
 ├── assets/
 └── environments/
+
+🛣️ Roadmap e Próximos Passos
+[x] Arquitetura Base (Core/Shared/Features)
+
+[x] CRUD de Contas
+
+[x] CRUD de Transações com Estorno
+
+[x] Filtros e Paginação no Frontend
+
+[ ] Dashboard com Gráficos (Chart.js ou Ngx-Charts)
+
+[ ] Gestão de Faturas de Cartão de Crédito
+
+[ ] Deploy Automático (Vercel/Netlify)
