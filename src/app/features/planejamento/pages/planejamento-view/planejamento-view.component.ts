@@ -11,6 +11,7 @@ import {
 import { ModalSaldoComponent } from '../../components/modal-saldo/modal-saldo.component';
 import { ModalGastoComponent } from '../../components/modal-gasto/modal-gasto.component';
 import { ModalDiminuirSaldoComponent } from '../../components/modal-diminuir-saldo/modal-diminuir-saldo.component';
+import { ModalResgatarComponent } from '../../components/modal-resgatar/modal-resgatar.component';
 
 @Component({
   selector: 'app-planejamento-view',
@@ -31,6 +32,55 @@ export class PlanejamentoViewComponent implements OnInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
   ) {}
+
+  temItensGuardados(): boolean {
+    return this.resumo?.itens?.some(i => i.status === 'GUARDADO') ?? false;
+  }
+
+  calcularTotalGuardado(): number {
+    return this.resumo?.itens
+      ?.filter(i => i.status === 'GUARDADO')
+      .reduce((acc, curr) => acc + Number(curr.valor), 0) ?? 0;
+  }
+
+  abrirResgate(item: ItemPlanejamento) {
+    const ref = this.dialog.open(ModalResgatarComponent, {
+      width: '350px',
+      data: {
+        descricao: item.nomeCarteira,
+        saldoAtual: item.valor
+      }
+    });
+
+    ref.afterClosed().subscribe(valorResgate => {
+      if (valorResgate) {
+        // Chama o service (Você precisa criar esse método no frontend service)
+        this.financeiroService.resgatarParcial(item.id, valorResgate).subscribe({
+          next: () => {
+            // ATUALIZAÇÃO OTIMISTA (Visual)
+            item.valor = Number(item.valor) - Number(valorResgate);
+
+            // Se zerar, ele vai sumir da lista da direita (pois o status mudaria no back)
+            // Mas visualmente aqui apenas reduzimos.
+
+            // Recarrega oficial
+            setTimeout(() => {
+                this.carregarDadosResumo();
+                this.carregarContasReais();
+            }, 500);
+
+            this.snackBar.open('Resgate realizado com sucesso!', 'Ok', {
+              panelClass: ['success-snackbar'], verticalPosition: 'top'
+            });
+          },
+          error: (err) => {
+            console.error(err);
+            this.snackBar.open('Erro ao resgatar.', 'Fechar', { panelClass: ['warning-snackbar'] });
+          }
+        });
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.carregarDadosResumo();

@@ -5,6 +5,7 @@
   </header>
 
   <div class="dashboard-grid">
+
     <div class="column gastos-column">
       <div class="column-header">
         <h3>Planejamento</h3>
@@ -13,59 +14,52 @@
         </button>
       </div>
 
-      <div class="cards-list">
+      <div class="planejamento-list lista-scroll">
         <div
-          class="card-item"
+          class="planejamento-row"
           *ngFor="let item of resumo?.itens"
-          [class.guardado]="item.status === 'GUARDADO'"
+          [class.guardado-row]="item.status === 'GUARDADO'"
         >
-          <div class="card-top">
-            <span class="carteira-nome">{{ item.nomeCarteira }}</span>
+          <div class="row-left">
+            <button
+              mat-icon-button
+              class="lock-button"
+              [class.locked]="item.status === 'GUARDADO'"
+              (click)="alternarStatus(item)"
+              matTooltip="{{ item.status === 'GUARDADO' ? 'Desbloquear e Estornar' : 'Guardar Valor' }}"
+            >
+              <mat-icon>{{ item.status === 'GUARDADO' ? 'lock' : 'lock_open' }}</mat-icon>
+            </button>
 
-            <div style="display: flex; align-items: center; gap: 0px">
-              <span
-                class="status-badge"
-                [class.on]="item.status === 'GUARDADO'"
-              >
-                {{ item.status }}
-              </span>
-
-              <button
-                mat-icon-button
-                [matMenuTriggerFor]="menu"
-                (click)="$event.stopPropagation()"
-                style="margin-right: -10px"
-              >
-                <mat-icon>more_vert</mat-icon>
-              </button>
-
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="editarItem(item)">
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </button>
-                <button mat-menu-item (click)="excluirItem(item)">
-                  <mat-icon color="warn">delete</mat-icon>
-                  <span>Excluir</span>
-                </button>
-              </mat-menu>
+            <div class="info-box">
+              <span class="titulo">{{ item.nomeCarteira }}</span>
+              <span class="subtitulo">{{ item.nomeContaDestino }}</span>
             </div>
           </div>
-          <div class="card-value">R$ {{ item.valor | number: "1.2-2" }}</div>
 
-          <div class="card-footer">
-            <small>{{ item.nomeContaDestino }}</small>
+          <div class="row-right">
+            <span class="valor-destaque">R$ {{ item.valor | number: "1.2-2" }}</span>
 
-            <button mat-icon-button (click)="alternarStatus(item)">
-              <mat-icon>{{
-                item.status === "GUARDADO" ? "lock" : "lock_open"
-              }}</mat-icon>
+            <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+              <mat-icon>more_vert</mat-icon>
             </button>
+
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="editarItem(item)">
+                <mat-icon>edit</mat-icon>
+                <span>Editar</span>
+              </button>
+              <button mat-menu-item (click)="excluirItem(item)">
+                <mat-icon color="warn">delete</mat-icon>
+                <span>Excluir</span>
+              </button>
+            </mat-menu>
           </div>
         </div>
 
-        <div *ngIf="resumo?.itens?.length === 0" class="empty">
-          Sem planejamentos.
+        <div *ngIf="resumo?.itens?.length === 0" class="empty-state">
+          <mat-icon>event_note</mat-icon>
+          <p>Sem planejamentos.</p>
         </div>
       </div>
     </div>
@@ -73,39 +67,93 @@
     <div class="column saldo-column">
       <div class="saldo-box">
         <h4>SALDO DISPONÍVEL</h4>
-
         <div class="big-number">
           R$ {{ resumo?.saldoDisponivelVirtual | number: "1.2-2" }}
         </div>
-
         <div class="actions-row">
-          <button
-            mat-raised-button
-            class="btn-action btn-add"
-            (click)="abrirAdicionarSaldo()"
-          >
+          <button mat-raised-button class="btn-action btn-add" (click)="abrirAdicionarSaldo()">
             <mat-icon>add</mat-icon> Aumentar
           </button>
-
-          <button
-            mat-raised-button
-            class="btn-action btn-remove"
-            (click)="abrirDiminuirSaldo()"
-          >
+          <button mat-raised-button class="btn-action btn-remove" (click)="abrirDiminuirSaldo()">
             <mat-icon>remove</mat-icon> Diminuir
           </button>
         </div>
       </div>
     </div>
 
-    <div class="column contas-column">
-      <h3>Contas Bancárias</h3>
-      <div class="contas-list">
-        <div class="conta-row" *ngFor="let conta of listaContasReais">
-          <span>{{ conta.nome }}</span>
-          <strong>R$ {{ conta.saldo | number: "1.2-2" }}</strong>
+    <div class="column reservas-column">
+      <div class="section-reservas">
+        <div class="lista-header header-orange">
+          <div class="header-content">
+            <mat-icon>savings</mat-icon>
+            <span>Reservas Guardadas</span>
+          </div>
+          <span class="total-badge">
+            Total: R$ {{ calcularTotalGuardado() | number: "1.2-2" }}
+          </span>
+        </div>
+
+        <div class="lista-scroll">
+          <ng-container *ngFor="let item of resumo?.itens">
+            <div class="reserva-row" *ngIf="item.status === 'GUARDADO'">
+              <div class="row-left">
+                <div class="icon-box check">
+                  <mat-icon>check_circle</mat-icon>
+                </div>
+                <div class="info-box">
+                  <span class="titulo">{{ item.nomeCarteira }}</span>
+                  <span class="subtitulo">{{ item.nomeContaDestino }}</span>
+                </div>
+              </div>
+              <div class="row-right">
+                <span class="valor-verde">+ R$ {{ item.valor | number: "1.2-2" }}</span>
+                <button mat-icon-button [matMenuTriggerFor]="menuResgate">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menuResgate="matMenu">
+                  <button mat-menu-item (click)="abrirResgate(item)">
+                    <mat-icon color="warn">arrow_downward</mat-icon>
+                    <span>Resgatar Valor</span>
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="empty-state" *ngIf="!temItensGuardados()">
+            <mat-icon>savings_off</mat-icon>
+            <p>Nenhuma reserva guardada.</p>
+          </div>
         </div>
       </div>
+
+      <div class="separator"></div>
+
+      <div class="section-contas">
+        <div class="lista-header header-blue">
+          <div class="header-content">
+            <mat-icon>account_balance</mat-icon>
+            <span>Saldos Bancários</span>
+          </div>
+        </div>
+
+        <div class="lista-scroll">
+          <div class="reserva-row" *ngFor="let conta of listaContasReais">
+            <div class="row-left">
+              <div class="icon-box bank">
+                <mat-icon>account_balance_wallet</mat-icon>
+              </div>
+              <span class="titulo">{{ conta.nome }}</span>
+            </div>
+            <div class="row-right">
+              <span style="font-weight: bold; font-size: 14px; color: #333;">
+                R$ {{ conta.saldo | number: "1.2-2" }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

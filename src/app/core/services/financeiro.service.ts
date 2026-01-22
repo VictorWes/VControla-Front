@@ -37,4 +37,10 @@ export class FinanceiroService {
   atualizarItem(id: string, dados: any): Observable<any> {
     return this.http.put<any>(`${this.API_URL}/item/${id}`, dados);
   }
+
+  resgatarParcial(id: string, valor: number): Observable<void> {
+    return this.http.post<void>(`${this.API_URL}/item/${id}/resgatar`, {
+      valor,
+    });
+  }
 }

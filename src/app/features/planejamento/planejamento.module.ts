@@ -21,6 +21,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { ModalDiminuirSaldoComponent } from './components/modal-diminuir-saldo/modal-diminuir-saldo.component';
+import { ModalResgatarComponent } from './components/modal-resgatar/modal-resgatar.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ModalDiminuirSaldoComponent } from './components/modal-diminuir-saldo/m
     ModalSaldoComponent,
     ModalGastoComponent,
     ModalDiminuirSaldoComponent,
+    ModalResgatarComponent,
   ],
   imports: [
     CommonModule,

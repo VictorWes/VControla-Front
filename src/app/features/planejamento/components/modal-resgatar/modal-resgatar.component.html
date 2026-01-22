@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>Resgatar Valor</h2>
+<mat-dialog-content>
+  <p>
+    Quanto você deseja retirar de <strong>{{ data.descricao }}</strong
+    >?
+  </p>
+  <p class="saldo-atual">
+    Guardado atual: R$ {{ data.saldoAtual | number: "1.2-2" }}
+  </p>
+
+  <mat-form-field appearance="outline" style="width: 100%; margin-top: 15px">
+    <mat-label>Valor a retirar</mat-label>
+    <input
+      matInput
+      type="number"
+      [(ngModel)]="valor"
+      cdkFocusInitial
+      placeholder="0.00"
+    />
+    <span matPrefix>R$&nbsp;</span>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="confirmar()"
+    [disabled]="!valor || valor > data.saldoAtual"
+  >
+    Confirmar Resgate
+  </button>
+</mat-dialog-actions>
