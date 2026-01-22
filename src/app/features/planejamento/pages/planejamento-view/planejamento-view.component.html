@@ -21,15 +21,41 @@
         >
           <div class="card-top">
             <span class="carteira-nome">{{ item.nomeCarteira }}</span>
-            <span class="status-badge" [class.on]="item.status === 'GUARDADO'">
-              {{ item.status }}
-            </span>
-          </div>
 
+            <div style="display: flex; align-items: center; gap: 0px">
+              <span
+                class="status-badge"
+                [class.on]="item.status === 'GUARDADO'"
+              >
+                {{ item.status }}
+              </span>
+
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                (click)="$event.stopPropagation()"
+                style="margin-right: -10px"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="editarItem(item)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Editar</span>
+                </button>
+                <button mat-menu-item (click)="excluirItem(item)">
+                  <mat-icon color="warn">delete</mat-icon>
+                  <span>Excluir</span>
+                </button>
+              </mat-menu>
+            </div>
+          </div>
           <div class="card-value">R$ {{ item.valor | number: "1.2-2" }}</div>
 
           <div class="card-footer">
             <small>{{ item.nomeContaDestino }}</small>
+
             <button mat-icon-button (click)="alternarStatus(item)">
               <mat-icon>{{
                 item.status === "GUARDADO" ? "lock" : "lock_open"

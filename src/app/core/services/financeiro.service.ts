@@ -26,8 +26,15 @@ export class FinanceiroService {
     return this.http.post<void>(`${this.API_URL}/item`, item);
   }
 
-  // PATCH: Alterna entre PENDENTE e GUARDADO
   alternarStatus(id: string): Observable<void> {
     return this.http.patch<void>(`${this.API_URL}/item/${id}/alternar`, {});
+  }
+
+  excluirItem(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/item/${id}`);
+  }
+
+  atualizarItem(id: string, dados: any): Observable<any> {
+    return this.http.put<any>(`${this.API_URL}/item/${id}`, dados);
   }
 }

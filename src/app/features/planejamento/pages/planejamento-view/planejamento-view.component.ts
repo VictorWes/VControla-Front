@@ -165,4 +165,55 @@ export class PlanejamentoViewComponent implements OnInit {
       }
     });
   }
+
+  editarItem(item: ItemPlanejamento) {
+    const ref = this.dialog.open(ModalGastoComponent, {
+      width: '400px',
+      data: {
+        carteiras: this.listaCarteiras,
+        contas: this.listaContasReais,
+        itemParaEditar: item,
+      },
+    });
+
+    ref.afterClosed().subscribe((result) => {
+      if (result) {
+        this.financeiroService.atualizarItem(item.id, result).subscribe(() => {
+          this.carregarDadosResumo();
+          this.carregarContasReais();
+          this.snackBar.open('Item atualizado!', 'Ok', {
+            duration: 3000,
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar'],
+          });
+        });
+      }
+    });
+  }
+
+  excluirItem(item: ItemPlanejamento) {
+    const nomeExibicao = item.nomeCarteira || 'este item';
+
+    if (confirm(`Tem certeza que deseja excluir "${nomeExibicao}"?`)) {
+      this.financeiroService.excluirItem(item.id).subscribe({
+        next: () => {
+          this.carregarDadosResumo();
+          this.carregarContasReais();
+
+          this.snackBar.open('Item excluído com sucesso.', 'Ok', {
+            duration: 3000,
+            verticalPosition: 'top',
+            panelClass: ['warning-snackbar'],
+          });
+        },
+        error: (err) => {
+          console.error(err);
+          this.snackBar.open('Erro ao excluir item.', 'Fechar', {
+            verticalPosition: 'top',
+            panelClass: ['warning-snackbar'],
+          });
+        },
+      });
+    }
+  }
 }

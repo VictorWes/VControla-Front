@@ -18,8 +18,8 @@ import {
   MatSnackBarModule,
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
 } from '@angular/material/snack-bar';
-
 import { FormsModule } from '@angular/forms';
+import { MatMenuModule } from '@angular/material/menu';
 import { ModalDiminuirSaldoComponent } from './components/modal-diminuir-saldo/modal-diminuir-saldo.component';
 
 @NgModule({
@@ -42,6 +42,7 @@ import { ModalDiminuirSaldoComponent } from './components/modal-diminuir-saldo/m
     MatTooltipModule,
     FormsModule,
     MatSnackBarModule,
+    MatMenuModule,
   ],
   providers: [
     {
