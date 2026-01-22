@@ -1,1 +1,73 @@
-<p>planejamento-view works!</p>
+<div class="page-container">
+  <header class="page-header">
+    <h2>Organização Financeira</h2>
+    <p>Distribua seu saldo entre suas carteiras.</p>
+  </header>
+
+  <div class="dashboard-grid">
+    <div class="column gastos-column">
+      <div class="column-header">
+        <h3>Planejamento</h3>
+        <button mat-mini-fab color="primary" (click)="abrirNovoGasto()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
+      <div class="cards-list">
+        <div
+          class="card-item"
+          *ngFor="let item of resumo?.itens"
+          [class.guardado]="item.status === 'GUARDADO'"
+        >
+          <div class="card-top">
+            <span class="carteira-nome">{{ item.nomeCarteira }}</span>
+            <span class="status-badge" [class.on]="item.status === 'GUARDADO'">
+              {{ item.status }}
+            </span>
+          </div>
+
+          <div class="card-value">R$ {{ item.valor | number: "1.2-2" }}</div>
+
+          <div class="card-footer">
+            <small>{{ item.nomeContaDestino }}</small>
+            <button mat-icon-button (click)="alternarStatus(item)">
+              <mat-icon>{{
+                item.status === "GUARDADO" ? "lock" : "lock_open"
+              }}</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="resumo?.itens?.length === 0" class="empty">
+          Sem planejamentos.
+        </div>
+      </div>
+    </div>
+
+    <div class="column saldo-column">
+      <div class="saldo-box">
+        <h4>SALDO DISPONÍVEL</h4>
+        <div class="big-number">
+          R$ {{ resumo?.saldoDisponivelVirtual | number: "1.2-2" }}
+        </div>
+        <button
+          mat-raised-button
+          class="btn-add"
+          (click)="abrirAdicionarSaldo()"
+        >
+          <mat-icon>add</mat-icon> Aumentar
+        </button>
+      </div>
+    </div>
+
+    <div class="column contas-column">
+      <h3>Contas Bancárias</h3>
+      <div class="contas-list">
+        <div class="conta-row" *ngFor="let conta of listaContasReais">
+          <span>{{ conta.nome }}</span>
+          <strong>R$ {{ conta.saldo | number: "1.2-2" }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

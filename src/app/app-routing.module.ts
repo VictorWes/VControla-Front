@@ -13,18 +13,20 @@ const routes: Routes = [
       import('./features/auth/auth.module').then((m) => m.AuthModule),
   },
 
+  // --- AQUI É A "CASINHA" DO SISTEMA (COM LAYOUT) ---
   {
     path: 'sistema',
-    component: LayoutComponent,
+    component: LayoutComponent, // <--- ESSE CARA QUE TRAZ O HEADER E O MENU
     canActivate: [authGuard],
-
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+
       {
         path: 'dashboard',
         loadChildren: () =>
           import('./features/dashboard.module').then((m) => m.DashboardModule),
       },
+
       {
         path: 'transacoes',
         loadChildren: () =>
@@ -32,17 +34,20 @@ const routes: Routes = [
             (m) => m.TransacoesModule,
           ),
       },
+
+      // --- MUDANÇA: O PLANEJAMENTO VEM PARA CÁ (DENTRO DO CHILDREN) ---
+      {
+        path: 'planejamento',
+        loadChildren: () =>
+          import('./features/planejamento/planejamento.module').then(
+            (m) => m.PlanejamentoModule,
+          ),
+      },
     ],
   },
 
+  // O Wildcard deve ser a última coisa
   { path: '**', redirectTo: 'auth/login' },
-  {
-    path: 'planejamento',
-    loadChildren: () =>
-      import('./features/planejamento/planejamento.module').then(
-        (m) => m.PlanejamentoModule,
-      ),
-  },
 ];
 
 @NgModule({

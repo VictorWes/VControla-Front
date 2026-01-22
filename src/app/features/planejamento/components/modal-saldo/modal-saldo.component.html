@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Adicionar Saldo</h2>
+
+<mat-dialog-content>
+  <p>Quanto você quer adicionar ao seu saldo disponível para distribuir?</p>
+
+  <mat-form-field appearance="outline" style="width: 100%; margin-top: 10px;">
+    <mat-label>Valor (R$)</mat-label>
+    <input matInput type="number" [(ngModel)]="valor" placeholder="0.00" cdkFocusInitial>
+    <span matPrefix>R$&nbsp;</span>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="salvar()" [disabled]="!valor">
+    Adicionar
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>Novo Planejamento</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="outline">
+    <mat-label>Carteira (Objetivo)</mat-label>
+    <mat-select [(ngModel)]="novoItem.carteiraId">
+      <mat-option *ngFor="let c of listaCarteiras" [value]="c.id">
+        {{ c.nome }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Valor a Alocar</mat-label>
+    <input matInput type="number" [(ngModel)]="novoItem.valor">
+    <span matPrefix>R$&nbsp;</span>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Conta de Destino</mat-label>
+    <mat-select [(ngModel)]="novoItem.contaDestinoId">
+      <mat-option *ngFor="let conta of listaContas" [value]="conta.id">
+        {{ conta.nome }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-raised-button color="primary" (click)="salvar()"
+          [disabled]="!novoItem.carteiraId || !novoItem.valor || !novoItem.contaDestinoId">
+    Salvar
+  </button>
+</mat-dialog-actions>

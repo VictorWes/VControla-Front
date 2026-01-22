@@ -12,9 +12,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ModalSaldoComponent } from './components/modal-saldo/modal-saldo.component';
+import { ModalGastoComponent } from './components/modal-gasto/modal-gasto.component';
+
+
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [PlanejamentoViewComponent],
+  declarations: [
+    PlanejamentoViewComponent,
+    ModalSaldoComponent,
+    ModalGastoComponent,
+  ],
   imports: [
     CommonModule,
     PlanejamentoRoutingModule,
@@ -26,6 +35,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
+    FormsModule,
   ],
 })
 export class PlanejamentoModule {}

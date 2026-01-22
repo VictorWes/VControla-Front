@@ -1,0 +1,108 @@
+.page-container {
+  padding: 24px;
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+.page-header {
+  margin-bottom: 24px;
+  h2 {
+    margin: 0;
+  }
+  p {
+    color: #666;
+  }
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.column {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  .column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+}
+
+.card-item {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  &.guardado {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .card-value {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 8px 0;
+  }
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #777;
+  }
+
+  .status-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #eee;
+    &.on {
+      background: #dcfce7;
+      color: #166534;
+    }
+  }
+}
+
+.saldo-column {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  .saldo-box {
+    background: linear-gradient(135deg, #3f51b5, #5c6bc0);
+    color: white;
+    border-radius: 16px;
+    padding: 40px 20px;
+    text-align: center;
+    .big-number {
+      font-size: 36px;
+      font-weight: 800;
+      margin: 16px 0;
+    }
+    .btn-add {
+      background: white;
+      color: #3f51b5;
+    }
+  }
+}
+
+.conta-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  &:last-child {
+    border: none;
+  }
+}
