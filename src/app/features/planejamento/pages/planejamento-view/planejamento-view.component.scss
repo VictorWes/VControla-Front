@@ -105,4 +105,14 @@
   &:last-child {
     border: none;
   }
+
 }
+
+ .warning-snackbar {
+    background-color: #f44336 !important;
+    color: white !important;
+
+    .mat-mdc-simple-snack-bar-action {
+      color: #ffd740 !important;
+    }
+  }

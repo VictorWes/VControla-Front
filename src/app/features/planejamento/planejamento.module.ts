@@ -14,7 +14,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ModalSaldoComponent } from './components/modal-saldo/modal-saldo.component';
 import { ModalGastoComponent } from './components/modal-gasto/modal-gasto.component';
-
+import {
+  MatSnackBarModule,
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+} from '@angular/material/snack-bar';
 
 import { FormsModule } from '@angular/forms';
 
@@ -36,6 +39,17 @@ import { FormsModule } from '@angular/forms';
     MatSelectModule,
     MatTooltipModule,
     FormsModule,
+    MatSnackBarModule,
+  ],
+  providers: [
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: {
+        verticalPosition: 'top',
+        horizontalPosition: 'center',
+        duration: 5000,
+      },
+    },
   ],
 })
 export class PlanejamentoModule {}

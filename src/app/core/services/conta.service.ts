@@ -11,9 +11,12 @@ export class ContaService {
 
   constructor(private http: HttpClient) {}
 
-  listar(): Observable<Conta[]> {
-    return this.http.get<Conta[]>(this.API_URL);
+  listar(): Observable<any[]> {
+    const timestamp = new Date().getTime();
+
+    return this.http.get<any[]>(`${this.API_URL}?t=${timestamp}`);
   }
+
   criar(conta: Conta): Observable<void> {
     return this.http.post<void>(this.API_URL, conta);
   }
