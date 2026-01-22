@@ -39,14 +39,14 @@
   }
 }
 
-// --- NOVO ESTILO DA COLUNA ESQUERDA (LISTA COMPACTA) ---
+// --- ESTILO DA COLUNA ESQUERDA (LISTA COMPACTA + PAGINAÇÃO) ---
 .gastos-column {
-  // Removemos os estilos antigos de .card-item e usamos este novo padrão de lista
-
   .planejamento-list {
-    // Reaproveita a área de scroll se tiver muitos itens
-    max-height: calc(100vh - 200px);
+    // Reduzi a altura máxima para sobrar espaço para o paginador
+    max-height: calc(100vh - 260px);
     overflow-y: auto;
+    border-bottom: 1px solid #eee; // Linha sutil separando lista do paginador
+
     &::-webkit-scrollbar {
       width: 4px;
     }
@@ -60,7 +60,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 4px; // Padding menor nas laterais
+    padding: 12px 4px;
     border-bottom: 1px solid #eee;
     transition: background-color 0.2s;
 
@@ -70,8 +70,6 @@
     &:hover {
       background-color: #fafafa;
     }
-
-    // Estilo opcional para a linha quando está guardado (fundo verde bem claro)
     &.guardado-row {
       background-color: #f7fdf9;
     }
@@ -80,15 +78,12 @@
       display: flex;
       align-items: center;
       gap: 12px;
-
-      // Botão do Cadeado
       .lock-button {
-        color: #999; // Cor padrão (cadeado aberto)
+        color: #999;
         &.locked {
-          color: #4caf50; // Cor verde quando fechado
+          color: #4caf50;
         }
       }
-
       .info-box {
         display: flex;
         flex-direction: column;
@@ -108,7 +103,6 @@
       display: flex;
       align-items: center;
       gap: 8px;
-
       .valor-destaque {
         font-weight: bold;
         font-size: 15px;
@@ -129,6 +123,18 @@
       opacity: 0.5;
     }
   }
+
+  // --- ESTILO DO PAGINADOR ---
+  mat-paginator {
+    background: transparent;
+    border-radius: 0 0 12px 12px;
+
+    // Ajuste fino para compactar a altura do paginador
+    ::ng-deep .mat-mdc-paginator-container {
+      padding: 0 8px;
+      min-height: 48px;
+    }
+  }
 }
 
 // --- COLUNA CENTRAL (SALDO) ---
@@ -143,7 +149,6 @@
     border-radius: 16px;
     padding: 40px 20px;
     text-align: center;
-
     h4 {
       margin: 0;
       opacity: 0.9;
@@ -153,14 +158,12 @@
       font-weight: 800;
       margin: 16px 0;
     }
-
     .actions-row {
       display: flex;
       justify-content: center;
       gap: 12px;
       margin-top: 24px;
     }
-
     .btn-action {
       min-width: 130px;
       font-weight: 600;
@@ -177,7 +180,6 @@
 }
 
 // --- ESTILO DA COLUNA DIREITA (HÍBRIDA) ---
-// (Reaproveitando o código que já estava funcionando bem)
 .reservas-column {
   padding: 0 !important;
   overflow: hidden;
@@ -208,7 +210,6 @@
       border-radius: 4px;
     }
   }
-
   .header-orange {
     background-color: #ff9800;
   }

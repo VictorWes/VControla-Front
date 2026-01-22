@@ -22,6 +22,7 @@ import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { ModalDiminuirSaldoComponent } from './components/modal-diminuir-saldo/modal-diminuir-saldo.component';
 import { ModalResgatarComponent } from './components/modal-resgatar/modal-resgatar.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { ModalResgatarComponent } from './components/modal-resgatar/modal-resgat
     FormsModule,
     MatSnackBarModule,
     MatMenuModule,
+    MatPaginatorModule,
   ],
   providers: [
     {

@@ -5,7 +5,6 @@
   </header>
 
   <div class="dashboard-grid">
-
     <div class="column gastos-column">
       <div class="column-header">
         <h3>Planejamento</h3>
@@ -17,7 +16,7 @@
       <div class="planejamento-list lista-scroll">
         <div
           class="planejamento-row"
-          *ngFor="let item of resumo?.itens"
+          *ngFor="let item of itensPaginados"
           [class.guardado-row]="item.status === 'GUARDADO'"
         >
           <div class="row-left">
@@ -26,9 +25,15 @@
               class="lock-button"
               [class.locked]="item.status === 'GUARDADO'"
               (click)="alternarStatus(item)"
-              matTooltip="{{ item.status === 'GUARDADO' ? 'Desbloquear e Estornar' : 'Guardar Valor' }}"
+              matTooltip="{{
+                item.status === 'GUARDADO'
+                  ? 'Desbloquear e Estornar'
+                  : 'Guardar Valor'
+              }}"
             >
-              <mat-icon>{{ item.status === 'GUARDADO' ? 'lock' : 'lock_open' }}</mat-icon>
+              <mat-icon>{{
+                item.status === "GUARDADO" ? "lock" : "lock_open"
+              }}</mat-icon>
             </button>
 
             <div class="info-box">
@@ -38,9 +43,15 @@
           </div>
 
           <div class="row-right">
-            <span class="valor-destaque">R$ {{ item.valor | number: "1.2-2" }}</span>
+            <span class="valor-destaque"
+              >R$ {{ item.valor | number: "1.2-2" }}</span
+            >
 
-            <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+            <button
+              mat-icon-button
+              [matMenuTriggerFor]="menu"
+              (click)="$event.stopPropagation()"
+            >
               <mat-icon>more_vert</mat-icon>
             </button>
 
@@ -62,6 +73,16 @@
           <p>Sem planejamentos.</p>
         </div>
       </div>
+
+      <mat-paginator
+        *ngIf="(resumo?.itens?.length || 0) > 0"
+        [length]="resumo?.itens?.length || 0"
+        [pageSize]="tamanhoPagina"
+        [hidePageSize]="true"
+        (page)="mudarPagina($event)"
+        aria-label="Selecionar página"
+      >
+      </mat-paginator>
     </div>
 
     <div class="column saldo-column">
@@ -71,10 +92,18 @@
           R$ {{ resumo?.saldoDisponivelVirtual | number: "1.2-2" }}
         </div>
         <div class="actions-row">
-          <button mat-raised-button class="btn-action btn-add" (click)="abrirAdicionarSaldo()">
+          <button
+            mat-raised-button
+            class="btn-action btn-add"
+            (click)="abrirAdicionarSaldo()"
+          >
             <mat-icon>add</mat-icon> Aumentar
           </button>
-          <button mat-raised-button class="btn-action btn-remove" (click)="abrirDiminuirSaldo()">
+          <button
+            mat-raised-button
+            class="btn-action btn-remove"
+            (click)="abrirDiminuirSaldo()"
+          >
             <mat-icon>remove</mat-icon> Diminuir
           </button>
         </div>
@@ -106,7 +135,9 @@
                 </div>
               </div>
               <div class="row-right">
-                <span class="valor-verde">+ R$ {{ item.valor | number: "1.2-2" }}</span>
+                <span class="valor-verde"
+                  >+ R$ {{ item.valor | number: "1.2-2" }}</span
+                >
                 <button mat-icon-button [matMenuTriggerFor]="menuResgate">
                   <mat-icon>more_vert</mat-icon>
                 </button>
@@ -146,14 +177,13 @@
               <span class="titulo">{{ conta.nome }}</span>
             </div>
             <div class="row-right">
-              <span style="font-weight: bold; font-size: 14px; color: #333;">
+              <span style="font-weight: bold; font-size: 14px; color: #333">
                 R$ {{ conta.saldo | number: "1.2-2" }}
               </span>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>

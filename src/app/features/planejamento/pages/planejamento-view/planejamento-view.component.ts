@@ -12,6 +12,7 @@ import { ModalSaldoComponent } from '../../components/modal-saldo/modal-saldo.co
 import { ModalGastoComponent } from '../../components/modal-gasto/modal-gasto.component';
 import { ModalDiminuirSaldoComponent } from '../../components/modal-diminuir-saldo/modal-diminuir-saldo.component';
 import { ModalResgatarComponent } from '../../components/modal-resgatar/modal-resgatar.component';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-planejamento-view',
@@ -25,6 +26,9 @@ export class PlanejamentoViewComponent implements OnInit {
   listaCarteiras: any[] = [];
   carregando = true;
 
+  tamanhoPagina = 10;
+  paginaAtual = 0;
+
   constructor(
     private financeiroService: FinanceiroService,
     private contaService: ContaService,
@@ -33,14 +37,29 @@ export class PlanejamentoViewComponent implements OnInit {
     private snackBar: MatSnackBar,
   ) {}
 
+  get itensPaginados(): any[] {
+    if (!this.resumo?.itens) return [];
+
+    const inicio = this.paginaAtual * this.tamanhoPagina;
+    const fim = inicio + this.tamanhoPagina;
+
+    return this.resumo.itens.slice(inicio, fim);
+  }
+
+  mudarPagina(evento: PageEvent) {
+    this.paginaAtual = evento.pageIndex;
+  }
+
   temItensGuardados(): boolean {
-    return this.resumo?.itens?.some(i => i.status === 'GUARDADO') ?? false;
+    return this.resumo?.itens?.some((i) => i.status === 'GUARDADO') ?? false;
   }
 
   calcularTotalGuardado(): number {
-    return this.resumo?.itens
-      ?.filter(i => i.status === 'GUARDADO')
-      .reduce((acc, curr) => acc + Number(curr.valor), 0) ?? 0;
+    return (
+      this.resumo?.itens
+        ?.filter((i) => i.status === 'GUARDADO')
+        .reduce((acc, curr) => acc + Number(curr.valor), 0) ?? 0
+    );
   }
 
   abrirResgate(item: ItemPlanejamento) {
@@ -48,36 +67,35 @@ export class PlanejamentoViewComponent implements OnInit {
       width: '350px',
       data: {
         descricao: item.nomeCarteira,
-        saldoAtual: item.valor
-      }
+        saldoAtual: item.valor,
+      },
     });
 
-    ref.afterClosed().subscribe(valorResgate => {
+    ref.afterClosed().subscribe((valorResgate) => {
       if (valorResgate) {
-        // Chama o service (Você precisa criar esse método no frontend service)
-        this.financeiroService.resgatarParcial(item.id, valorResgate).subscribe({
-          next: () => {
-            // ATUALIZAÇÃO OTIMISTA (Visual)
-            item.valor = Number(item.valor) - Number(valorResgate);
+        this.financeiroService
+          .resgatarParcial(item.id, valorResgate)
+          .subscribe({
+            next: () => {
+              item.valor = Number(item.valor) - Number(valorResgate);
 
-            // Se zerar, ele vai sumir da lista da direita (pois o status mudaria no back)
-            // Mas visualmente aqui apenas reduzimos.
-
-            // Recarrega oficial
-            setTimeout(() => {
+              setTimeout(() => {
                 this.carregarDadosResumo();
                 this.carregarContasReais();
-            }, 500);
+              }, 500);
 
-            this.snackBar.open('Resgate realizado com sucesso!', 'Ok', {
-              panelClass: ['success-snackbar'], verticalPosition: 'top'
-            });
-          },
-          error: (err) => {
-            console.error(err);
-            this.snackBar.open('Erro ao resgatar.', 'Fechar', { panelClass: ['warning-snackbar'] });
-          }
-        });
+              this.snackBar.open('Resgate realizado com sucesso!', 'Ok', {
+                panelClass: ['success-snackbar'],
+                verticalPosition: 'top',
+              });
+            },
+            error: (err) => {
+              console.error(err);
+              this.snackBar.open('Erro ao resgatar.', 'Fechar', {
+                panelClass: ['warning-snackbar'],
+              });
+            },
+          });
       }
     });
   }
