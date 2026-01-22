@@ -37,7 +37,13 @@ export class PlanejamentoViewComponent implements OnInit {
     private snackBar: MatSnackBar,
   ) {}
 
-  get itensPaginados(): any[] {
+  ngOnInit(): void {
+    this.carregarDadosResumo();
+    this.carregarContasReais();
+    this.carregarCarteiras();
+  }
+
+  get itensPaginados(): ItemPlanejamento[] {
     if (!this.resumo?.itens) return [];
 
     const inicio = this.paginaAtual * this.tamanhoPagina;
@@ -50,60 +56,18 @@ export class PlanejamentoViewComponent implements OnInit {
     this.paginaAtual = evento.pageIndex;
   }
 
-  temItensGuardados(): boolean {
-    return this.resumo?.itens?.some((i) => i.status === 'GUARDADO') ?? false;
-  }
+  private ordenarItens() {
+    if (!this.resumo?.itens) return;
 
-  calcularTotalGuardado(): number {
-    return (
-      this.resumo?.itens
-        ?.filter((i) => i.status === 'GUARDADO')
-        .reduce((acc, curr) => acc + Number(curr.valor), 0) ?? 0
-    );
-  }
-
-  abrirResgate(item: ItemPlanejamento) {
-    const ref = this.dialog.open(ModalResgatarComponent, {
-      width: '350px',
-      data: {
-        descricao: item.nomeCarteira,
-        saldoAtual: item.valor,
-      },
-    });
-
-    ref.afterClosed().subscribe((valorResgate) => {
-      if (valorResgate) {
-        this.financeiroService
-          .resgatarParcial(item.id, valorResgate)
-          .subscribe({
-            next: () => {
-              item.valor = Number(item.valor) - Number(valorResgate);
-
-              setTimeout(() => {
-                this.carregarDadosResumo();
-                this.carregarContasReais();
-              }, 500);
-
-              this.snackBar.open('Resgate realizado com sucesso!', 'Ok', {
-                panelClass: ['success-snackbar'],
-                verticalPosition: 'top',
-              });
-            },
-            error: (err) => {
-              console.error(err);
-              this.snackBar.open('Erro ao resgatar.', 'Fechar', {
-                panelClass: ['warning-snackbar'],
-              });
-            },
-          });
+    this.resumo.itens.sort((a, b) => {
+      if (a.status !== b.status) {
+        return a.status === 'PENDENTE' ? -1 : 1;
       }
-    });
-  }
 
-  ngOnInit(): void {
-    this.carregarDadosResumo();
-    this.carregarContasReais();
-    this.carregarCarteiras();
+      return (a.nomeCarteira || '').localeCompare(b.nomeCarteira || '');
+    });
+
+    this.resumo.itens = [...this.resumo.itens];
   }
 
   carregarDadosResumo() {
@@ -111,6 +75,8 @@ export class PlanejamentoViewComponent implements OnInit {
     this.financeiroService.buscarResumo().subscribe({
       next: (dados) => {
         this.resumo = dados;
+
+        this.ordenarItens();
         this.carregando = false;
       },
       error: (err) => {
@@ -124,7 +90,6 @@ export class PlanejamentoViewComponent implements OnInit {
     this.contaService.listar().subscribe({
       next: (contas) => {
         console.log('Contas atualizadas recebidas:', contas);
-
         this.listaContasReais = [...contas];
       },
       error: (err) => console.error('Erro ao buscar contas:', err),
@@ -134,32 +99,6 @@ export class PlanejamentoViewComponent implements OnInit {
   carregarCarteiras() {
     this.tipoContaService.listar().subscribe((carteiras) => {
       this.listaCarteiras = carteiras;
-    });
-  }
-
-  abrirAdicionarSaldo() {
-    const ref = this.dialog.open(ModalSaldoComponent, { width: '300px' });
-    ref.afterClosed().subscribe((valor) => {
-      if (valor) {
-        this.financeiroService.adicionarSaldo(valor).subscribe(() => {
-          this.carregarDadosResumo();
-        });
-      }
-    });
-  }
-
-  abrirNovoGasto() {
-    const ref = this.dialog.open(ModalGastoComponent, {
-      width: '400px',
-      data: { carteiras: this.listaCarteiras, contas: this.listaContasReais },
-    });
-    ref.afterClosed().subscribe((result) => {
-      if (result) {
-        this.financeiroService.criarItem(result).subscribe(() => {
-          this.carregarDadosResumo();
-          this.carregarContasReais();
-        });
-      }
     });
   }
 
@@ -181,16 +120,17 @@ export class PlanejamentoViewComponent implements OnInit {
           } else {
             contaAlvo.saldo = saldoAtual + valorItem;
           }
-
           this.listaContasReais = [...this.listaContasReais];
         }
 
         item.status = vaiGuardar ? 'GUARDADO' : 'PENDENTE';
 
+        this.ordenarItens();
+
         setTimeout(() => {
           this.carregarDadosResumo();
           this.carregarContasReais();
-        }, 1);
+        }, 200);
 
         this.snackBar.open('Saldo atualizado!', 'Ok', {
           duration: 3000,
@@ -200,10 +140,13 @@ export class PlanejamentoViewComponent implements OnInit {
         });
       },
       error: (err) => {
-        item.status = statusAntigo;
+        item.status = statusAntigo; // Rollback visual se der erro
         console.error(err);
 
-        this.snackBar.open('Erro ao atualizar.', 'Fechar', {
+        let msg = 'Erro ao atualizar.';
+        if (err.error?.message) msg = err.error.message;
+
+        this.snackBar.open(msg, 'Fechar', {
           verticalPosition: 'top',
           panelClass: ['warning-snackbar'],
         });
@@ -211,18 +154,49 @@ export class PlanejamentoViewComponent implements OnInit {
     });
   }
 
+  abrirAdicionarSaldo() {
+    const ref = this.dialog.open(ModalSaldoComponent, { width: '300px' });
+    ref.afterClosed().subscribe((valor) => {
+      if (valor) {
+        this.financeiroService.adicionarSaldo(valor).subscribe(() => {
+          this.carregarDadosResumo();
+          this.snackBar.open('Saldo adicionado!', 'Ok', {
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar'],
+          });
+        });
+      }
+    });
+  }
+
+  abrirNovoGasto() {
+    const ref = this.dialog.open(ModalGastoComponent, {
+      width: '400px',
+      data: { carteiras: this.listaCarteiras, contas: this.listaContasReais },
+    });
+    ref.afterClosed().subscribe((result) => {
+      if (result) {
+        this.financeiroService.criarItem(result).subscribe(() => {
+          this.carregarDadosResumo();
+          this.carregarContasReais();
+          this.snackBar.open('Planejamento criado!', 'Ok', {
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar'],
+          });
+        });
+      }
+    });
+  }
+
   abrirDiminuirSaldo() {
     const ref = this.dialog.open(ModalDiminuirSaldoComponent, {
       width: '300px',
     });
-
     ref.afterClosed().subscribe((valor) => {
       if (valor) {
         const valorNegativo = valor * -1;
-
         this.financeiroService.adicionarSaldo(valorNegativo).subscribe(() => {
           this.carregarDadosResumo();
-
           this.snackBar.open('Saldo diminuído com sucesso!', 'Ok', {
             duration: 3000,
             verticalPosition: 'top',
@@ -247,7 +221,7 @@ export class PlanejamentoViewComponent implements OnInit {
     ref.afterClosed().subscribe((result) => {
       if (result) {
         this.financeiroService.atualizarItem(item.id, result).subscribe(() => {
-          this.carregarDadosResumo();
+          this.carregarDadosResumo(); // Reordena automaticamente ao recarregar
           this.carregarContasReais();
           this.snackBar.open('Item atualizado!', 'Ok', {
             duration: 3000,
@@ -261,13 +235,11 @@ export class PlanejamentoViewComponent implements OnInit {
 
   excluirItem(item: ItemPlanejamento) {
     const nomeExibicao = item.nomeCarteira || 'este item';
-
     if (confirm(`Tem certeza que deseja excluir "${nomeExibicao}"?`)) {
       this.financeiroService.excluirItem(item.id).subscribe({
         next: () => {
           this.carregarDadosResumo();
           this.carregarContasReais();
-
           this.snackBar.open('Item excluído com sucesso.', 'Ok', {
             duration: 3000,
             verticalPosition: 'top',
@@ -276,12 +248,60 @@ export class PlanejamentoViewComponent implements OnInit {
         },
         error: (err) => {
           console.error(err);
-          this.snackBar.open('Erro ao excluir item.', 'Fechar', {
+          let msg = 'Erro ao excluir item.';
+          if (err.error?.message) msg = err.error.message;
+
+          this.snackBar.open(msg, 'Fechar', {
             verticalPosition: 'top',
             panelClass: ['warning-snackbar'],
           });
         },
       });
     }
+  }
+
+  abrirResgate(item: ItemPlanejamento) {
+    const ref = this.dialog.open(ModalResgatarComponent, {
+      width: '350px',
+      data: { descricao: item.nomeCarteira, saldoAtual: item.valor },
+    });
+
+    ref.afterClosed().subscribe((valorResgate) => {
+      if (valorResgate) {
+        this.financeiroService
+          .resgatarParcial(item.id, valorResgate)
+          .subscribe({
+            next: () => {
+              item.valor = Number(item.valor) - Number(valorResgate);
+              setTimeout(() => {
+                this.carregarDadosResumo();
+                this.carregarContasReais();
+              }, 500);
+              this.snackBar.open('Resgate realizado com sucesso!', 'Ok', {
+                panelClass: ['success-snackbar'],
+                verticalPosition: 'top',
+              });
+            },
+            error: (err) => {
+              console.error(err);
+              this.snackBar.open('Erro ao resgatar.', 'Fechar', {
+                panelClass: ['warning-snackbar'],
+              });
+            },
+          });
+      }
+    });
+  }
+
+  temItensGuardados(): boolean {
+    return this.resumo?.itens?.some((i) => i.status === 'GUARDADO') ?? false;
+  }
+
+  calcularTotalGuardado(): number {
+    return (
+      this.resumo?.itens
+        ?.filter((i) => i.status === 'GUARDADO')
+        .reduce((acc, curr) => acc + Number(curr.valor), 0) ?? 0
+    );
   }
 }
