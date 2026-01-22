@@ -36,6 +36,13 @@ const routes: Routes = [
   },
 
   { path: '**', redirectTo: 'auth/login' },
+  {
+    path: 'planejamento',
+    loadChildren: () =>
+      import('./features/planejamento/planejamento.module').then(
+        (m) => m.PlanejamentoModule,
+      ),
+  },
 ];
 
 @NgModule({
