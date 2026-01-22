@@ -3,6 +3,7 @@
   background: #f5f7fa;
   min-height: 100vh;
 }
+
 .page-header {
   margin-bottom: 24px;
   h2 {
@@ -39,6 +40,7 @@
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 10px;
+
   &.guardado {
     background: #f0fdf4;
     border-color: #bbf7d0;
@@ -50,11 +52,13 @@
     font-weight: 600;
     font-size: 14px;
   }
+
   .card-value {
     font-size: 18px;
     font-weight: bold;
     margin: 8px 0;
   }
+
   .card-footer {
     display: flex;
     justify-content: space-between;
@@ -68,6 +72,7 @@
     padding: 2px 6px;
     border-radius: 4px;
     background: #eee;
+
     &.on {
       background: #dcfce7;
       color: #166534;
@@ -79,20 +84,42 @@
   background: transparent;
   box-shadow: none;
   padding: 0;
+
   .saldo-box {
     background: linear-gradient(135deg, #3f51b5, #5c6bc0);
     color: white;
     border-radius: 16px;
     padding: 40px 20px;
     text-align: center;
+
     .big-number {
       font-size: 36px;
       font-weight: 800;
       margin: 16px 0;
     }
-    .btn-add {
-      background: white;
-      color: #3f51b5;
+
+    // --- ÁREA DOS BOTÕES ---
+    .actions-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn-action {
+      min-width: 130px;
+      font-weight: 600; // Deixa o texto mais legível
+
+      // Botão Aumentar (Branco com texto Roxo)
+      &.btn-add {
+        background-color: white !important;
+        color: #3f51b5 !important;
+      }
+
+      &.btn-remove {
+        background-color: #f44336 !important; /* Vermelho */
+        color: white !important;
+      }
     }
   }
 }
@@ -105,14 +132,13 @@
   &:last-child {
     border: none;
   }
-
 }
 
- .warning-snackbar {
-    background-color: #f44336 !important;
-    color: white !important;
-
-    .mat-mdc-simple-snack-bar-action {
-      color: #ffd740 !important;
-    }
+// Snackbars
+.warning-snackbar {
+  background-color: #f44336 !important;
+  color: white !important;
+  .mat-mdc-simple-snack-bar-action {
+    color: #ffd740 !important;
   }
+}

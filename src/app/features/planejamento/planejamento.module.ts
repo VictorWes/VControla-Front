@@ -20,12 +20,14 @@ import {
 } from '@angular/material/snack-bar';
 
 import { FormsModule } from '@angular/forms';
+import { ModalDiminuirSaldoComponent } from './components/modal-diminuir-saldo/modal-diminuir-saldo.component';
 
 @NgModule({
   declarations: [
     PlanejamentoViewComponent,
     ModalSaldoComponent,
     ModalGastoComponent,
+    ModalDiminuirSaldoComponent,
   ],
   imports: [
     CommonModule,

@@ -10,6 +10,7 @@ import {
 } from '../../../../core/models/financeiro.model';
 import { ModalSaldoComponent } from '../../components/modal-saldo/modal-saldo.component';
 import { ModalGastoComponent } from '../../components/modal-gasto/modal-gasto.component';
+import { ModalDiminuirSaldoComponent } from '../../components/modal-diminuir-saldo/modal-diminuir-saldo.component';
 
 @Component({
   selector: 'app-planejamento-view',
@@ -123,7 +124,6 @@ export class PlanejamentoViewComponent implements OnInit {
           this.carregarContasReais();
         }, 1);
 
-        // Feedback
         this.snackBar.open('Saldo atualizado!', 'Ok', {
           duration: 3000,
           verticalPosition: 'top',
@@ -132,7 +132,6 @@ export class PlanejamentoViewComponent implements OnInit {
         });
       },
       error: (err) => {
-        // Rollback visual em caso de erro
         item.status = statusAntigo;
         console.error(err);
 
@@ -141,6 +140,29 @@ export class PlanejamentoViewComponent implements OnInit {
           panelClass: ['warning-snackbar'],
         });
       },
+    });
+  }
+
+  abrirDiminuirSaldo() {
+    const ref = this.dialog.open(ModalDiminuirSaldoComponent, {
+      width: '300px',
+    });
+
+    ref.afterClosed().subscribe((valor) => {
+      if (valor) {
+        const valorNegativo = valor * -1;
+
+        this.financeiroService.adicionarSaldo(valorNegativo).subscribe(() => {
+          this.carregarDadosResumo();
+
+          this.snackBar.open('Saldo diminuído com sucesso!', 'Ok', {
+            duration: 3000,
+            verticalPosition: 'top',
+            horizontalPosition: 'center',
+            panelClass: ['warning-snackbar'],
+          });
+        });
+      }
     });
   }
 }

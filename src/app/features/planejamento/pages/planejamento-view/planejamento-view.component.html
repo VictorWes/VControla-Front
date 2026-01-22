@@ -47,16 +47,28 @@
     <div class="column saldo-column">
       <div class="saldo-box">
         <h4>SALDO DISPONÍVEL</h4>
+
         <div class="big-number">
           R$ {{ resumo?.saldoDisponivelVirtual | number: "1.2-2" }}
         </div>
-        <button
-          mat-raised-button
-          class="btn-add"
-          (click)="abrirAdicionarSaldo()"
-        >
-          <mat-icon>add</mat-icon> Aumentar
-        </button>
+
+        <div class="actions-row">
+          <button
+            mat-raised-button
+            class="btn-action btn-add"
+            (click)="abrirAdicionarSaldo()"
+          >
+            <mat-icon>add</mat-icon> Aumentar
+          </button>
+
+          <button
+            mat-raised-button
+            class="btn-action btn-remove"
+            (click)="abrirDiminuirSaldo()"
+          >
+            <mat-icon>remove</mat-icon> Diminuir
+          </button>
+        </div>
       </div>
     </div>
 
