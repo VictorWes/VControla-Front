@@ -8,9 +8,22 @@
     <div class="column gastos-column">
       <div class="column-header">
         <h3>Planejamento</h3>
-        <button mat-mini-fab color="primary" (click)="abrirNovoGasto()">
-          <mat-icon>add</mat-icon>
-        </button>
+
+        <div class="header-actions">
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="abrirNovaCarteira()"
+            style="margin-right: 8px; border-radius: 20px"
+          >
+            <mat-icon>account_balance_wallet</mat-icon>
+            Nova Carteira
+          </button>
+
+          <button mat-mini-fab color="primary" (click)="abrirNovoGasto()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
       </div>
 
       <div class="planejamento-list lista-scroll">

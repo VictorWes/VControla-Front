@@ -12,6 +12,7 @@ import { ModalSaldoComponent } from '../../components/modal-saldo/modal-saldo.co
 import { ModalGastoComponent } from '../../components/modal-gasto/modal-gasto.component';
 import { ModalDiminuirSaldoComponent } from '../../components/modal-diminuir-saldo/modal-diminuir-saldo.component';
 import { ModalResgatarComponent } from '../../components/modal-resgatar/modal-resgatar.component';
+import { TipoContaDialogComponent } from '../../../contas/components/tipo-conta-dialog/tipo-conta-dialog.component';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
@@ -151,6 +152,34 @@ export class PlanejamentoViewComponent implements OnInit {
           panelClass: ['warning-snackbar'],
         });
       },
+    });
+  }
+
+  abrirNovaCarteira() {
+    const dialogRef = this.dialog.open(TipoContaDialogComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((nomeDigitado) => {
+      if (nomeDigitado) {
+        this.tipoContaService.criar(nomeDigitado).subscribe({
+          next: () => {
+            this.snackBar.open('Carteira criada com sucesso!', 'OK', {
+              duration: 3000,
+              panelClass: ['success-snackbar'],
+            });
+
+            this.carregarCarteiras();
+          },
+          error: (err) => {
+            console.error('Erro', err);
+            this.snackBar.open('Erro ao criar carteira.', 'Fechar', {
+              duration: 3000,
+              panelClass: ['warning-snackbar'],
+            });
+          },
+        });
+      }
     });
   }
 
