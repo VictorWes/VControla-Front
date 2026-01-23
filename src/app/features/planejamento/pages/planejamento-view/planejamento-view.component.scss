@@ -21,7 +21,7 @@
   align-items: start;
 }
 
-// Estilo base para colunas com cabeçalho padrão (Esquerda e Centro)
+
 .column {
   background: white;
   border-radius: 12px;
@@ -39,13 +39,13 @@
   }
 }
 
-// --- ESTILO DA COLUNA ESQUERDA (LISTA COMPACTA + PAGINAÇÃO) ---
+
 .gastos-column {
   .planejamento-list {
-    // Reduzi a altura máxima para sobrar espaço para o paginador
+
     max-height: calc(100vh - 260px);
     overflow-y: auto;
-    border-bottom: 1px solid #eee; // Linha sutil separando lista do paginador
+    border-bottom: 1px solid #eee;
 
     &::-webkit-scrollbar {
       width: 4px;
@@ -124,12 +124,12 @@
     }
   }
 
-  // --- ESTILO DO PAGINADOR ---
+
   mat-paginator {
     background: transparent;
     border-radius: 0 0 12px 12px;
 
-    // Ajuste fino para compactar a altura do paginador
+
     ::ng-deep .mat-mdc-paginator-container {
       padding: 0 8px;
       min-height: 48px;
@@ -137,7 +137,7 @@
   }
 }
 
-// --- COLUNA CENTRAL (SALDO) ---
+
 .saldo-column {
   background: transparent;
   box-shadow: none;
@@ -179,7 +179,7 @@
   }
 }
 
-// --- ESTILO DA COLUNA DIREITA (HÍBRIDA) ---
+
 .reservas-column {
   padding: 0 !important;
   overflow: hidden;
@@ -308,7 +308,7 @@
   }
 }
 
-// Snackbars
+
 .warning-snackbar {
   background-color: #f44336 !important;
   color: white !important;
