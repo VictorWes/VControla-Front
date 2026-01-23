@@ -16,11 +16,10 @@
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 1fr 320px 1fr;
+  grid-template-columns: 1fr 310px 1.6fr;
   gap: 24px;
   align-items: start;
 }
-
 
 .column {
   background: white;
@@ -39,10 +38,8 @@
   }
 }
 
-
 .gastos-column {
   .planejamento-list {
-
     max-height: calc(100vh - 260px);
     overflow-y: auto;
     border-bottom: 1px solid #eee;
@@ -124,11 +121,9 @@
     }
   }
 
-
   mat-paginator {
     background: transparent;
     border-radius: 0 0 12px 12px;
-
 
     ::ng-deep .mat-mdc-paginator-container {
       padding: 0 8px;
@@ -136,7 +131,6 @@
     }
   }
 }
-
 
 .saldo-column {
   background: transparent;
@@ -178,7 +172,6 @@
     }
   }
 }
-
 
 .reservas-column {
   padding: 0 !important;
@@ -307,7 +300,6 @@
     border-bottom: 1px solid #eee;
   }
 }
-
 
 .warning-snackbar {
   background-color: #f44336 !important;
