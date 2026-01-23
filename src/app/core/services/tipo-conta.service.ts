@@ -24,4 +24,14 @@ export class TipoContaService {
     };
     return this.http.post<void>(this.API_URL, payload);
   }
+
+  atualizar(id: string, nome: string): Observable<void> {
+    const payload = { nome: nome };
+    return this.http.put<void>(`${this.API_URL}/${id}`, payload);
+  }
+
+  excluir(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
 }
+

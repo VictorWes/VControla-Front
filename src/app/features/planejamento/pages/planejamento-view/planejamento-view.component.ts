@@ -141,7 +141,7 @@ export class PlanejamentoViewComponent implements OnInit {
         });
       },
       error: (err) => {
-        item.status = statusAntigo; 
+        item.status = statusAntigo;
         console.error(err);
 
         let msg = 'Erro ao atualizar.';
@@ -181,6 +181,62 @@ export class PlanejamentoViewComponent implements OnInit {
         });
       }
     });
+  }
+
+  editarCarteira(carteira: any) {
+    const dialogRef = this.dialog.open(TipoContaDialogComponent, {
+      width: '400px',
+      data: carteira.nome,
+    });
+
+    dialogRef.afterClosed().subscribe((novoNome) => {
+      if (novoNome && novoNome !== carteira.nome) {
+        this.tipoContaService.atualizar(carteira.id, novoNome).subscribe({
+          next: () => {
+            this.carregarCarteiras();
+            this.carregarDadosResumo();
+            this.snackBar.open('Carteira atualizada!', 'OK', {
+              panelClass: ['success-snackbar'],
+              verticalPosition: 'top',
+            });
+          },
+          error: (err) => {
+            console.error(err);
+            this.snackBar.open('Erro ao atualizar.', 'Fechar', {
+              panelClass: ['warning-snackbar'],
+              verticalPosition: 'top',
+            });
+          },
+        });
+      }
+    });
+  }
+
+  excluirCarteira(carteira: any) {
+    if (
+      confirm(`Tem certeza que deseja excluir a carteira "${carteira.nome}"?`)
+    ) {
+      this.tipoContaService.excluir(carteira.id).subscribe({
+        next: () => {
+          this.carregarCarteiras();
+          this.snackBar.open('Carteira excluída.', 'OK', {
+            panelClass: ['warning-snackbar'],
+            verticalPosition: 'top',
+          });
+        },
+        error: (err) => {
+          console.error(err);
+          let msg = 'Erro ao excluir carteira.';
+          if (err.error?.message) msg = err.error.message;
+
+          this.snackBar.open(msg, 'Entendi', {
+            duration: 5000,
+            panelClass: ['warning-snackbar'],
+            verticalPosition: 'top',
+          });
+        },
+      });
+    }
   }
 
   abrirAdicionarSaldo() {
@@ -250,7 +306,7 @@ export class PlanejamentoViewComponent implements OnInit {
     ref.afterClosed().subscribe((result) => {
       if (result) {
         this.financeiroService.atualizarItem(item.id, result).subscribe(() => {
-          this.carregarDadosResumo(); // Reordena automaticamente ao recarregar
+          this.carregarDadosResumo();
           this.carregarContasReais();
           this.snackBar.open('Item atualizado!', 'Ok', {
             duration: 3000,

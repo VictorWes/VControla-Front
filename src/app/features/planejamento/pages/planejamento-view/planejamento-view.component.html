@@ -6,96 +6,130 @@
 
   <div class="dashboard-grid">
     <div class="column gastos-column">
-      <div class="column-header">
-        <h3>Planejamento</h3>
-
-        <div class="header-actions">
-          <button
-            mat-stroked-button
-            color="primary"
-            (click)="abrirNovaCarteira()"
-            style="margin-right: 8px; border-radius: 20px"
-          >
-            <mat-icon>account_balance_wallet</mat-icon>
-            Nova Carteira
-          </button>
-
-          <button mat-mini-fab color="primary" (click)="abrirNovoGasto()">
-            <mat-icon>add</mat-icon>
-          </button>
-        </div>
-      </div>
-
-      <div class="planejamento-list lista-scroll">
-        <div
-          class="planejamento-row"
-          *ngFor="let item of itensPaginados"
-          [class.guardado-row]="item.status === 'GUARDADO'"
-        >
-          <div class="row-left">
+      <div class="carteiras-section">
+        <div class="section-header">
+          <div class="header-title">
+            <h3>Minhas Carteiras</h3>
             <button
-              mat-icon-button
-              class="lock-button"
-              [class.locked]="item.status === 'GUARDADO'"
-              (click)="alternarStatus(item)"
-              matTooltip="{{
-                item.status === 'GUARDADO'
-                  ? 'Desbloquear e Estornar'
-                  : 'Guardar Valor'
-              }}"
+              mat-stroked-button
+              color="primary"
+              (click)="abrirNovaCarteira()"
+              class="small-btn"
             >
-              <mat-icon>{{
-                item.status === "GUARDADO" ? "lock" : "lock_open"
-              }}</mat-icon>
+              <mat-icon>add</mat-icon> Nova
             </button>
+          </div>
+        </div>
 
-            <div class="info-box">
-              <span class="titulo">{{ item.nomeCarteira }}</span>
-              <span class="subtitulo">{{ item.nomeContaDestino }}</span>
+        <div class="carteiras-vertical-list">
+          <div
+            class="carteira-mini-row"
+            *ngFor="let carteira of listaCarteiras"
+          >
+            <div class="row-content">
+              <mat-icon class="wallet-icon">account_balance_wallet</mat-icon>
+              <span class="nome">{{ carteira.nome }}</span>
+            </div>
+
+            <div class="row-actions">
+              <button mat-icon-button (click)="editarCarteira(carteira)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="excluirCarteira(carteira)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
             </div>
           </div>
 
-          <div class="row-right">
-            <span class="valor-destaque"
-              >R$ {{ item.valor | number: "1.2-2" }}</span
-            >
-
-            <button
-              mat-icon-button
-              [matMenuTriggerFor]="menu"
-              (click)="$event.stopPropagation()"
-            >
-              <mat-icon>more_vert</mat-icon>
-            </button>
-
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="editarItem(item)">
-                <mat-icon>edit</mat-icon>
-                <span>Editar</span>
-              </button>
-              <button mat-menu-item (click)="excluirItem(item)">
-                <mat-icon color="warn">delete</mat-icon>
-                <span>Excluir</span>
-              </button>
-            </mat-menu>
+          <div class="empty-list" *ngIf="listaCarteiras.length === 0">
+            Nenhuma carteira.
           </div>
-        </div>
-
-        <div *ngIf="resumo?.itens?.length === 0" class="empty-state">
-          <mat-icon>event_note</mat-icon>
-          <p>Sem planejamentos.</p>
         </div>
       </div>
 
-      <mat-paginator
-        *ngIf="(resumo?.itens?.length || 0) > 0"
-        [length]="resumo?.itens?.length || 0"
-        [pageSize]="tamanhoPagina"
-        [hidePageSize]="true"
-        (page)="mudarPagina($event)"
-        aria-label="Selecionar página"
-      >
-      </mat-paginator>
+      <div class="divider"></div>
+
+      <div class="planejamento-section">
+        <div class="section-header">
+          <h3>Planejamento</h3>
+          <button
+            mat-mini-fab
+            color="primary"
+            (click)="abrirNovoGasto()"
+            matTooltip="Novo Planejamento"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
+        <div class="planejamento-list lista-scroll">
+          <div
+            class="planejamento-row"
+            *ngFor="let item of itensPaginados"
+            [class.guardado-row]="item.status === 'GUARDADO'"
+          >
+            <div class="row-left">
+              <button
+                mat-icon-button
+                class="lock-button"
+                [class.locked]="item.status === 'GUARDADO'"
+                (click)="alternarStatus(item)"
+                matTooltip="{{
+                  item.status === 'GUARDADO' ? 'Desbloquear' : 'Guardar'
+                }}"
+              >
+                <mat-icon>{{
+                  item.status === "GUARDADO" ? "lock" : "lock_open"
+                }}</mat-icon>
+              </button>
+
+              <div class="info-box">
+                <span class="titulo">{{ item.nomeCarteira }}</span>
+                <span class="subtitulo">{{ item.nomeContaDestino }}</span>
+              </div>
+            </div>
+
+            <div class="row-right">
+              <span class="valor-destaque"
+                >R$ {{ item.valor | number: "1.2-2" }}</span
+              >
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                (click)="$event.stopPropagation()"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="editarItem(item)">
+                  <mat-icon>edit</mat-icon><span>Editar</span>
+                </button>
+                <button mat-menu-item (click)="excluirItem(item)">
+                  <mat-icon color="warn">delete</mat-icon><span>Excluir</span>
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+
+          <div *ngIf="resumo?.itens?.length === 0" class="empty-state">
+            <mat-icon>event_note</mat-icon>
+            <p>Sem planejamentos.</p>
+          </div>
+        </div>
+
+        <mat-paginator
+          *ngIf="(resumo?.itens?.length || 0) > 0"
+          [length]="resumo?.itens?.length || 0"
+          [pageSize]="tamanhoPagina"
+          [hidePageSize]="true"
+          (page)="mudarPagina($event)"
+        >
+        </mat-paginator>
+      </div>
     </div>
 
     <div class="column saldo-column">
