@@ -141,7 +141,7 @@ export class PlanejamentoViewComponent implements OnInit {
         });
       },
       error: (err) => {
-        item.status = statusAntigo; // Rollback visual se der erro
+        item.status = statusAntigo; 
         console.error(err);
 
         let msg = 'Erro ao atualizar.';
