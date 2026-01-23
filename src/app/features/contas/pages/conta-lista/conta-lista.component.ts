@@ -93,16 +93,30 @@ export class ContaListaComponent implements OnInit {
   }
 
   excluirConta(conta: Conta) {
-    const confirmou = confirm(
-      `Tem certeza que deseja excluir a conta "${conta.nome}"?`,
-    );
+    if (!conta.id) return;
 
-    if (confirmou && conta.id) {
+    if (confirm('Tem certeza que deseja excluir?')) {
       this.contaService.excluir(conta.id).subscribe({
         next: () => {
           this.buscarContas();
+
+          this.snackBar.open('Conta excluída!', 'Ok', {
+            panelClass: ['success-snackbar'],
+          });
         },
-        error: (err) => alert('Erro ao excluir: ' + err.message),
+        error: (err) => {
+          console.error(err);
+
+          let msg = 'Erro ao excluir conta.';
+          if (err.error?.message) msg = err.error.message;
+          if (err.error && typeof err.error === 'string') msg = err.error;
+
+          this.snackBar.open(msg, 'Entendi', {
+            duration: 5000,
+            panelClass: ['warning-snackbar'],
+            verticalPosition: 'top',
+          });
+        },
       });
     }
   }
