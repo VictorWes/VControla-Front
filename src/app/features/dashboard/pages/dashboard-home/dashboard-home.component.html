@@ -5,11 +5,16 @@
       <div class="stats">
         <div class="stat-item">
           <small>Receitas no mês</small>
-          <p class="text-success">R$ 0,00</p>
+          <p class="text-success">
+            {{ resumo.receitas | currency: "BRL" : "symbol" : "1.2-2" }}
+          </p>
         </div>
+
         <div class="stat-item">
           <small>Despesas no mês</small>
-          <p class="text-danger">R$ 0,00</p>
+          <p class="text-danger">
+            {{ resumo.despesas | currency: "BRL" : "symbol" : "1.2-2" }}
+          </p>
         </div>
       </div>
     </div>
