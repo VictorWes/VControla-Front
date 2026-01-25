@@ -6,12 +6,13 @@ import { LoginResponse } from '../models/login-response.model';
 import { LoginRequest } from '../models/login-request.model';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:8080/usuarios';
+  private readonly API_URL = `${environment.apiUrl}/usuarios`;
 
   constructor(
     private http: HttpClient,

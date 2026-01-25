@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Conta } from '../models/conta.model';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContaService {
-  private readonly API_URL = 'http://localhost:8080/contas';
+  private readonly API_URL = `${environment.apiUrl}/contas`;
 
   constructor(private http: HttpClient) {}
 

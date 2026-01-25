@@ -5,12 +5,13 @@ import {
   ResumoFinanceiro,
   ItemPlanejamentoRequest,
 } from '../models/financeiro.model';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FinanceiroService {
-  private readonly API_URL = 'http://localhost:8080/financeiro';
+  private readonly API_URL = `${environment.apiUrl}/financeiro`;
 
   constructor(private http: HttpClient) {}
 
