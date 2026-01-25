@@ -5,7 +5,7 @@ import {
   ResumoFinanceiro,
   ItemPlanejamentoRequest,
 } from '../models/financeiro.model';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../../src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
