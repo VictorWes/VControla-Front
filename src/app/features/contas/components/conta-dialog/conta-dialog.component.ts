@@ -52,11 +52,10 @@ export class ContaDialogComponent {
     const contaParaSalvar = {
       nome: this.novaConta.nome,
       saldo: this.novaConta.saldo,
-      // O campo TEM que chamar 'tipoId' para bater com o Java
+  
       tipoId: this.novaConta.tipo?.id,
     };
 
-    console.log('Enviando para o Back:', contaParaSalvar); // Dica: Olhe no F12 se o ID está aqui
     this.dialogRef.close(contaParaSalvar);
   }
 

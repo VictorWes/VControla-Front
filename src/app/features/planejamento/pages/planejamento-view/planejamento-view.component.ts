@@ -90,7 +90,6 @@ export class PlanejamentoViewComponent implements OnInit {
   carregarContasReais() {
     this.contaService.listar().subscribe({
       next: (contas) => {
-        console.log('Contas atualizadas recebidas:', contas);
         this.listaContasReais = [...contas];
       },
       error: (err) => console.error('Erro ao buscar contas:', err),
