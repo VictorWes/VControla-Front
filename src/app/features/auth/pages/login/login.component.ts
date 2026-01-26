@@ -64,9 +64,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  signInWithGoogle(): void {
-    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
-  }
+
 
   fazerLoginGoogleNoBackend(googleToken: string) {
     this.authService.loginGoogle(googleToken).subscribe({

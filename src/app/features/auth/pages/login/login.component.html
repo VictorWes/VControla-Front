@@ -46,25 +46,16 @@
         ou
       </div>
 
-      <button
-        type="button"
-        mat-stroked-button
-        (click)="signInWithGoogle()"
-        style="
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 10px;
-        "
-      >
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-          alt="Google"
-          width="20"
-        />
-        Entrar com Google
-      </button>
+      <div style="display: flex; justify-content: center; width: 100%">
+        <asl-google-signin-button
+          type="standard"
+          size="large"
+          text="signin_with"
+          theme="outline"
+          [width]="320"
+        >
+        </asl-google-signin-button>
+      </div>
     </form>
 
     <div class="login-footer">

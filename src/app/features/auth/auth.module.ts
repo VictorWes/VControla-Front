@@ -11,6 +11,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { CadastroComponent } from './pages/cadastro/cadastro.component';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
+import { MatFormField } from '@angular/material/input';
 
 @NgModule({
   declarations: [LoginComponent, CadastroComponent],
@@ -23,6 +25,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatIconModule,
     FormsModule,
     MatSnackBarModule,
+    GoogleSigninButtonModule,
+    MatFormField,
   ],
 })
 export class AuthModule {}
