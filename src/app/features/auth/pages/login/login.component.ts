@@ -3,6 +3,11 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../../core/services/auth.service';
 import { LoginRequest } from '../../../../core/models/login-request.model';
+// 👇 1. Novos Imports do Social Login
+import {
+  SocialAuthService,
+  GoogleLoginProvider,
+} from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +25,21 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private snackBar: MatSnackBar,
+    private socialAuthService: SocialAuthService,
   ) {}
+
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/sistema/dashboard/home']);
+      return;
+    }
+
+    this.socialAuthService.authState.subscribe((user) => {
+      if (user && user.idToken) {
+        this.fazerLoginGoogleNoBackend(user.idToken);
+      }
+    });
+  }
 
   onSubmit() {
     this.authService.login(this.loginData).subscribe({
@@ -45,9 +64,24 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/sistema/dashboard/home']);
-    }
+  signInWithGoogle(): void {
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  fazerLoginGoogleNoBackend(googleToken: string) {
+    this.authService.loginGoogle(googleToken).subscribe({
+      next: (response) => {
+        this.snackBar.open('Login com Google realizado!', 'Fechar', {
+          duration: 3000,
+        });
+        this.router.navigate(['/sistema/dashboard/home']);
+      },
+      error: (erro) => {
+        console.error('Erro Google:', erro);
+        this.snackBar.open('Falha ao autenticar com Google.', 'Fechar', {
+          duration: 4000,
+        });
+      },
+    });
   }
 }

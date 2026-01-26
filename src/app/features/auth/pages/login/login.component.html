@@ -38,6 +38,33 @@
       <button mat-flat-button color="primary" class="btn-submit" type="submit">
         ENTRAR
       </button>
+
+      <div
+        class="google-separator"
+        style="margin: 20px 0; text-align: center; color: #666"
+      >
+        ou
+      </div>
+
+      <button
+        type="button"
+        mat-stroked-button
+        (click)="signInWithGoogle()"
+        style="
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+        "
+      >
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+          alt="Google"
+          width="20"
+        />
+        Entrar com Google
+      </button>
     </form>
 
     <div class="login-footer">

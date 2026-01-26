@@ -11,6 +11,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+import {
+  SocialLoginModule,
+  SocialAuthServiceConfig,
+  GoogleLoginProvider,
+} from '@abacritt/angularx-social-login';
 
 registerLocaleData(localePt);
 
@@ -22,6 +27,7 @@ registerLocaleData(localePt);
     AppRoutingModule,
     HttpClientModule,
     MatMenuModule,
+    SocialLoginModule,
   ],
   providers: [
     {
@@ -32,6 +38,23 @@ registerLocaleData(localePt);
 
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     { provide: LOCALE_ID, useValue: 'pt-BR' },
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '801912870800-ettaegklrg135o1ec6prtkjspgdtlqj5.apps.googleusercontent.com',
+            ),
+          },
+        ],
+        onError: (err) => {
+          console.error(err);
+        },
+      } as SocialAuthServiceConfig,
+    },
   ],
   bootstrap: [AppComponent],
 })

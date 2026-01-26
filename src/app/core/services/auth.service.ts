@@ -6,7 +6,7 @@ import { LoginResponse } from '../models/login-response.model';
 import { LoginRequest } from '../models/login-request.model';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { environment } from '../../../../src/environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -24,15 +24,22 @@ export class AuthService {
   }
 
   login(dados: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.API_URL}/login`, dados).pipe(
-      tap((response) => {
-        localStorage.setItem('access_token', response.token);
+    return this.http
+      .post<LoginResponse>(`${this.API_URL}/login`, dados)
+      .pipe(tap((response) => this.salvarSessao(response)));
+  }
 
-        if (response.nome) {
-          localStorage.setItem('user_nome', response.nome);
-        }
-      }),
-    );
+  loginGoogle(googleToken: string): Observable<LoginResponse> {
+    return this.http
+      .post<LoginResponse>(`${this.API_URL}/google`, { token: googleToken })
+      .pipe(tap((response) => this.salvarSessao(response)));
+  }
+
+  private salvarSessao(response: LoginResponse): void {
+    localStorage.setItem('access_token', response.token);
+    if (response.nome) {
+      localStorage.setItem('user_nome', response.nome);
+    }
   }
 
   isAuthenticated(): boolean {
