@@ -3,10 +3,9 @@
   height: 100%;
   gap: 24px;
   padding: 24px;
-  background-color: #f5f7fa; // Fundo suave
+  background-color: #f5f7fa;
 }
 
-// --- SIDEBAR ---
 .sidebar-section {
   width: 300px;
   flex-shrink: 0;
@@ -74,7 +73,6 @@
   }
 }
 
-// --- MAIN CONTENT ---
 .content-section {
   flex: 1;
   background: white;
@@ -117,7 +115,6 @@
   }
 }
 
-// RESUMO FATURA (NOVO LAYOUT)
 .invoice-summary-card {
   background: #fafafa;
   box-shadow: none;
@@ -135,7 +132,7 @@
       font-size: 2rem;
       font-weight: bold;
       color: #d32f2f;
-    } // Vermelho para dívida
+    }
   }
 
   .limit-bar-container {
@@ -149,7 +146,6 @@
   }
 }
 
-// GRID DE INFO
 .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -192,7 +188,6 @@
   }
 }
 
-// AÇÕES
 .actions-container {
   margin-top: auto;
   padding-top: 24px;
