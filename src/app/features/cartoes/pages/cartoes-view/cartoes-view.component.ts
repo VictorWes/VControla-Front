@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CartaoCreditoService } from '../../../../core/services/cartao-credito.service';
 import { CartaoCredito } from '../../../../core/models/cartao-credito.model';
+import { MatDialog } from '@angular/material/dialog';
+import { CartaoDialogComponent } from '../../components/cartao-dialog/cartao-dialog.component';
 
 @Component({
   selector: 'app-cartoes-view',
@@ -13,7 +15,10 @@ export class CartoesViewComponent implements OnInit {
   cartaoSelecionado: CartaoCredito | null = null;
   isLoading = true;
 
-  constructor(private cartaoService: CartaoCreditoService) {}
+  constructor(
+    private cartaoService: CartaoCreditoService,
+    private dialog: MatDialog,
+  ) {}
 
   ngOnInit(): void {
     this.carregarCartoes();
@@ -42,6 +47,27 @@ export class CartoesViewComponent implements OnInit {
   }
 
   novoCartao() {
-    console.log('Abrir modal de novo cartão');
+    const dialogRef = this.dialog.open(CartaoDialogComponent, {
+      width: '450px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.criarCartao(result);
+      }
+    });
+  }
+
+  criarCartao(dados: any) {
+    this.isLoading = true;
+    this.cartaoService.criar(dados).subscribe({
+      next: () => {
+        this.carregarCartoes();
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+      },
+    });
   }
 }
