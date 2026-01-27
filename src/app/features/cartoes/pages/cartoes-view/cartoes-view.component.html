@@ -42,7 +42,24 @@
         <h1>{{ cartaoSelecionado.nome }}</h1>
         <p class="status-badge">Fatura em aberto</p>
       </div>
-      <button mat-icon-button><mat-icon>edit</mat-icon></button>
+      <div class="header-actions">
+        <button
+          mat-icon-button
+          (click)="editarCartao(cartaoSelecionado)"
+          matTooltip="Editar cartão"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="excluirCartao(cartaoSelecionado)"
+          matTooltip="Excluir cartão"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
     </div>
 
     <mat-card class="invoice-summary-card">

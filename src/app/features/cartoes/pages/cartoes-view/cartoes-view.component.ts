@@ -70,4 +70,50 @@ export class CartoesViewComponent implements OnInit {
       },
     });
   }
+
+  editarCartao(cartao: CartaoCredito) {
+    const dialogRef = this.dialog.open(CartaoDialogComponent, {
+      width: '450px',
+      data: cartao,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.salvarEdicao(cartao.id!, result);
+      }
+    });
+  }
+
+  salvarEdicao(id: string, dados: any) {
+    this.isLoading = true;
+    this.cartaoService.atualizar(id, dados).subscribe({
+      next: () => {
+        this.carregarCartoes();
+
+        if (this.cartaoSelecionado) {
+          this.cartaoSelecionado = { ...this.cartaoSelecionado, ...dados };
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao atualizar', err);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  excluirCartao(cartao: CartaoCredito) {
+    if (confirm(`Deseja realmente excluir o cartão ${cartao.nome}?`)) {
+      this.isLoading = true;
+      this.cartaoService.excluir(cartao.id!).subscribe({
+        next: () => {
+          this.cartaoSelecionado = null;
+          this.carregarCartoes();
+        },
+        error: (err) => {
+          console.error('Erro ao excluir', err);
+          this.isLoading = false;
+        },
+      });
+    }
+  }
 }

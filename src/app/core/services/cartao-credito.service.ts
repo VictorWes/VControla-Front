@@ -19,4 +19,11 @@ export class CartaoCreditoService {
   criar(cartao: any): Observable<void> {
     return this.http.post<void>(this.apiUrl, cartao);
   }
+  atualizar(id: string, cartao: any): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}`, cartao);
+  }
+
+  excluir(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }
