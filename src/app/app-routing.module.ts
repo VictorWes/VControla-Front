@@ -13,10 +13,9 @@ const routes: Routes = [
       import('./features/auth/auth.module').then((m) => m.AuthModule),
   },
 
-  // --- AQUI É A "CASINHA" DO SISTEMA (COM LAYOUT) ---
   {
     path: 'sistema',
-    component: LayoutComponent, // <--- ESSE CARA QUE TRAZ O HEADER E O MENU
+    component: LayoutComponent,
     canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -35,7 +34,6 @@ const routes: Routes = [
           ),
       },
 
-      // --- MUDANÇA: O PLANEJAMENTO VEM PARA CÁ (DENTRO DO CHILDREN) ---
       {
         path: 'planejamento',
         loadChildren: () =>
@@ -43,10 +41,16 @@ const routes: Routes = [
             (m) => m.PlanejamentoModule,
           ),
       },
+      {
+        path: 'cartoes',
+        loadChildren: () =>
+          import('./features/cartoes/cartoes.module').then(
+            (m) => m.CartoesModule,
+          ),
+      },
     ],
   },
 
-  // O Wildcard deve ser a última coisa
   { path: '**', redirectTo: 'auth/login' },
 ];
 

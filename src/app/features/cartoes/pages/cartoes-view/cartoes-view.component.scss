@@ -1,0 +1,210 @@
+.page-container {
+  display: flex;
+  height: 100%;
+  gap: 24px;
+  padding: 24px;
+  background-color: #f5f7fa; // Fundo suave
+}
+
+// --- SIDEBAR ---
+.sidebar-section {
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #333;
+    }
+  }
+
+  .cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+
+    &:hover {
+      background: #f0f0f0;
+    }
+    &.active {
+      background: #e3f2fd;
+      border-color: #2196f3;
+      .card-icon {
+        color: #2196f3;
+      }
+    }
+
+    .card-icon {
+      margin-right: 12px;
+      color: #757575;
+    }
+    .card-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      .card-name {
+        font-weight: 500;
+      }
+      .card-limit {
+        font-size: 0.8rem;
+        color: #666;
+      }
+    }
+    .chevron {
+      color: #ccc;
+    }
+  }
+}
+
+// --- MAIN CONTENT ---
+.content-section {
+  flex: 1;
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  &.empty {
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+    }
+  }
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  h1 {
+    margin: 0 0 4px 0;
+    font-size: 1.8rem;
+  }
+  .status-badge {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    display: inline-block;
+    font-weight: 500;
+  }
+}
+
+// RESUMO FATURA (NOVO LAYOUT)
+.invoice-summary-card {
+  background: #fafafa;
+  box-shadow: none;
+  border: 1px solid #eee;
+
+  .invoice-value {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+    .label {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #d32f2f;
+    } // Vermelho para dívida
+  }
+
+  .limit-bar-container {
+    .limit-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 8px;
+    }
+  }
+}
+
+// GRID DE INFO
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    box-shadow: none;
+    border: 1px solid #eee;
+
+    mat-icon {
+      background: #e0f7fa;
+      color: #006064;
+      padding: 8px;
+      border-radius: 50%;
+      margin-right: 12px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      .label {
+        font-size: 0.75rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .value {
+        font-weight: 600;
+        color: #333;
+      }
+    }
+  }
+}
+
+// AÇÕES
+.actions-container {
+  margin-top: auto;
+  padding-top: 24px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .pagamento-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+  }
+}

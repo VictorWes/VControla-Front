@@ -47,7 +47,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatDividerModule,
     MatMenuModule,
     MatSnackBarModule,
-    MatSelectModule
+    MatSelectModule,
   ],
 })
 export class DashboardModule {}

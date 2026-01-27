@@ -1,0 +1,129 @@
+<div class="page-container">
+  <div class="sidebar-section">
+    <div class="section-header">
+      <h2>Meus Cartões</h2>
+      <button
+        mat-mini-fab
+        color="primary"
+        (click)="novoCartao()"
+        matTooltip="Novo cartão"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <div class="cards-list">
+      <div
+        *ngFor="let card of cartoes"
+        class="card-item"
+        [class.active]="card.id === cartaoSelecionado?.id"
+        (click)="selecionarCartao(card)"
+      >
+        <mat-icon class="card-icon">credit_card</mat-icon>
+        <div class="card-info">
+          <span class="card-name">{{ card.nome }}</span>
+          <span class="card-limit"
+            >Limite: {{ card.limite | currency: "BRL" }}</span
+          >
+        </div>
+        <mat-icon class="chevron">chevron_right</mat-icon>
+      </div>
+
+      <div *ngIf="cartoes.length === 0 && !isLoading" class="empty-state">
+        <mat-icon>credit_card_off</mat-icon>
+        <p>Nenhum cartão cadastrado</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-section" *ngIf="cartaoSelecionado; else noSelection">
+    <div class="detail-header">
+      <div>
+        <h1>{{ cartaoSelecionado.nome }}</h1>
+        <p class="status-badge">Fatura em aberto</p>
+      </div>
+      <button mat-icon-button><mat-icon>edit</mat-icon></button>
+    </div>
+
+    <mat-card class="invoice-summary-card">
+      <mat-card-content>
+        <div class="invoice-value">
+          <span class="label">Fatura Atual</span>
+          <span class="value">{{
+            cartaoSelecionado.valorFaturaAtual | currency: "BRL"
+          }}</span>
+        </div>
+
+        <div class="limit-bar-container">
+          <div class="limit-info">
+            <span
+              >Usado:
+              {{ cartaoSelecionado.valorFaturaAtual | currency: "BRL" }}</span
+            >
+            <span
+              >Disponível:
+              {{
+                cartaoSelecionado.limite - cartaoSelecionado.valorFaturaAtual
+                  | currency: "BRL"
+              }}</span
+            >
+          </div>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="
+              (cartaoSelecionado.valorFaturaAtual / cartaoSelecionado.limite) *
+              100
+            "
+          ></mat-progress-bar>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="info-grid">
+      <mat-card class="info-item">
+        <mat-icon>event</mat-icon>
+        <div>
+          <span class="label">Vencimento</span>
+          <span class="value">Dia {{ cartaoSelecionado.diaVencimento }}</span>
+        </div>
+      </mat-card>
+
+      <mat-card class="info-item">
+        <mat-icon>update</mat-icon>
+        <div>
+          <span class="label">Fechamento</span>
+          <span class="value">Dia {{ cartaoSelecionado.diaFechamento }}</span>
+        </div>
+      </mat-card>
+
+      <mat-card class="info-item">
+        <mat-icon>attach_money</mat-icon>
+        <div>
+          <span class="label">Limite Total</span>
+          <span class="value">{{
+            cartaoSelecionado.limite | currency: "BRL"
+          }}</span>
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="actions-container">
+      <div class="pagamento-toggle">
+        <span>Fatura Paga?</span>
+        <mat-slide-toggle color="primary"></mat-slide-toggle>
+      </div>
+
+      <button mat-stroked-button color="primary">
+        <mat-icon>list</mat-icon>
+        Ver Parcelamentos
+      </button>
+    </div>
+  </div>
+
+  <ng-template #noSelection>
+    <div class="content-section empty">
+      <mat-icon>touch_app</mat-icon>
+      <p>Selecione um cartão para ver os detalhes</p>
+    </div>
+  </ng-template>
+</div>
