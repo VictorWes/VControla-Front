@@ -1,4 +1,5 @@
 <h2 mat-dialog-title>{{ isEdicao ? "Editar conta" : "Nova conta" }}</h2>
+
 <mat-dialog-content>
   <div
     class="form-container"
@@ -33,37 +34,6 @@
         [(ngModel)]="novaConta.saldo"
         required
       />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Tipo da conta</mat-label>
-      <mat-select
-        [(ngModel)]="novaConta.tipo"
-        name="tipo"
-        required
-        [compareWith]="compararTipos"
-      >
-        <mat-select-trigger>
-          <div
-            style="display: flex; align-items: center; gap: 8px"
-            *ngIf="novaConta.tipo"
-          >
-            <mat-icon
-              style="margin: 0; font-size: 20px; width: 20px; height: 20px"
-            >
-              {{ novaConta.tipo.icone }}
-            </mat-icon>
-            <span>{{ novaConta.tipo.nome }}</span>
-          </div>
-        </mat-select-trigger>
-
-        <mat-option *ngFor="let tipo of tiposDeConta" [value]="tipo">
-          <div style="display: flex; align-items: center; gap: 8px">
-            <mat-icon>{{ tipo.icone }}</mat-icon>
-            <span>{{ tipo.nome }}</span>
-          </div>
-        </mat-option>
-      </mat-select>
     </mat-form-field>
   </div>
 </mat-dialog-content>
