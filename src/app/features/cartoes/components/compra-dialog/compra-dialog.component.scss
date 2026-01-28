@@ -1,17 +1,16 @@
-// Garante que o CSS obedeça as bordas e não estoure
+
 :host {
   display: block;
   box-sizing: border-box;
 }
 
-// Título mais espaçado e bonito
+
 h2 {
   margin: 0 0 8px 0;
   color: #333;
   font-weight: 500;
 }
 
-// Remove scrollbar horizontal indesejado do Material Design
 ::ng-deep .mat-mdc-dialog-content {
   overflow-x: hidden !important;
   max-width: 100%;
