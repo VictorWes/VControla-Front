@@ -6,7 +6,7 @@
         mat-mini-fab
         color="primary"
         (click)="novoCartao()"
-        matTooltip="Novo cartão"
+        matTooltip="Adicionar Cartão"
       >
         <mat-icon>add</mat-icon>
       </button>
@@ -19,128 +19,163 @@
         [class.active]="card.id === cartaoSelecionado?.id"
         (click)="selecionarCartao(card)"
       >
-        <mat-icon class="card-icon">credit_card</mat-icon>
+        <div class="card-icon">
+          <mat-icon>credit_card</mat-icon>
+        </div>
         <div class="card-info">
           <span class="card-name">{{ card.nome }}</span>
           <span class="card-limit"
-            >Limite: {{ card.limite | currency: "BRL" }}</span
+            >Limite: {{ card.limiteTotal | currency: "BRL" }}</span
           >
         </div>
         <mat-icon class="chevron">chevron_right</mat-icon>
-      </div>
-
-      <div *ngIf="cartoes.length === 0 && !isLoading" class="empty-state">
-        <mat-icon>credit_card_off</mat-icon>
-        <p>Nenhum cartão cadastrado</p>
       </div>
     </div>
   </div>
 
   <div class="content-section" *ngIf="cartaoSelecionado; else noSelection">
     <div class="detail-header">
-      <div>
+      <div class="title-group">
         <h1>{{ cartaoSelecionado.nome }}</h1>
-        <p class="status-badge">Fatura em aberto</p>
+        <span class="status-badge">Ativo</span>
       </div>
+
       <div class="header-actions">
+        <button mat-flat-button color="accent" (click)="novaCompra()">
+          <mat-icon>shopping_cart</mat-icon>
+          Nova Compra
+        </button>
         <button
           mat-icon-button
           (click)="editarCartao(cartaoSelecionado)"
-          matTooltip="Editar cartão"
+          matTooltip="Editar"
         >
           <mat-icon>edit</mat-icon>
         </button>
-
         <button
           mat-icon-button
           color="warn"
           (click)="excluirCartao(cartaoSelecionado)"
-          matTooltip="Excluir cartão"
+          matTooltip="Excluir"
         >
           <mat-icon>delete</mat-icon>
         </button>
       </div>
     </div>
 
-    <mat-card class="invoice-summary-card">
-      <mat-card-content>
-        <div class="invoice-value">
-          <span class="label">Fatura Atual</span>
-          <span class="value">{{
-            cartaoSelecionado.valorFaturaAtual | currency: "BRL"
-          }}</span>
-        </div>
+    <div class="dashboard-split">
+      <div class="split-left">
+        <h3>Últimas Compras</h3>
 
-        <div class="limit-bar-container">
-          <div class="limit-info">
-            <span
-              >Usado:
-              {{ cartaoSelecionado.valorFaturaAtual | currency: "BRL" }}</span
+        <mat-accordion multi>
+          <mat-expansion-panel
+            *ngFor="let compra of comprasDoCartao"
+            (opened)="carregarParcelas(compra)"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <strong>{{ compra.nome }}</strong>
+              </mat-panel-title>
+              <mat-panel-description>
+                {{ compra.dataCompra | date: "dd/MM/yyyy" }} —
+                {{ compra.valorTotal | currency: "BRL" }}
+                ({{ compra.qtdeParcelas }}x)
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <div
+              class="parcelas-list"
+              *ngIf="compra.parcelas; else loadingParcelas"
             >
-            <span
-              >Disponível:
-              {{
-                cartaoSelecionado.limite - cartaoSelecionado.valorFaturaAtual
-                  | currency: "BRL"
-              }}</span
+              <div class="parcela-row" *ngFor="let p of compra.parcelas">
+                <div class="parcela-info">
+                  <span class="p-num">{{ p.numeroParcela }}ª Parcela</span>
+                  <span class="p-date"
+                    >Vence: {{ p.dataVencimento | date: "dd/MM/yyyy" }}</span
+                  >
+                </div>
+                <div class="parcela-action">
+                  <span class="p-valor">{{
+                    p.valorParcela | currency: "BRL"
+                  }}</span>
+
+                  <button
+                    *ngIf="!p.paga"
+                    mat-stroked-button
+                    color="primary"
+                    class="btn-small"
+                    (click)="pagarParcela(p)"
+                  >
+                    Pagar
+                  </button>
+
+                  <span *ngIf="p.paga" class="badge-pago">
+                    <mat-icon>check_circle</mat-icon> Pago
+                  </span>
+                </div>
+              </div>
+            </div>
+            <ng-template #loadingParcelas
+              ><p>Carregando parcelas...</p></ng-template
             >
-          </div>
-          <mat-progress-bar
-            mode="determinate"
-            [value]="
-              (cartaoSelecionado.valorFaturaAtual / cartaoSelecionado.limite) *
-              100
-            "
-          ></mat-progress-bar>
-        </div>
-      </mat-card-content>
-    </mat-card>
+          </mat-expansion-panel>
+        </mat-accordion>
 
-    <div class="info-grid">
-      <mat-card class="info-item">
-        <mat-icon>event</mat-icon>
-        <div>
-          <span class="label">Vencimento</span>
-          <span class="value">Dia {{ cartaoSelecionado.diaVencimento }}</span>
+        <div *ngIf="comprasDoCartao.length === 0" class="empty-state">
+          Nenhuma compra registrada.
         </div>
-      </mat-card>
-
-      <mat-card class="info-item">
-        <mat-icon>update</mat-icon>
-        <div>
-          <span class="label">Fechamento</span>
-          <span class="value">Dia {{ cartaoSelecionado.diaFechamento }}</span>
-        </div>
-      </mat-card>
-
-      <mat-card class="info-item">
-        <mat-icon>attach_money</mat-icon>
-        <div>
-          <span class="label">Limite Total</span>
-          <span class="value">{{
-            cartaoSelecionado.limite | currency: "BRL"
-          }}</span>
-        </div>
-      </mat-card>
-    </div>
-
-    <div class="actions-container">
-      <div class="pagamento-toggle">
-        <span>Fatura Paga?</span>
-        <mat-slide-toggle color="primary"></mat-slide-toggle>
       </div>
 
-      <button mat-stroked-button color="primary">
-        <mat-icon>list</mat-icon>
-        Ver Parcelamentos
-      </button>
+      <div class="split-right">
+        <mat-card class="summary-card fatura-card">
+          <mat-card-header>
+            <mat-card-title>Fatura Atual</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="big-value red">
+              {{ cartaoSelecionado.valorFaturaAtual | currency: "BRL" }}
+            </div>
+            <p class="desc">
+              Vencimento: Dia {{ cartaoSelecionado.diaVencimento }}
+            </p>
+            <mat-divider></mat-divider>
+            <div class="fechamento-info">
+              <mat-icon>update</mat-icon>
+              <span>Fecha dia {{ cartaoSelecionado.diaFechamento }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="summary-card limite-card">
+          <mat-card-header>
+            <mat-card-title>Limite Disponível</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="big-value green">
+              {{ cartaoSelecionado.limiteDisponivel | currency: "BRL" }}
+            </div>
+            <mat-progress-bar
+              mode="determinate"
+              [value]="
+                (cartaoSelecionado.limiteDisponivel /
+                  cartaoSelecionado.limiteTotal) *
+                100
+              "
+            >
+            </mat-progress-bar>
+            <p class="desc">
+              Total: {{ cartaoSelecionado.limiteTotal | currency: "BRL" }}
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
   </div>
 
   <ng-template #noSelection>
-    <div class="content-section empty">
+    <div class="no-selection-placeholder">
       <mat-icon>touch_app</mat-icon>
-      <p>Selecione um cartão para ver os detalhes</p>
+      <p>Selecione um cartão para ver detalhes</p>
     </div>
   </ng-template>
 </div>

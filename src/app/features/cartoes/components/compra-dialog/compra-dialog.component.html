@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>Nova Compra</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-container">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>O que você comprou?</mat-label>
+      <input
+        matInput
+        formControlName="nome"
+        placeholder="Ex: Mercado, TV, Uber..."
+        autofocus
+      />
+      <mat-icon matSuffix>shopping_bag</mat-icon>
+      <mat-error *ngIf="form.get('nome')?.hasError('required')"
+        >O nome é obrigatório</mat-error
+      >
+    </mat-form-field>
+
+    <div class="row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Valor Total</mat-label>
+        <span matPrefix>R$&nbsp;</span>
+        <input
+          matInput
+          type="number"
+          formControlName="valorTotal"
+          placeholder="0,00"
+        />
+        <mat-error *ngIf="form.get('valorTotal')?.hasError('required')"
+          >Informe o valor</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Parcelas</mat-label>
+        <input matInput type="number" formControlName="qtdeParcelas" min="1" />
+        <span matSuffix>x</span>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Data da Compra</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dataCompra" />
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="form.invalid"
+    (click)="salvar()"
+  >
+    Adicionar
+  </button>
+</mat-dialog-actions>

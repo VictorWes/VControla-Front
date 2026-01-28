@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>Pagar Parcela</h2>
+
+<mat-dialog-content class="dialog-content">
+  <p class="description">
+    Você está prestes a pagar <strong>{{ data.valor | currency: "BRL" }}</strong
+    >.
+    <br />
+    De qual conta deseja debitar este valor?
+  </p>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Conta de Origem</mat-label>
+    <mat-select [(value)]="contaSelecionadaId" placeholder="Selecione a conta">
+      <mat-option *ngFor="let conta of contas" [value]="conta.id">
+        {{ conta.nome }}
+        <span class="saldo">({{ conta.saldo | currency: "BRL" }})</span>
+      </mat-option>
+    </mat-select>
+    <mat-hint>O valor será subtraído do saldo desta conta.</mat-hint>
+  </mat-form-field>
+
+  <div *ngIf="isLoading" class="loading-state">
+    <mat-spinner diameter="30"></mat-spinner>
+    <small>Carregando contas...</small>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="!contaSelecionadaId || isLoading"
+    (click)="confirmar()"
+  >
+    Confirmar Pagamento
+  </button>
+</mat-dialog-actions>

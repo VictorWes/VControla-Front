@@ -24,7 +24,10 @@ export class CartaoDialogComponent {
 
     this.form = this.fb.group({
       nome: [data?.nome || '', Validators.required],
-      limite: [data?.limite || null, [Validators.required, Validators.min(1)]],
+      limite: [
+        data?.limiteTotal || null,
+        [Validators.required, Validators.min(1)],
+      ],
       diaVencimento: [data?.diaVencimento || null, Validators.required],
       diaFechamento: [data?.diaFechamento || null, Validators.required],
     });

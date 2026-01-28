@@ -16,9 +16,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PagamentoDialogComponent } from './components/pagamento-dialog/pagamento-dialog.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CompraDialogComponent } from './components/compra-dialog/compra-dialog.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatExpansionModule } from '@angular/material/expansion'; // Para o Accordion
 
 @NgModule({
-  declarations: [CartoesViewComponent, CartaoDialogComponent],
+  declarations: [
+    CartoesViewComponent,
+    CartaoDialogComponent,
+    PagamentoDialogComponent,
+    CompraDialogComponent,
+  ],
   imports: [
     CommonModule,
     CartoesRoutingModule,
@@ -33,6 +45,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
+    MatDividerModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatExpansionModule,
   ],
 })
 export class CartoesModule {}

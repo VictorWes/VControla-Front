@@ -1,0 +1,29 @@
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 380px;
+  padding-top: 10px;
+}
+
+.description {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 8px;
+
+  strong {
+    color: #333;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.saldo {
+  color: #43a047; 
+  font-size: 0.85em;
+  font-weight: 500;
+  margin-left: 6px;
+}
