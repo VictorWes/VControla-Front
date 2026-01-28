@@ -11,6 +11,8 @@ import { CompraDialogComponent } from '../../components/compra-dialog/compra-dia
 import { PagamentoDialogComponent } from '../../components/pagamento-dialog/pagamento-dialog.component';
 import { SelecaoContaDialogComponent } from '../../components/selecao-conta-dialog/selecao-conta-dialog.component';
 
+import { PageEvent } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-cartoes-view',
   templateUrl: './cartoes-view.component.html',
@@ -22,6 +24,11 @@ export class CartoesViewComponent implements OnInit {
   cartaoSelecionado: any = null;
   comprasDoCartao: Compra[] = [];
   isLoading = true;
+
+  // Variáveis para paginação
+  totalCompras = 0;
+  paginaAtual = 0;
+  tamanhoPagina = 5;
 
   constructor(
     private cartaoService: CartaoCreditoService,
@@ -64,24 +71,37 @@ export class CartoesViewComponent implements OnInit {
     });
   }
 
-  selecionarCartao(cartao: any) {
-    this.cartaoSelecionado = cartao;
-    if (cartao && cartao.id) {
-      this.carregarCompras(cartao.id);
+  carregarCompras(cartaoId: string) {
+    this.cartaoService
+      .listarCompras(cartaoId, this.paginaAtual, this.tamanhoPagina)
+      .subscribe({
+        next: (pageData) => {
+          this.comprasDoCartao = pageData.content;
+          this.totalCompras = pageData.totalElements;
+
+          this.comprasDoCartao.forEach((compra) => {
+            this.carregarParcelas(compra);
+          });
+        },
+        error: (err) => console.error('Erro ao buscar compras', err),
+      });
+  }
+
+  mudarPagina(event: PageEvent) {
+    this.paginaAtual = event.pageIndex;
+    this.tamanhoPagina = event.pageSize;
+
+    if (this.cartaoSelecionado) {
+      this.carregarCompras(this.cartaoSelecionado.id);
     }
   }
 
-  carregarCompras(cartaoId: string) {
-    this.cartaoService.listarCompras(cartaoId).subscribe({
-      next: (data) => {
-        this.comprasDoCartao = data;
-
-        this.comprasDoCartao.forEach((compra) => {
-          this.carregarParcelas(compra);
-        });
-      },
-      error: (err) => console.error('Erro ao buscar compras', err),
-    });
+  selecionarCartao(cartao: any) {
+    this.cartaoSelecionado = cartao;
+    this.paginaAtual = 0;
+    if (cartao && cartao.id) {
+      this.carregarCompras(cartao.id);
+    }
   }
 
   carregarParcelas(compra: any) {

@@ -150,8 +150,19 @@
         </mat-accordion>
 
         <div *ngIf="comprasDoCartao.length === 0" class="empty-state">
-          Nenhuma compra registrada.
+          Nenhuma compra encontrada nesta página.
         </div>
+
+        <mat-paginator
+          [length]="totalCompras"
+          [pageSize]="tamanhoPagina"
+          [pageSizeOptions]="[5, 10, 20]"
+          [pageIndex]="paginaAtual"
+          (page)="mudarPagina($event)"
+          showFirstLastButtons
+          aria-label="Selecionar página de compras"
+        >
+        </mat-paginator>
       </div>
 
       <div class="split-right">

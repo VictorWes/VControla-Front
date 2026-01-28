@@ -25,6 +25,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SelecaoContaDialogComponent } from './components/selecao-conta-dialog/selecao-conta-dialog.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { SelecaoContaDialogComponent } from './components/selecao-conta-dialog/s
     MatNativeDateModule,
     MatExpansionModule,
     MatSnackBarModule,
+    MatPaginatorModule,
   ],
 })
 export class CartoesModule {}

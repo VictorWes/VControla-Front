@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../src/environments/environment';
 import { CartaoCredito } from '../models/cartao-credito.model';
 import { Compra } from '../models/compra.model';
+import { Page } from '../models/page.model';
 
 @Injectable({
   providedIn: 'root',
@@ -36,8 +37,14 @@ export class CartaoCreditoService {
     return this.http.post<void>(this.comprasUrl, compra);
   }
 
-  listarCompras(cartaoId: string): Observable<Compra[]> {
-    return this.http.get<Compra[]>(`${this.comprasUrl}/cartao/${cartaoId}`);
+  listarCompras(
+    cartaoId: string,
+    page: number = 0,
+    size: number = 5,
+  ): Observable<Page<Compra>> {
+    return this.http.get<Page<Compra>>(
+      `${this.comprasUrl}/cartao/${cartaoId}?page=${page}&size=${size}`,
+    );
   }
 
   listarParcelas(compraId: string): Observable<any[]> {
@@ -64,12 +71,13 @@ export class CartaoCreditoService {
     return this.http.put<void>(`${this.comprasUrl}/${id}`, dados);
   }
 
- 
   excluirCompra(id: string, contaId?: string): Observable<void> {
     let params = {};
     if (contaId) {
       params = { contaId: contaId };
     }
-    return this.http.delete<void>(`${this.comprasUrl}/${id}`, { params: params });
+    return this.http.delete<void>(`${this.comprasUrl}/${id}`, {
+      params: params,
+    });
   }
 }
