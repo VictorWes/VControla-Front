@@ -24,6 +24,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SelecaoContaDialogComponent } from './components/selecao-conta-dialog/selecao-conta-dialog.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     CartaoDialogComponent,
     PagamentoDialogComponent,
     CompraDialogComponent,
+    SelecaoContaDialogComponent,
   ],
   imports: [
     CommonModule,

@@ -157,7 +157,7 @@ $success-color: #43a047;
       background-color: #e8f5e9 !important; // Verde bem clarinho
       border: 1px solid #c8e6c9;
 
-      // Força a cor do cabeçalho também (usando ::ng-deep para sobrescrever o Material)
+      // Força a cor do cabeçalho também
       ::ng-deep .mat-expansion-panel-header {
         background-color: #e8f5e9 !important;
 
@@ -171,6 +171,44 @@ $success-color: #43a047;
       // Muda a cor da setinha de expandir
       ::ng-deep .mat-expansion-indicator::after {
         color: #2e7d32;
+      }
+    }
+
+    // --- AJUSTES DO CABEÇALHO PARA BOTÕES DE AÇÃO ---
+    ::ng-deep .mat-expansion-panel-header-description {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-grow: 1;
+      margin-right: 0 !important;
+
+      .info-texto {
+        // Garante que o texto não quebre de forma feia
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .acoes-compra {
+        display: flex;
+        gap: 0px; // Pequeno espaço entre os ícones
+        margin-left: 10px;
+        align-items: center;
+
+        // Ajuste fino dos botões para não ficarem gigantes
+        button {
+          width: 36px;
+          height: 36px;
+          line-height: 36px;
+          padding: 0;
+
+          mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+          }
+        }
       }
     }
   }

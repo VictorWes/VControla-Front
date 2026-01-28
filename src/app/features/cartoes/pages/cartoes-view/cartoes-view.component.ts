@@ -4,12 +4,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { CartaoCreditoService } from '../../../../core/services/cartao-credito.service';
 import { CartaoCredito } from '../../../../core/models/cartao-credito.model';
+import { Compra } from '../../../../core/models/compra.model';
 
 import { CartaoDialogComponent } from '../../components/cartao-dialog/cartao-dialog.component';
 import { CompraDialogComponent } from '../../components/compra-dialog/compra-dialog.component';
 import { PagamentoDialogComponent } from '../../components/pagamento-dialog/pagamento-dialog.component';
-
-import { Compra } from '../../../../core/models/compra.model';
+import { SelecaoContaDialogComponent } from '../../components/selecao-conta-dialog/selecao-conta-dialog.component';
 
 @Component({
   selector: 'app-cartoes-view',
@@ -19,9 +19,7 @@ import { Compra } from '../../../../core/models/compra.model';
 })
 export class CartoesViewComponent implements OnInit {
   cartoes: CartaoCredito[] = [];
-
   cartaoSelecionado: any = null;
-
   comprasDoCartao: Compra[] = [];
   isLoading = true;
 
@@ -88,15 +86,12 @@ export class CartoesViewComponent implements OnInit {
 
   carregarParcelas(compra: any) {
     if (compra.parcelas && compra.parcelas.length > 0) {
-      compra.isQuitada = compra.parcelas.every((p: any) => p.paga);
       return;
     }
 
     this.cartaoService.listarParcelas(compra.id).subscribe({
       next: (parcelas) => {
         compra.parcelas = parcelas;
-
-        compra.isQuitada = parcelas.every((p: any) => p.paga);
       },
       error: (err) => console.error('Erro ao buscar parcelas', err),
     });
@@ -121,7 +116,6 @@ export class CartoesViewComponent implements OnInit {
           error: (err) => {
             console.error('Erro:', err);
             this.isLoading = false;
-
             const mensagemErro = err.error || 'Erro ao realizar compra.';
             this.mostrarMensagem(mensagemErro, 'erro');
           },
@@ -138,6 +132,7 @@ export class CartoesViewComponent implements OnInit {
       panelClass: tipo === 'erro' ? ['snackbar-erro'] : ['snackbar-sucesso'],
     });
   }
+
   pagarParcela(parcela: any) {
     const dialogRef = this.dialog.open(PagamentoDialogComponent, {
       width: '400px',
@@ -149,7 +144,7 @@ export class CartoesViewComponent implements OnInit {
         this.cartaoService.pagarParcela(parcela.id, contaId).subscribe({
           next: () => {
             parcela.paga = true;
-            this.carregarCartoes();
+            this.carregarCartoes(); // Atualiza faturas e limites
           },
           error: (err) => console.error('Erro ao pagar parcela', err),
         });
@@ -200,7 +195,6 @@ export class CartoesViewComponent implements OnInit {
     this.cartaoService.atualizar(id, dados).subscribe({
       next: () => {
         this.carregarCartoes();
-
         if (this.cartaoSelecionado && this.cartaoSelecionado.id === id) {
           this.cartaoSelecionado = { ...this.cartaoSelecionado, ...dados };
         }
@@ -228,10 +222,69 @@ export class CartoesViewComponent implements OnInit {
     }
   }
 
-  isCompraQuitada(compra: any): boolean {
-    if (!compra.parcelas || compra.parcelas.length === 0) {
-      return false;
+  abrirEdicaoCompra(compra: Compra) {
+    const dialogRef = this.dialog.open(CompraDialogComponent, {
+      width: '500px',
+      data: {
+        cartaoId: this.cartaoSelecionado?.id,
+        compraEditar: compra,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.isLoading = true;
+        this.cartaoService.editarCompra(compra.id, result).subscribe({
+          next: () => {
+            this.carregarCartoes();
+            this.mostrarMensagem('Compra atualizada!', 'sucesso');
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.mostrarMensagem(err.error || 'Erro ao editar.', 'erro');
+          },
+        });
+      }
+    });
+  }
+
+  confirmarExclusaoCompra(compra: Compra) {
+    if (confirm(`Tem certeza que deseja excluir a compra "${compra.nome}"?`)) {
+      this.executarExclusao(compra.id);
     }
-    return compra.parcelas.every((p: any) => p.paga);
+  }
+
+  private executarExclusao(compraId: string, contaIdEstorno?: string) {
+    this.isLoading = true;
+
+    this.cartaoService.excluirCompra(compraId, contaIdEstorno).subscribe({
+      next: () => {
+        this.carregarCartoes();
+        this.mostrarMensagem('Compra excluída com sucesso!', 'sucesso');
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.isLoading = false;
+
+        if (err.status === 422 && err.error) {
+          this.abrirModalEstorno(compraId, err.error);
+        } else {
+          this.mostrarMensagem(err.error || 'Erro ao excluir compra.', 'erro');
+        }
+      },
+    });
+  }
+
+  private abrirModalEstorno(compraId: string, mensagemErro: string) {
+    const dialogRef = this.dialog.open(SelecaoContaDialogComponent, {
+      width: '400px',
+      data: { valorEstorno: 0 }, // Opcional: Se tiver o valor no erro, pode passar aqui
+    });
+
+    dialogRef.afterClosed().subscribe((contaId) => {
+      if (contaId) {
+        this.executarExclusao(compraId, contaId);
+      }
+    });
   }
 }

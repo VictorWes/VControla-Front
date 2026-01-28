@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Estornar Valor Pago</h2>
+
+<mat-dialog-content>
+  <p>
+    Esta compra possui pagamentos realizados. Para excluir, precisamos estornar
+    o valor pago.
+  </p>
+
+  <p class="valor-destaque">
+    Valor a devolver: <strong>{{ data.valorEstorno | currency: "BRL" }}</strong>
+  </p>
+
+  <mat-form-field appearance="outline" style="width: 100%; margin-top: 16px">
+    <mat-label>Conta de Destino (Estorno)</mat-label>
+    <mat-select [(value)]="contaSelecionadaId">
+      <mat-option *ngFor="let conta of contas" [value]="conta.id">
+        {{ conta.nome }} (Saldo: {{ conta.saldo | currency: "BRL" }})
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button
+    mat-flat-button
+    color="warn"
+    [disabled]="!contaSelecionadaId"
+    (click)="confirmar()"
+  >
+    Confirmar Exclusão e Estorno
+  </button>
+</mat-dialog-actions>

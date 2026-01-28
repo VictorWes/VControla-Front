@@ -48,7 +48,7 @@
         <button
           mat-icon-button
           (click)="editarCartao(cartaoSelecionado)"
-          matTooltip="Editar"
+          matTooltip="Editar Cartão"
         >
           <mat-icon>edit</mat-icon>
         </button>
@@ -56,7 +56,7 @@
           mat-icon-button
           color="warn"
           (click)="excluirCartao(cartaoSelecionado)"
-          matTooltip="Excluir"
+          matTooltip="Excluir Cartão"
         >
           <mat-icon>delete</mat-icon>
         </button>
@@ -82,10 +82,32 @@
                 >
                 <strong>{{ compra.nome }}</strong>
               </mat-panel-title>
+
               <mat-panel-description>
-                {{ compra.dataCompra | date: "dd/MM/yyyy" }} —
-                {{ compra.valorTotal | currency: "BRL" }}
-                ({{ compra.qtdeParcelas }}x)
+                <span class="info-texto">
+                  {{ compra.dataCompra | date: "dd/MM/yyyy" }} —
+                  {{ compra.valorTotal | currency: "BRL" }}
+                  ({{ compra.qtdeParcelas }}x)
+                </span>
+
+                <div class="acoes-compra" (click)="$event.stopPropagation()">
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    matTooltip="Editar Compra"
+                    (click)="abrirEdicaoCompra(compra)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    matTooltip="Excluir Compra"
+                    (click)="confirmarExclusaoCompra(compra)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
               </mat-panel-description>
             </mat-expansion-panel-header>
 

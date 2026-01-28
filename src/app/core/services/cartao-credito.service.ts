@@ -59,4 +59,17 @@ export class CartaoCreditoService {
   listarContas(): Observable<any[]> {
     return this.http.get<any[]>(this.contasUrl);
   }
+
+  editarCompra(id: string, dados: any): Observable<void> {
+    return this.http.put<void>(`${this.comprasUrl}/${id}`, dados);
+  }
+
+ 
+  excluirCompra(id: string, contaId?: string): Observable<void> {
+    let params = {};
+    if (contaId) {
+      params = { contaId: contaId };
+    }
+    return this.http.delete<void>(`${this.comprasUrl}/${id}`, { params: params });
+  }
 }
