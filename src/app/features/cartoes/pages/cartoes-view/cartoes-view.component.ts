@@ -201,4 +201,11 @@ export class CartoesViewComponent implements OnInit {
       });
     }
   }
+
+  isCompraQuitada(compra: any): boolean {
+    if (!compra.parcelas || compra.parcelas.length === 0) {
+      return false;
+    }
+    return compra.parcelas.every((p: any) => p.paga);
+  }
 }

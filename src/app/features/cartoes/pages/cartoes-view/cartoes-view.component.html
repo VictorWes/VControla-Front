@@ -71,9 +71,15 @@
           <mat-expansion-panel
             *ngFor="let compra of comprasDoCartao"
             (opened)="carregarParcelas(compra)"
+            [class.compra-paga]="isCompraQuitada(compra)"
           >
             <mat-expansion-panel-header>
               <mat-panel-title>
+                <mat-icon
+                  *ngIf="isCompraQuitada(compra)"
+                  style="color: #2e7d32; margin-right: 8px"
+                  >check_circle</mat-icon
+                >
                 <strong>{{ compra.nome }}</strong>
               </mat-panel-title>
               <mat-panel-description>

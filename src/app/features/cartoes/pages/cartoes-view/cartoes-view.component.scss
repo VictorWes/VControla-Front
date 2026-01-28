@@ -151,6 +151,28 @@ $success-color: #43a047;
     &.mat-expanded {
       margin-bottom: 16px;
     }
+
+    // --- NOVA ESTILIZAÇÃO PARA COMPRA QUITADA ---
+    &.compra-paga {
+      background-color: #e8f5e9 !important; // Verde bem clarinho
+      border: 1px solid #c8e6c9;
+
+      // Força a cor do cabeçalho também (usando ::ng-deep para sobrescrever o Material)
+      ::ng-deep .mat-expansion-panel-header {
+        background-color: #e8f5e9 !important;
+
+        .mat-expansion-panel-header-title,
+        .mat-expansion-panel-header-description {
+          color: #2e7d32; // Verde escuro para o texto
+          font-weight: 500;
+        }
+      }
+
+      // Muda a cor da setinha de expandir
+      ::ng-deep .mat-expansion-indicator::after {
+        color: #2e7d32;
+      }
+    }
   }
 
   .parcelas-list {
