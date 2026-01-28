@@ -22,7 +22,8 @@ import { CompraDialogComponent } from './components/compra-dialog/compra-dialog.
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatExpansionModule } from '@angular/material/expansion'; // Para o Accordion
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { MatExpansionModule } from '@angular/material/expansion'; // Para o Acco
     MatDatepickerModule,
     MatNativeDateModule,
     MatExpansionModule,
+    MatSnackBarModule,
   ],
 })
 export class CartoesModule {}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { CartaoCreditoService } from '../../../../core/services/cartao-credito.service';
 import { CartaoCredito } from '../../../../core/models/cartao-credito.model';
@@ -7,6 +8,8 @@ import { CartaoCredito } from '../../../../core/models/cartao-credito.model';
 import { CartaoDialogComponent } from '../../components/cartao-dialog/cartao-dialog.component';
 import { CompraDialogComponent } from '../../components/compra-dialog/compra-dialog.component';
 import { PagamentoDialogComponent } from '../../components/pagamento-dialog/pagamento-dialog.component';
+
+import { Compra } from '../../../../core/models/compra.model';
 
 @Component({
   selector: 'app-cartoes-view',
@@ -19,12 +22,13 @@ export class CartoesViewComponent implements OnInit {
 
   cartaoSelecionado: any = null;
 
-  comprasDoCartao: any[] = [];
+  comprasDoCartao: Compra[] = [];
   isLoading = true;
 
   constructor(
     private cartaoService: CartaoCreditoService,
     private dialog: MatDialog,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -73,20 +77,29 @@ export class CartoesViewComponent implements OnInit {
     this.cartaoService.listarCompras(cartaoId).subscribe({
       next: (data) => {
         this.comprasDoCartao = data;
+
+        this.comprasDoCartao.forEach((compra) => {
+          this.carregarParcelas(compra);
+        });
       },
       error: (err) => console.error('Erro ao buscar compras', err),
     });
   }
 
   carregarParcelas(compra: any) {
-    if (!compra.parcelas) {
-      this.cartaoService.listarParcelas(compra.id).subscribe({
-        next: (parcelas) => {
-          compra.parcelas = parcelas;
-        },
-        error: (err) => console.error('Erro ao buscar parcelas', err),
-      });
+    if (compra.parcelas && compra.parcelas.length > 0) {
+      compra.isQuitada = compra.parcelas.every((p: any) => p.paga);
+      return;
     }
+
+    this.cartaoService.listarParcelas(compra.id).subscribe({
+      next: (parcelas) => {
+        compra.parcelas = parcelas;
+
+        compra.isQuitada = parcelas.every((p: any) => p.paga);
+      },
+      error: (err) => console.error('Erro ao buscar parcelas', err),
+    });
   }
 
   novaCompra() {
@@ -103,13 +116,26 @@ export class CartoesViewComponent implements OnInit {
         this.cartaoService.criarCompra(result).subscribe({
           next: () => {
             this.carregarCartoes();
+            this.mostrarMensagem('Compra realizada com sucesso!', 'sucesso');
           },
           error: (err) => {
-            console.error('Erro ao criar compra', err);
+            console.error('Erro:', err);
             this.isLoading = false;
+
+            const mensagemErro = err.error || 'Erro ao realizar compra.';
+            this.mostrarMensagem(mensagemErro, 'erro');
           },
         });
       }
+    });
+  }
+
+  mostrarMensagem(msg: string, tipo: 'sucesso' | 'erro') {
+    this.snackBar.open(msg, 'Fechar', {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: tipo === 'erro' ? ['snackbar-erro'] : ['snackbar-sucesso'],
     });
   }
   pagarParcela(parcela: any) {
