@@ -1,18 +1,28 @@
+// Garante que o CSS obedeça as bordas e não estoure
 :host {
   display: block;
+  box-sizing: border-box;
 }
 
+// Título mais espaçado e bonito
 h2 {
-  margin-bottom: 10px;
+  margin: 0 0 8px 0;
   color: #333;
+  font-weight: 500;
+}
+
+// Remove scrollbar horizontal indesejado do Material Design
+::ng-deep .mat-mdc-dialog-content {
+  overflow-x: hidden !important;
+  max-width: 100%;
 }
 
 .form-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  min-width: 450px;
-  padding-top: 10px;
+  gap: 16px;
+  width: 100%;
+  padding-top: 5px;
 }
 
 .full-width {
@@ -22,12 +32,13 @@ h2 {
 .row {
   display: flex;
   gap: 16px;
+  width: 100%;
 
   .half-width {
     flex: 1;
+    min-width: 0;
   }
 }
-
 
 mat-form-field {
   width: 100%;

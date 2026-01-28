@@ -17,7 +17,6 @@ import { PagamentoDialogComponent } from '../../components/pagamento-dialog/paga
 export class CartoesViewComponent implements OnInit {
   cartoes: CartaoCredito[] = [];
 
-
   cartaoSelecionado: any = null;
 
   comprasDoCartao: any[] = [];
@@ -41,7 +40,6 @@ export class CartoesViewComponent implements OnInit {
 
         if (this.cartoes.length > 0) {
           if (this.cartaoSelecionado) {
-
             const atualizado = this.cartoes.find(
               (c) => c.id === this.cartaoSelecionado.id,
             );
@@ -51,7 +49,6 @@ export class CartoesViewComponent implements OnInit {
               this.selecionarCartao(this.cartoes[0]);
             }
           } else {
-
             this.selecionarCartao(this.cartoes[0]);
           }
         } else {
@@ -72,8 +69,6 @@ export class CartoesViewComponent implements OnInit {
     }
   }
 
-
-
   carregarCompras(cartaoId: string) {
     this.cartaoService.listarCompras(cartaoId).subscribe({
       next: (data) => {
@@ -82,7 +77,6 @@ export class CartoesViewComponent implements OnInit {
       error: (err) => console.error('Erro ao buscar compras', err),
     });
   }
-
 
   carregarParcelas(compra: any) {
     if (!compra.parcelas) {
@@ -99,7 +93,7 @@ export class CartoesViewComponent implements OnInit {
     if (!this.cartaoSelecionado) return;
 
     const dialogRef = this.dialog.open(CompraDialogComponent, {
-      width: '400px',
+      width: '500px',
       data: { cartaoId: this.cartaoSelecionado.id },
     });
 
@@ -118,13 +112,11 @@ export class CartoesViewComponent implements OnInit {
       }
     });
   }
-
   pagarParcela(parcela: any) {
     const dialogRef = this.dialog.open(PagamentoDialogComponent, {
       width: '400px',
       data: { valor: parcela.valorParcela },
     });
-
 
     dialogRef.afterClosed().subscribe((contaId) => {
       if (contaId) {
@@ -138,7 +130,6 @@ export class CartoesViewComponent implements OnInit {
       }
     });
   }
-
 
   novoCartao() {
     const dialogRef = this.dialog.open(CartaoDialogComponent, {
@@ -183,7 +174,7 @@ export class CartoesViewComponent implements OnInit {
     this.cartaoService.atualizar(id, dados).subscribe({
       next: () => {
         this.carregarCartoes();
-      
+
         if (this.cartaoSelecionado && this.cartaoSelecionado.id === id) {
           this.cartaoSelecionado = { ...this.cartaoSelecionado, ...dados };
         }
