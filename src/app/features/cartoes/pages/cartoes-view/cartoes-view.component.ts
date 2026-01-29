@@ -161,12 +161,28 @@ export class CartoesViewComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((contaId) => {
       if (contaId) {
+    
+        this.isLoading = true;
+
         this.cartaoService.pagarParcela(parcela.id, contaId).subscribe({
           next: () => {
             parcela.paga = true;
-            this.carregarCartoes(); // Atualiza faturas e limites
+            this.carregarCartoes();
+
+
+            this.mostrarMensagem('Pagamento realizado com sucesso!', 'sucesso');
+            this.isLoading = false;
           },
-          error: (err) => console.error('Erro ao pagar parcela', err),
+          error: (err) => {
+            console.error('Erro ao pagar parcela', err);
+            this.isLoading = false;
+
+
+            const mensagem = err.error || 'Erro ao processar pagamento.';
+
+
+            this.mostrarMensagem(mensagem, 'erro');
+          },
         });
       }
     });
