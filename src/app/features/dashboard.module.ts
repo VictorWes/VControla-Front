@@ -21,6 +21,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import { TipoContaDialogComponent } from './contas/components/tipo-conta-dialog/tipo-conta-dialog.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatMenuModule,
     MatSnackBarModule,
     MatSelectModule,
+    MatProgressBarModule,
   ],
 })
 export class DashboardModule {}

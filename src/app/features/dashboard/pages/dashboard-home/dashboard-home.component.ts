@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Conta } from '../../../../core/models/conta.model';
+import { CartaoCredito } from '../../../../core/models/cartao-credito.model'; // Importe o modelo
 import { ContaService } from '../../../../core/services/conta.service';
+import { CartaoCreditoService } from '../../../../core/services/cartao-credito.service'; // Importe o service
 import {
   DashboardService,
   ResumoDashboard,
@@ -14,6 +16,7 @@ import {
 })
 export class DashboardHomeComponent implements OnInit {
   contas: Conta[] = [];
+  cartoes: CartaoCredito[] = [];
   saldoTotal: number = 0;
 
   resumo: ResumoDashboard = { receitas: 0, despesas: 0, saldo: 0 };
@@ -23,6 +26,7 @@ export class DashboardHomeComponent implements OnInit {
 
   constructor(
     private contaService: ContaService,
+    private cartaoService: CartaoCreditoService,
     private dashboardService: DashboardService,
   ) {}
 
@@ -32,6 +36,7 @@ export class DashboardHomeComponent implements OnInit {
 
     this.definirSaudacao();
     this.carregarContas();
+    this.carregarCartoes();
     this.carregarResumoMensal();
   }
 
@@ -58,6 +63,16 @@ export class DashboardHomeComponent implements OnInit {
         this.contas = lista.slice(0, 3);
       },
       error: (err) => console.error('Erro ao carregar contas:', err),
+    });
+  }
+
+  carregarCartoes() {
+    this.cartaoService.listar().subscribe({
+      next: (lista) => {
+
+        this.cartoes = lista.slice(0, 3);
+      },
+      error: (err) => console.error('Erro ao carregar cartões:', err),
     });
   }
 
