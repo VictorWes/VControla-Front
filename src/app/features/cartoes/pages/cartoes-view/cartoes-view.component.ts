@@ -161,7 +161,7 @@ export class CartoesViewComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((contaId) => {
       if (contaId) {
-    
+
         this.isLoading = true;
 
         this.cartaoService.pagarParcela(parcela.id, contaId).subscribe({

@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { Conta } from '../../../../core/models/conta.model'; // Ajuste o caminho se necessário
-import { Transacao } from '../../../../core/models/transacao.model'; // Ajuste o caminho se necessário
+import { Conta } from '../../../../core/models/conta.model';
+import { Transacao } from '../../../../core/models/transacao.model';
 import { ContaService } from '../../../../core/services/conta.service';
 import { TransacaoService } from '../../../../core/services/transacao.service';
 import { TransacaoCadastroComponent } from '../../components/transacao-cadastro/transacao-cadastro.component';
@@ -20,13 +20,13 @@ export class TransacaoListaComponent implements OnInit {
   termoBusca: string = '';
 
   // Variáveis de Dados
-  listaTransacoes: Transacao[] = []; // Dados brutos do Banco (ex: 100 itens)
-  transacoesFiltradas: Transacao[] = []; // Dados filtrados por busca/conta (ex: 11 itens)
-  transacoesPaginadas: Transacao[] = []; // Dados visíveis na tela (ex: 10 itens)
+  listaTransacoes: Transacao[] = [];
+  transacoesFiltradas: Transacao[] = [];
+  transacoesPaginadas: Transacao[] = [];
 
   // Configuração da Paginação
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  tamanhoPagina = 10; // <--- PADRÃO DE 10 ITENS
+  tamanhoPagina = 10;
   paginaAtual = 0;
 
   constructor(
@@ -81,7 +81,6 @@ export class TransacaoListaComponent implements OnInit {
       this.tamanhoPagina = event.pageSize;
     } else {
       this.paginaAtual = 0;
-
       this.tamanhoPagina = this.tamanhoPagina || 10;
     }
 
@@ -91,22 +90,7 @@ export class TransacaoListaComponent implements OnInit {
     this.transacoesPaginadas = this.transacoesFiltradas.slice(inicio, fim);
   }
 
-  abrirNovaTransacao(tipo: 'GASTOS' | 'RECEITAS') {
-    const dialogRef = this.dialog.open(TransacaoCadastroComponent, {
-      width: '400px',
-      data: {
-        tipo: tipo,
-        contas: this.listaContas,
-        contaSelecionada: null,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.criarTransacao(result);
-      }
-    });
-  }
+  // REMOVIDO: Método abrirNovaTransacao() foi apagado pois não há botões para chamá-lo
 
   criarTransacao(transacao: any) {
     const payload: any = {
