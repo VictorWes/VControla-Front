@@ -116,7 +116,7 @@ export class PlanejamentoViewComponent implements OnInit {
 
       if (valorItem > saldoVirtualDisponivel) {
         this.snackBar.open(
-          'Saldo Disponível insuficiente para esta reserva!',
+          'Saldo fictício disponível insuficiente para esta reserva!',
           'Entendi',
           {
             duration: 5000,
