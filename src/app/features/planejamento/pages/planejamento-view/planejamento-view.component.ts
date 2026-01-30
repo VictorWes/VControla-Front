@@ -98,7 +98,9 @@ export class PlanejamentoViewComponent implements OnInit {
 
   carregarCarteiras() {
     this.tipoContaService.listar().subscribe((carteiras) => {
-      this.listaCarteiras = carteiras;
+      this.listaCarteiras = carteiras.sort((a, b) => {
+        return a.nome.localeCompare(b.nome);
+      });
     });
   }
 
