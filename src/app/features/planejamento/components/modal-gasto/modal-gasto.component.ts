@@ -24,8 +24,15 @@ export class ModalGastoComponent {
   ) {
     this.listaCarteiras = data.carteiras || [];
     this.listaContas = data.contas || [];
-  }
 
+    if (data.itemParaEditar) {
+      this.novoItem = {
+        carteiraId: data.itemParaEditar.carteiraId,
+        valor: data.itemParaEditar.valor,
+        contaDestinoId: data.itemParaEditar.contaDestinoId,
+      };
+    }
+  }
   salvar() {
     this.dialogRef.close(this.novoItem);
   }
