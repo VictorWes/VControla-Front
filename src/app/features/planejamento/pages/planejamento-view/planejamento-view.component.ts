@@ -107,25 +107,52 @@ export class PlanejamentoViewComponent implements OnInit {
   alternarStatus(item: ItemPlanejamento) {
     const statusAntigo = item.status;
     const vaiGuardar = statusAntigo === 'PENDENTE';
+    const valorItem = Number(item.valor);
+
+    if (vaiGuardar) {
+      const saldoVirtualDisponivel = Number(
+        this.resumo?.saldoDisponivelVirtual || 0,
+      );
+
+      if (valorItem > saldoVirtualDisponivel) {
+        this.snackBar.open(
+          'Saldo Disponível insuficiente para esta reserva!',
+          'Entendi',
+          {
+            duration: 5000,
+            verticalPosition: 'top',
+            panelClass: ['warning-snackbar'],
+          },
+        );
+        return;
+      }
+    }
 
     this.financeiroService.alternarStatus(item.id).subscribe({
       next: () => {
+        item.status = vaiGuardar ? 'GUARDADO' : 'PENDENTE';
+
+        if (this.resumo) {
+          if (vaiGuardar) {
+            this.resumo.saldoDisponivelVirtual -= valorItem;
+          } else {
+            this.resumo.saldoDisponivelVirtual += valorItem;
+          }
+        }
+
         const contaAlvo = this.listaContasReais.find(
           (c) => c.id == item.contaDestinoId,
         );
+
         if (contaAlvo) {
-          const valorItem = Number(item.valor);
-          const saldoAtual = Number(contaAlvo.saldo);
+          const saldoContaAtual = Number(contaAlvo.saldo);
 
           if (vaiGuardar) {
-            contaAlvo.saldo = saldoAtual - valorItem;
+            contaAlvo.saldo = saldoContaAtual + valorItem;
           } else {
-            contaAlvo.saldo = saldoAtual + valorItem;
+            contaAlvo.saldo = saldoContaAtual - valorItem;
           }
-          this.listaContasReais = [...this.listaContasReais];
         }
-
-        item.status = vaiGuardar ? 'GUARDADO' : 'PENDENTE';
 
         this.ordenarItens();
 
@@ -134,21 +161,32 @@ export class PlanejamentoViewComponent implements OnInit {
           this.carregarContasReais();
         }, 200);
 
-        this.snackBar.open('Saldo atualizado!', 'Ok', {
-          duration: 3000,
-          verticalPosition: 'top',
-          horizontalPosition: 'center',
-          panelClass: ['success-snackbar'],
-        });
+        this.snackBar.open(
+          vaiGuardar ? 'Valor guardado!' : 'Valor estornado!',
+          'Ok',
+          {
+            duration: 3000,
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar'],
+          },
+        );
       },
+
       error: (err) => {
         item.status = statusAntigo;
-        console.error(err);
+
+        console.error('Erro no alternarStatus:', err);
 
         let msg = 'Erro ao atualizar.';
-        if (err.error?.message) msg = err.error.message;
 
-        this.snackBar.open(msg, 'Fechar', {
+        if (typeof err.error === 'string') {
+          msg = err.error;
+        } else if (err.error?.message) {
+          msg = err.error.message;
+        }
+
+        this.snackBar.open(msg, 'Entendi', {
+          duration: 5000,
           verticalPosition: 'top',
           panelClass: ['warning-snackbar'],
         });
