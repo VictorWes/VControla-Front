@@ -16,19 +16,15 @@
 
 .dashboard-grid {
   display: grid;
-  // === CORREÇÃO AQUI ===
-  // Esquerda Fixa (450px) | Meio Fixo (300px) | Direita (O resto)
   grid-template-columns: 450px 300px 1fr;
   gap: 24px;
   align-items: start;
-
-  // Proteção para telas menores (Notebooks pequenos)
   @media (max-width: 1200px) {
-    grid-template-columns: 1fr; // Empilha tudo
+    grid-template-columns: 1fr;
   }
 }
 
-// Estilo Base das Colunas
+
 .column {
   background: white;
   border-radius: 12px;
