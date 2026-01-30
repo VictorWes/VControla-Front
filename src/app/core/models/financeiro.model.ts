@@ -17,6 +17,6 @@ export interface ResumoFinanceiro {
 
 export interface ItemPlanejamentoRequest {
   carteiraId: string;
-  valor: number;
+  valor: number | null;
   contaDestinoId: string;
 }

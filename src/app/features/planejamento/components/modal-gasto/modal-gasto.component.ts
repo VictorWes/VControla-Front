@@ -11,7 +11,7 @@ import { ItemPlanejamentoRequest } from '../../../../core/models/financeiro.mode
 export class ModalGastoComponent {
   novoItem: ItemPlanejamentoRequest = {
     carteiraId: '',
-    valor: 0,
+    valor: null,
     contaDestinoId: '',
   };
 
