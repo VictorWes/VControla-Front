@@ -51,25 +51,51 @@ A aplicação está disponível para testes! Você pode criar uma conta e explor
 - **Filtros Dinâmicos:** Filtragem instantânea por Conta Bancária e Busca textual (Descrição/Valor).
 - **Operações:** Criação, Edição e Exclusão de receitas e despesas com atualização em tempo real do saldo.
 - **Feedback Visual:** Indicadores de status e modais de confirmação para ações críticas (estorno automático ao excluir).
+- **Categorização:** Identificação visual de receitas (verde) e despesas (vermelho).
 
 ### 📊 Dashboard Financeiro
 
-- Visualização de resumo mensal com receitas, despesas e saldo.
-- Listagem de contas bancárias com saldos atualizados.
-- Saudação personalizada baseada no horário.
+- **Resumo Mensal:** Visualização de receitas, despesas e saldo consolidado do mês atual.
+- **Visão Geral de Contas:** Listagem de todas as contas bancárias com saldos atualizados em tempo real.
+- **Visão Geral de Cartões:** Exibição de todos os cartões de crédito com limite disponível e fatura atual.
+- **Saudação Personalizada:** Mensagem dinâmica baseada no horário do dia (Bom dia, Boa tarde, Boa noite).
+- **Ações Rápidas:** Botões para acessar rapidamente o gerenciamento de contas e cartões.
 
-### 💳 Controle de Contas e Cartões
+### 🏦 Controle de Contas Bancárias
 
-- Gerenciamento completo de contas bancárias (CRUD).
-- Sistema de tipos de conta personalizáveis.
-- Associação de contas a categorias específicas.
+- **CRUD Completo:** Criação, visualização, edição e exclusão de contas bancárias.
+- **Sistema de Tipos:** Categorização personalizável (Conta Corrente, Poupança, Investimentos, etc.).
+- **Gestão de Tipos de Conta:** Interface dedicada para criar e gerenciar tipos de conta.
+- **Saldos em Tempo Real:** Atualização automática do saldo conforme transações são registradas.
+- **Validações:** Controle de exclusão com verificação de vínculos e transações associadas.
+
+### 💳 Gestão de Cartões de Crédito
+
+- **CRUD de Cartões:** Cadastro completo com nome, bandeira, limite e dia de fechamento/vencimento.
+- **Registro de Compras:** Sistema para adicionar compras com valor, descrição e parcelamento.
+- **Controle de Parcelamento:** Gestão de compras parceladas com visualização de cada parcela.
+- **Pagamento de Faturas:** Interface para registrar pagamento total ou parcial da fatura com seleção de conta de débito.
+- **Associação com Contas:** Vinculação de pagamentos às contas bancárias para manter o fluxo de caixa sincronizado.
+- **Paginação de Compras:** Navegação eficiente através do histórico de compras de cada cartão.
+- **Cálculo Automático:** Limite disponível e total da fatura calculados automaticamente.
 
 ### 📋 Planejamento Financeiro
 
-- Gestão de carteiras financeiras (Reserva de Emergência, Casa, Viagem, etc.).
-- Controle de saldo real vs. saldo previsto por carteira.
-- Operações de adicionar saldo, registrar gastos e resgatar valores.
-- Paginação e organização de itens de planejamento.
+- **Gestão de Carteiras:** Criação de carteiras para objetivos específicos (Reserva de Emergência, Casa, Viagem, Carro, etc.).
+- **Controle de Saldo:** Acompanhamento de saldo real vs. saldo previsto por carteira.
+- **Operações Diversas:**
+  - ➕ Adicionar Saldo: Incrementar valor em uma carteira específica.
+  - 💸 Registrar Gasto: Debitar valor e manter histórico de gastos.
+  - 💰 Resgatar Valor: Sacar montante da carteira.
+  - ➖ Diminuir Saldo: Ajustar saldo manualmente.
+- **Paginação e Organização:** Interface limpa com suporte a múltiplas carteiras paginadas.
+- **Validações:** Controle de saldo negativo e confirmações para operações críticas.
+
+### 👤 Perfil do Usuário
+
+- **Menu de Usuário:** Dropdown no header com foto/ícone do perfil.
+- **Opção de Editar Perfil:** Acesso rápido para atualizar dados pessoais (em desenvolvimento).
+- **Logout Seguro:** Desconexão com limpeza de tokens e redirecionamento para login.
 
 ---
 
@@ -97,9 +123,12 @@ A comunicação é feita via `HttpClient` consumindo a API REST Spring Boot.
 - **Framework:** Angular 17+
 - **Linguagem:** TypeScript
 - **Estilização:** SCSS (Sass) com arquitetura BEM/Modular.
-- **UI Components:** Angular Material (Customizado).
+- **UI Components:** Angular Material (Customizado) - Dialogs, Cards, Tables, Menus, Toolbars.
 - **Reatividade:** RxJS (Observables, Subjects e Operators).
 - **Gerenciamento de Estado:** Baseado em Services (BehaviorSubject).
+- **Roteamento:** Angular Router com Lazy Loading e Guards.
+- **HTTP:** HttpClient com Interceptors para autenticação e tratamento de erros.
+- **Validação:** Reactive Forms com validadores customizados.
 
 ---
 
@@ -109,14 +138,30 @@ A comunicação é feita via `HttpClient` consumindo a API REST Spring Boot.
 src/
 ├── app/
 │   ├── core/           # Serviços singleton, interceptors, guards, models globais
-│   ├── shared/         # Componentes UI reutilizáveis (botões, inputs)
+│   │   ├── guards/     # auth.guard.ts, redirect.guard.ts
+│   │   ├── interceptors/ # auth.interceptor.ts
+│   │   ├── models/     # Interfaces TypeScript (Usuario, Conta, Transacao, CartaoCredito, Compra, etc.)
+│   │   └── services/   # auth.service, conta.service, transacao.service, cartao-credito.service, etc.
+│   ├── shared/         # Componentes UI reutilizáveis (botões, inputs, cards)
+│   │   └── components/ # v-card, etc.
 │   ├── features/       # Módulos de negócio (Lazy Loaded)
-│   │   ├── dashboard/
-│   │   ├── transacoes/
-│   │   │   ├── components/  # Modais e componentes específicos
-│   │   │   ├── pages/       # Páginas de rota (Lista)
-│   │   │   └── transacoes.module.ts
-│   │   └── contas/
+│   │   ├── auth/       # Login e Cadastro
+│   │   ├── dashboard/  # Dashboard Home
+│   │   ├── transacoes/ # Listagem e gestão de transações
+│   │   │   ├── components/  # transacao-cadastro
+│   │   │   └── pages/       # transacao-lista
+│   │   ├── contas/     # Gestão de contas bancárias
+│   │   │   ├── components/  # conta-dialog, tipo-conta-dialog
+│   │   │   └── pages/       # conta-lista
+│   │   ├── cartoes/    # Gestão de cartões de crédito
+│   │   │   ├── components/  # cartao-dialog, compra-dialog, pagamento-dialog, selecao-conta-dialog
+│   │   │   └── pages/       # cartoes-view
+│   │   └── planejamento/ # Gestão de carteiras financeiras
+│   │       ├── components/  # Modais de saldo, gasto, resgate
+│   │       └── pages/       # planejamento-view
+│   ├── template/       # Layout da aplicação
+│   │   ├── layout/     # Header, Sidebar, Footer
+│   │   └── footer/
 │   ├── app.module.ts
 │   └── app-routing.module.ts
 ├── assets/
@@ -127,18 +172,28 @@ src/
 ### ✅ Concluído
 - [x] Arquitetura Base (Core/Shared/Features)
 - [x] Sistema de Autenticação (Login/Cadastro)
+- [x] Interceptors (JWT e Error Handling)
+- [x] Guards de Rota (AuthGuard e RedirectGuard)
 - [x] CRUD de Contas Bancárias
 - [x] CRUD de Tipos de Conta
 - [x] CRUD de Transações com Estorno Automático
 - [x] Filtros e Paginação no Frontend
-- [x] Dashboard com Resumo Financeiro
+- [x] Dashboard com Resumo Financeiro Completo
 - [x] Sistema de Planejamento Financeiro (Carteiras)
+- [x] **CRUD de Cartões de Crédito**
+- [x] **Sistema de Compras e Parcelamento**
+- [x] **Pagamento de Faturas com Integração de Contas**
+- [x] **Menu de Usuário com Logout**
 - [x] Deploy Automático (Vercel)
+- [x] Layout Responsivo com Material Design
 
 ### 🚧 Em Desenvolvimento
+- [ ] **Página de Editar Perfil do Usuário**
 - [ ] Dashboard com Gráficos Avançados (Chart.js ou Ngx-Charts)
-- [ ] Gestão de Faturas de Cartão de Crédito
-- [ ] Relatórios e Exportação de Dados
+- [ ] **Gestão Detalhada de Faturas por Período**
+- [ ] Relatórios e Exportação de Dados (PDF/Excel)
 - [ ] Modo Escuro (Dark Mode)
 - [ ] Notificações e Alertas de Gastos
+- [ ] **Gestão de Orçamentos por Categoria**
+- [ ] **Histórico de Transações com Filtros Avançados**
 ```
