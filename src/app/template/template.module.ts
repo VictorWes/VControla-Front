@@ -9,6 +9,7 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { FooterComponent } from './footer/footer.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [LayoutComponent, FooterComponent],
@@ -22,6 +23,7 @@ import { FooterComponent } from './footer/footer.component';
     MatButtonModule,
     MatDividerModule,
     MatIcon,
+    MatMenuModule,
   ],
   exports: [LayoutComponent],
 })

@@ -6,10 +6,21 @@
       >VControla</span
     >
     <span class="spacer"></span>
-    <button mat-icon-button>
-      <span class="spacer"></span>
+
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
       <mat-icon>account_circle</mat-icon>
     </button>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="editarPerfil()">
+        <mat-icon>edit</mat-icon>
+        <span>Editar Perfil</span>
+      </button>
+      <button mat-menu-item (click)="sair()">
+        <mat-icon>logout</mat-icon>
+        <span>Sair</span>
+      </button>
+    </mat-menu>
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container">
