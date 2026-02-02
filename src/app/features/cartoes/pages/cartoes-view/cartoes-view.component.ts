@@ -161,14 +161,12 @@ export class CartoesViewComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((contaId) => {
       if (contaId) {
-
         this.isLoading = true;
 
         this.cartaoService.pagarParcela(parcela.id, contaId).subscribe({
           next: () => {
             parcela.paga = true;
             this.carregarCartoes();
-
 
             this.mostrarMensagem('Pagamento realizado com sucesso!', 'sucesso');
             this.isLoading = false;
@@ -177,9 +175,7 @@ export class CartoesViewComponent implements OnInit {
             console.error('Erro ao pagar parcela', err);
             this.isLoading = false;
 
-
             const mensagem = err.error || 'Erro ao processar pagamento.';
-
 
             this.mostrarMensagem(mensagem, 'erro');
           },
@@ -285,8 +281,18 @@ export class CartoesViewComponent implements OnInit {
   }
 
   confirmarExclusaoCompra(compra: Compra) {
-    if (confirm(`Tem certeza que deseja excluir a compra "${compra.nome}"?`)) {
-      this.executarExclusao(compra.id);
+    const temParcelaPaga = compra.parcelas?.some(
+      (p: any) => p.paga === true || p.status === 'PAGO',
+    );
+
+    if (temParcelaPaga) {
+      this.abrirModalEstorno(compra.id);
+    } else {
+      if (
+        confirm(`Tem certeza que deseja excluir a compra "${compra.nome}"?`)
+      ) {
+        this.executarExclusao(compra.id);
+      }
     }
   }
 
@@ -302,19 +308,18 @@ export class CartoesViewComponent implements OnInit {
       error: (err) => {
         this.isLoading = false;
 
-        if (err.status === 422 && err.error) {
-          this.abrirModalEstorno(compraId, err.error);
-        } else {
-          this.mostrarMensagem(err.error || 'Erro ao excluir compra.', 'erro');
-        }
+        const msg =
+          err.error?.message || err.error || 'Erro ao excluir compra.';
+        this.mostrarMensagem(msg, 'erro');
       },
     });
   }
 
-  private abrirModalEstorno(compraId: string, mensagemErro: string) {
+  private abrirModalEstorno(compraId: string) {
     const dialogRef = this.dialog.open(SelecaoContaDialogComponent, {
       width: '400px',
-      data: { valorEstorno: 0 }, // Opcional: Se tiver o valor no erro, pode passar aqui
+
+      data: { titulo: 'Estornar Valor Pago' },
     });
 
     dialogRef.afterClosed().subscribe((contaId) => {
