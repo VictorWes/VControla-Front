@@ -30,6 +30,17 @@ A aplicação está disponível para testes! Você pode criar uma conta e explor
 <img width="1911" height="911" alt="DashBoardVC" src="https://github.com/user-attachments/assets/a230f4a0-a3f8-42b1-9384-35c5a8bb060a" />
 <img width="1909" height="905" alt="Transacoes" src="https://github.com/user-attachments/assets/05664b39-419c-43c3-852e-5a722a572037" />
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ad4a26a5-a690-4d80-befb-e16fefffdc5d" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a0cf51cb-0612-4e1f-9802-d916820de5db" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/812b2e58-0dc6-478e-8e5d-641846198fe5" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/affdcd12-3055-47bc-947c-a616ccf06291" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a279ffce-124c-4341-9eaf-f08054d87e49" />
+
+
+
+
 ---
 
 ## 🎯 Funcionalidades Principais
