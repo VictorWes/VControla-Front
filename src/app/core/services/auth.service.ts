@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { UsuarioRequest } from '../models/usuario-request.model';
 import { LoginResponse } from '../models/login-response.model';
 import { LoginRequest } from '../models/login-request.model';
@@ -20,14 +20,21 @@ export class AuthService {
     private router: Router,
   ) {}
 
+  public nomeUsuario$ = new BehaviorSubject<string>(
+    localStorage.getItem('user_nome') || '',
+  );
+
   cadastrar(dados: UsuarioRequest): Observable<any> {
     return this.http.post(this.API_URL, dados);
   }
 
-  login(dados: LoginRequest): Observable<LoginResponse> {
-    return this.http
-      .post<LoginResponse>(`${this.API_URL}/login`, dados)
-      .pipe(tap((response) => this.salvarSessao(response)));
+  login(dados: any) {
+    return this.http.post<any>(`${this.API_URL}/login`, dados).pipe(
+      tap((response) => {
+        localStorage.setItem('access_token', response.token);
+        this.atualizarNomeLocal(response.nome);
+      }),
+    );
   }
 
   loginGoogle(googleToken: string): Observable<LoginResponse> {
@@ -62,8 +69,8 @@ export class AuthService {
     return this.http.get<PerfilResponse>(`${this.API_URL}/me`);
   }
 
-  atualizarPerfil(dados: { nome: string }): Observable<any> {
-    return this.http.put(this.API_URL, dados);
+  atualizarPerfil(dados: { nome: string; email: string }): Observable<any> {
+    return this.http.put(`${this.API_URL}/perfil`, dados);
   }
 
   alterarSenha(dados: {
@@ -71,5 +78,10 @@ export class AuthService {
     novaSenha: string;
   }): Observable<any> {
     return this.http.patch(`${this.API_URL}/senha`, dados);
+  }
+
+  atualizarNomeLocal(novoNome: string) {
+    localStorage.setItem('user_nome', novoNome);
+    this.nomeUsuario$.next(novoNome);
   }
 }

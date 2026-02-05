@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Conta } from '../../../../core/models/conta.model';
-import { CartaoCredito } from '../../../../core/models/cartao-credito.model'; // Importe o modelo
+import { CartaoCredito } from '../../../../core/models/cartao-credito.model';
 import { ContaService } from '../../../../core/services/conta.service';
-import { CartaoCreditoService } from '../../../../core/services/cartao-credito.service'; // Importe o service
+import { CartaoCreditoService } from '../../../../core/services/cartao-credito.service';
 import {
   DashboardService,
   ResumoDashboard,
 } from '../../../../core/services/dashboard.service';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -28,11 +29,14 @@ export class DashboardHomeComponent implements OnInit {
     private contaService: ContaService,
     private cartaoService: CartaoCreditoService,
     private dashboardService: DashboardService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
-    const nomeCompleto = localStorage.getItem('user_nome') || 'Usuário';
-    this.nomeUsuario = nomeCompleto.split(' ')[0];
+    this.authService.nomeUsuario$.subscribe((nomeCompleto) => {
+      const nome = nomeCompleto || 'Usuário';
+      this.nomeUsuario = nome.split(' ')[0];
+    });
 
     this.definirSaudacao();
     this.carregarContas();
@@ -69,7 +73,6 @@ export class DashboardHomeComponent implements OnInit {
   carregarCartoes() {
     this.cartaoService.listar().subscribe({
       next: (lista) => {
-
         this.cartoes = lista.slice(0, 3);
       },
       error: (err) => console.error('Erro ao carregar cartões:', err),

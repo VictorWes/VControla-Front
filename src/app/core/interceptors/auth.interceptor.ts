@@ -29,15 +29,19 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(authRequest).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 403 || error.status === 401) {
+        if (error.status === 401) {
           console.warn(
-            'Token expirado ou inválido (Interceptor). Fazendo logout...',
+            'Erro 401: Token expirado ou inválido. Fazendo logout...',
           );
-
           localStorage.removeItem('access_token');
           localStorage.removeItem('user_nome');
-
           this.router.navigate(['/auth/login']);
+        }
+
+        if (error.status === 403) {
+          console.error(
+            'Erro 403 (Forbidden): A requisição foi recusada pelo servidor',
+          );
         }
 
         return throwError(() => error);
