@@ -1,0 +1,100 @@
+<div class="container-perfil">
+  <h2 class="page-title">Meu Perfil</h2>
+
+  <mat-card class="profile-card">
+    <mat-card-header>
+      <mat-card-title>Dados Pessoais</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="formPerfil" (ngSubmit)="salvarPerfil()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nome de Visualização</mat-label>
+          <input matInput formControlName="nome" placeholder="Seu nome" />
+          <mat-icon matSuffix>edit</mat-icon>
+          <mat-error *ngIf="formPerfil.get('nome')?.hasError('required')">
+            O nome é obrigatório
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>E-mail</mat-label>
+          <input matInput formControlName="email" readonly />
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-hint *ngIf="isGoogleAccount">
+            Gerenciado pelo Google (não pode ser alterado aqui)
+          </mat-hint>
+        </mat-form-field>
+
+        <div class="actions">
+          <button
+            mat-flat-button
+            color="primary"
+            [disabled]="formPerfil.invalid || isLoading"
+          >
+            <mat-icon>save</mat-icon>
+            Salvar Alterações
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="profile-card mt-3" *ngIf="!isGoogleAccount">
+    <mat-card-header>
+      <mat-card-title>Segurança</mat-card-title>
+      <mat-card-subtitle>Atualizar senha de acesso</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="formSenha" (ngSubmit)="alterarSenha()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Senha Atual</mat-label>
+          <input matInput formControlName="senhaAtual" type="password" />
+          <mat-error *ngIf="formSenha.get('senhaAtual')?.hasError('required')">
+            Informe sua senha atual
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nova Senha</mat-label>
+          <input matInput formControlName="novaSenha" type="password" />
+          <mat-error *ngIf="formSenha.get('novaSenha')?.hasError('minlength')">
+            A senha deve ter no mínimo 6 caracteres
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Confirmar Nova Senha</mat-label>
+          <input matInput formControlName="confirmarSenha" type="password" />
+        </mat-form-field>
+
+        <div class="actions">
+          <button
+            mat-stroked-button
+            color="warn"
+            [disabled]="formSenha.invalid || isLoading"
+          >
+            <mat-icon>lock_reset</mat-icon>
+            Atualizar Senha
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="profile-card google-card mt-3" *ngIf="isGoogleAccount">
+    <mat-card-content>
+      <div class="google-info">
+        <mat-icon class="google-icon">verified_user</mat-icon>
+        <div class="google-text">
+          <h3>Conta vinculada ao Google</h3>
+          <p>
+            Para sua segurança, a alteração de senha e e-mail deve ser feita
+            diretamente nas configurações da sua conta Google.
+          </p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

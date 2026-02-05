@@ -48,6 +48,12 @@ const routes: Routes = [
             (m) => m.CartoesModule,
           ),
       },
+      {
+        path: 'perfil',
+        loadChildren: () =>
+          import('./features/perfil/perfil.module').then((m) => m.PerfilModule),
+        canActivate: [authGuard],
+      },
     ],
   },
 

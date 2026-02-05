@@ -7,6 +7,7 @@ import { LoginRequest } from '../models/login-request.model';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { PerfilResponse } from '../models/perfil-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -55,5 +56,20 @@ export class AuthService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('user_nome');
     this.router.navigate(['/auth/login']);
+  }
+
+  buscarPerfil(): Observable<PerfilResponse> {
+    return this.http.get<PerfilResponse>(`${this.API_URL}/me`);
+  }
+
+  atualizarPerfil(dados: { nome: string }): Observable<any> {
+    return this.http.put(this.API_URL, dados);
+  }
+
+  alterarSenha(dados: {
+    senhaAtual: string;
+    novaSenha: string;
+  }): Observable<any> {
+    return this.http.patch(`${this.API_URL}/senha`, dados);
   }
 }

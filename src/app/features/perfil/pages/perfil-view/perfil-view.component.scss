@@ -1,0 +1,49 @@
+.container-perfil {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.mt-3 {
+  margin-top: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.google-card {
+  background-color: #f1f8e9; /* Um verde bem clarinho */
+  border: 1px solid #c5e1a5;
+
+  .google-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .google-icon {
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+      color: #4caf50;
+    }
+
+    h3 {
+      margin: 0 0 5px 0;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    p {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+  }
+}
