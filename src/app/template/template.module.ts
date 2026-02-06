@@ -10,11 +10,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { FooterComponent } from './footer/footer.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { HeaderComponent } from './header/header.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [LayoutComponent, FooterComponent],
+  declarations: [LayoutComponent, FooterComponent, HeaderComponent],
   imports: [
     CommonModule,
+    RouterModule,
     TemplateRoutingModule,
     MatToolbarModule,
     MatSidenavModule,
@@ -25,6 +28,15 @@ import { MatMenuModule } from '@angular/material/menu';
     MatIcon,
     MatMenuModule,
   ],
-  exports: [LayoutComponent],
+  exports: [
+    LayoutComponent,
+    FooterComponent,
+    HeaderComponent,
+    RouterModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+  ],
 })
 export class TemplateModule {}

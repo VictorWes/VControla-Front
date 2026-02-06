@@ -1,0 +1,47 @@
+<mat-toolbar color="primary" class="header">
+  <span
+    [routerLink]="estaLogado ? '/sistema/dashboard' : '/auth/login'"
+    style="
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 1.2rem;
+      user-select: none;
+    "
+  >
+    VControla
+  </span>
+
+  <span class="spacer" style="flex: 1 1 auto"></span>
+
+  <ng-container *ngIf="estaLogado">
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="userMenu"
+      aria-label="Menu do usuário"
+    >
+      <mat-icon>account_circle</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="editarPerfil()">
+        <mat-icon>edit</mat-icon>
+        <span>Meu Perfil</span>
+      </button>
+      <button mat-menu-item (click)="sair()">
+        <mat-icon>logout</mat-icon>
+        <span>Sair</span>
+      </button>
+    </mat-menu>
+  </ng-container>
+
+  <ng-container *ngIf="!estaLogado">
+    <a
+      mat-button
+      routerLink="/auth/login"
+      style="color: white; border: 1px solid rgba(255, 255, 255, 0.3)"
+    >
+      <mat-icon style="margin-right: 5px">login</mat-icon>
+      Entrar
+    </a>
+  </ng-container>
+</mat-toolbar>

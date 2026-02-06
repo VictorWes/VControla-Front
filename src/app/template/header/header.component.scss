@@ -1,0 +1,29 @@
+
+.header {
+  background-color: #80b5ca !important;
+  color: white !important;
+
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1000;
+}
+
+
+mat-icon {
+  color: white;
+}
+
+button {
+  color: white !important;
+}
+
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+
+a {
+  text-decoration: none;
+  color: white;
+}

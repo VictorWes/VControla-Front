@@ -12,6 +12,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/auth/auth.module').then((m) => m.AuthModule),
   },
+  {
+    path: 'institucional',
+    loadChildren: () =>
+      import('./pages/institucional/institucional.module').then(
+        (m) => m.InstitucionalModule,
+      ),
+  },
 
   {
     path: 'sistema',

@@ -1,27 +1,5 @@
 <div class="layout-container">
-  <mat-toolbar color="primary" class="header">
-    <span
-      routerLink="/sistema/dashboard/home"
-      style="cursor: pointer; outline: none"
-      >VControla</span
-    >
-    <span class="spacer"></span>
-
-    <button mat-icon-button [matMenuTriggerFor]="userMenu">
-      <mat-icon>account_circle</mat-icon>
-    </button>
-
-    <mat-menu #userMenu="matMenu">
-      <button mat-menu-item (click)="editarPerfil()">
-        <mat-icon>edit</mat-icon>
-        <span>Editar Perfil</span>
-      </button>
-      <button mat-menu-item (click)="sair()">
-        <mat-icon>logout</mat-icon>
-        <span>Sair</span>
-      </button>
-    </mat-menu>
-  </mat-toolbar>
+  <app-header></app-header>
 
   <mat-sidenav-container class="sidenav-container">
     <mat-sidenav mode="side" opened class="sidenav">
@@ -30,17 +8,13 @@
           <mat-icon matListItemIcon>dashboard</mat-icon>
           <span matListItemTitle>Dashboard</span>
         </a>
+
         <a mat-list-item routerLink="/sistema/transacoes">
           <mat-icon matListItemIcon>swap_horiz</mat-icon>
           <span matListItemTitle>Transações</span>
         </a>
 
-        <a
-          mat-list-item
-          routerLink="/sistema/planejamento"
-          routerLinkActive="active-link"
-          class="menu-item"
-        >
+        <a mat-list-item routerLink="/sistema/planejamento" class="menu-item">
           <mat-icon>savings</mat-icon>
           <span>Planejamento</span>
         </a>
@@ -51,7 +25,6 @@
       <div class="page-content">
         <router-outlet></router-outlet>
       </div>
-
       <app-footer></app-footer>
     </mat-sidenav-content>
   </mat-sidenav-container>
