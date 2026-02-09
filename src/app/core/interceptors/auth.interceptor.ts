@@ -19,8 +19,8 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     const token = localStorage.getItem('access_token');
-    let authRequest = request;
 
+    let authRequest = request;
     if (token) {
       authRequest = request.clone({
         headers: request.headers.set('Authorization', `Bearer ${token}`),
@@ -29,21 +29,14 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(authRequest).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
+        if (error.status === 401 || error.status === 403) {
           console.warn(
-            'Erro 401: Token expirado ou inválido. Fazendo logout...',
+            'Sessão expirada ou inválida. Redirecionando para login...',
           );
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('user_nome');
+
+          localStorage.clear();
           this.router.navigate(['/auth/login']);
         }
-
-        if (error.status === 403) {
-          console.error(
-            'Erro 403 (Forbidden): A requisição foi recusada pelo servidor',
-          );
-        }
-
         return throwError(() => error);
       }),
     );
