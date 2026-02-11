@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../../core/services/auth.service';
 import { LoginRequest } from '../../../../core/models/login-request.model';
-// 👇 1. Novos Imports do Social Login
 import {
   SocialAuthService,
   GoogleLoginProvider,
@@ -63,8 +62,6 @@ export class LoginComponent implements OnInit {
       },
     });
   }
-
-
 
   fazerLoginGoogleNoBackend(googleToken: string) {
     this.authService.loginGoogle(googleToken).subscribe({

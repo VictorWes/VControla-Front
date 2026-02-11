@@ -1,0 +1,38 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Criar Nova Senha</h2>
+    <p class="subtitle">
+      Digite sua nova senha abaixo para recuperar o acesso.
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <label>Nova Senha</label>
+        <input
+          type="password"
+          formControlName="senha"
+          placeholder="No mínimo 6 caracteres"
+        />
+      </div>
+
+      <div class="input-group">
+        <label>Confirmar Senha</label>
+        <input
+          type="password"
+          formControlName="confirmarSenha"
+          placeholder="Repita a senha"
+        />
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="form.invalid || loading"
+        class="btn-primary"
+      >
+        {{ loading ? "Salvando..." : "Definir Nova Senha" }}
+      </button>
+    </form>
+
+    <a routerLink="/auth/login" class="link-voltar">Cancelar e voltar</a>
+  </div>
+</div>

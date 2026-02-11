@@ -12,6 +12,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
 
   try {
+    console.log('🛡️ AUTH GUARD VERIFICANDO:', state.url);
     const decoded: any = jwtDecode(token);
 
     const expirationDate = decoded.exp;

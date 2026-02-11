@@ -7,7 +7,7 @@ import { TemplateModule } from './template/template.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { MatMenuModule } from '@angular/material/menu';
-
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
@@ -16,11 +16,13 @@ import {
   SocialAuthServiceConfig,
   GoogleLoginProvider,
 } from '@abacritt/angularx-social-login';
+import { NovaSenhaComponent } from './pages/auth/nova-senha/nova-senha.component';
+import { RecuperarSenhaComponent } from './pages/auth/recuperar-senha/recuperar-senha.component';
 
 registerLocaleData(localePt);
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, NovaSenhaComponent, RecuperarSenhaComponent],
   imports: [
     BrowserModule,
     TemplateModule,
@@ -28,6 +30,8 @@ registerLocaleData(localePt);
     HttpClientModule,
     MatMenuModule,
     SocialLoginModule,
+    ReactiveFormsModule,
+    FormsModule,
   ],
   providers: [
     {

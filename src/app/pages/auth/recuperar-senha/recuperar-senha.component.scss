@@ -1,0 +1,102 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  padding: 1rem;
+}
+
+.auth-card {
+  background: white;
+  width: 100%;
+  max-width: 400px;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+
+  h2 {
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+  .subtitle {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 1.2rem;
+
+  label {
+    display: block;
+    font-size: 0.85rem;
+    color: #475569;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+
+    &:focus {
+      border-color: #0d6efd;
+    }
+    &.error {
+      border-color: #ef4444;
+    }
+  }
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 0.9rem;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+
+  &:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+  }
+  &:hover:not(:disabled) {
+    background-color: #0b5ed7;
+  }
+}
+
+.link-voltar {
+  display: block;
+  margin-top: 1.5rem;
+  color: #64748b;
+  text-decoration: none;
+  font-size: 0.9rem;
+  &:hover {
+    color: #0d6efd;
+  }
+}
+
+.success-message {
+  .icon-check {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  h3 {
+    color: #0d6efd;
+  }
+  p {
+    color: #64748b;
+  }
+}

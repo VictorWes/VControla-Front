@@ -3,10 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './template/layout/layout.component';
 import { authGuard } from './core/guards/auth.guard';
 import { redirectGuard } from './core/guards/redirect.guard';
+import { NovaSenhaComponent } from './pages/auth/nova-senha/nova-senha.component';
+import { RecuperarSenhaComponent } from './pages/auth/recuperar-senha/recuperar-senha.component';
 
 const routes: Routes = [
+  { path: 'conta/nova-senha', component: NovaSenhaComponent },
+  { path: 'conta/recuperar-senha', component: RecuperarSenhaComponent },
   { path: '', pathMatch: 'full', canActivate: [redirectGuard], children: [] },
-
   {
     path: 'auth',
     loadChildren: () =>
@@ -68,7 +71,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { enableTracing: true })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

@@ -1,0 +1,41 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Recuperar Senha</h2>
+
+    <div *ngIf="!emailSent">
+      <p class="subtitle">
+        Informe seu e-mail cadastrado para receber o link de redefinição.
+      </p>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="input-group">
+          <label>E-mail</label>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="seu@email.com"
+            [class.error]="
+              form.get('email')?.invalid && form.get('email')?.touched
+            "
+          />
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="form.invalid || loading"
+          class="btn-primary"
+        >
+          {{ loading ? "Enviando..." : "Enviar Link" }}
+        </button>
+      </form>
+    </div>
+
+    <div *ngIf="emailSent" class="success-message">
+      <div class="icon-check">✅</div>
+      <h3>E-mail Enviado!</h3>
+      <p>Verifique sua caixa de entrada (e spam) para redefinir sua senha.</p>
+    </div>
+
+    <a routerLink="/auth/login" class="link-voltar">Voltar para Login</a>
+  </div>
+</div>

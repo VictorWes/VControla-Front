@@ -84,4 +84,17 @@ export class AuthService {
     localStorage.setItem('user_nome', novoNome);
     this.nomeUsuario$.next(novoNome);
   }
+
+  recuperarSenha(email: string): Observable<void> {
+    return this.http.post<void>(`${this.API_URL}/conta/recuperar-senha`, {
+      email,
+    });
+  }
+
+  redefinirSenha(token: string, novaSenha: string): Observable<void> {
+    return this.http.post<void>(`${this.API_URL}/conta/redefinir-senha`, {
+      token,
+      novaSenha,
+    });
+  }
 }
