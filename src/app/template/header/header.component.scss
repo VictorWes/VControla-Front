@@ -1,4 +1,3 @@
-
 .header {
   background-color: #80b5ca !important;
   color: white !important;
@@ -8,7 +7,6 @@
   z-index: 1000;
 }
 
-
 mat-icon {
   color: white;
 }
@@ -17,13 +15,23 @@ button {
   color: white !important;
 }
 
-
 .spacer {
   flex: 1 1 auto;
 }
 
-
 a {
   text-decoration: none;
   color: white;
+}
+::ng-deep button[mat-menu-item] {
+  color: #333 !important;
+
+  mat-icon {
+    color: #666 !important;
+    margin-right: 8px;
+  }
+}
+
+::ng-deep button[mat-menu-item]:hover {
+  background-color: #f5f5f5;
 }
