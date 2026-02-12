@@ -38,6 +38,10 @@ A aplicação está disponível para testes! Você pode criar uma conta e explor
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/affdcd12-3055-47bc-947c-a616ccf06291" />
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a279ffce-124c-4341-9eaf-f08054d87e49" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/cff72718-1fce-4553-b859-31e88c6d7db0" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ea06bd9a-f181-4753-abbf-96e6a7dbeb20" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0ef9b082-b72b-4e2c-8944-aad85cbc55ec" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2fc63523-5ed0-400f-9248-3dbe402215f5" />
 
 
 
