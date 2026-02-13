@@ -3,11 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UsuarioRequest } from '../models/usuario-request.model';
 import { LoginResponse } from '../models/login-response.model';
-import { LoginRequest } from '../models/login-request.model';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { PerfilResponse } from '../models/perfil-response.model';
+import { SocialAuthService } from '@abacritt/angularx-social-login';
+
+declare var google: any;
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +20,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private socialAuthService: SocialAuthService,
   ) {}
 
   public nomeUsuario$ = new BehaviorSubject<string>(
@@ -29,12 +32,9 @@ export class AuthService {
   }
 
   login(dados: any) {
-    return this.http.post<any>(`${this.API_URL}/login`, dados).pipe(
-      tap((response) => {
-        localStorage.setItem('access_token', response.token);
-        this.atualizarNomeLocal(response.nome);
-      }),
-    );
+    return this.http
+      .post<any>(`${this.API_URL}/login`, dados)
+      .pipe(tap((response) => this.salvarSessao(response)));
   }
 
   loginGoogle(googleToken: string): Observable<LoginResponse> {
@@ -43,10 +43,15 @@ export class AuthService {
       .pipe(tap((response) => this.salvarSessao(response)));
   }
 
-  private salvarSessao(response: LoginResponse): void {
+  private salvarSessao(response: any): void {
     localStorage.setItem('access_token', response.token);
+
     if (response.nome) {
-      localStorage.setItem('user_nome', response.nome);
+      this.atualizarNomeLocal(response.nome);
+    }
+
+    if (response.email) {
+      localStorage.setItem('user_email', response.email);
     }
   }
 
@@ -57,12 +62,6 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem('access_token');
-  }
-
-  logout(): void {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user_nome');
-    this.router.navigate(['/auth/login']);
   }
 
   buscarPerfil(): Observable<PerfilResponse> {
@@ -96,5 +95,19 @@ export class AuthService {
       token,
       novaSenha,
     });
+  }
+
+  logout(): void {
+    localStorage.clear();
+    this.nomeUsuario$.next('');
+    this.socialAuthService.signOut().catch(() => {});
+    if (typeof google !== 'undefined' && google.accounts) {
+      google.accounts.id.disableAutoSelect();
+    }
+    window.location.href = '/auth/login';
+  }
+
+  private finalizarLogout() {
+    window.location.href = '/auth/login';
   }
 }

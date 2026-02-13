@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../../core/services/auth.service';
 import { LoginRequest } from '../../../../core/models/login-request.model';
-import {
-  SocialAuthService,
-  GoogleLoginProvider,
-} from '@abacritt/angularx-social-login';
+import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -14,11 +12,9 @@ import {
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnInit {
-  loginData: LoginRequest = {
-    email: '',
-    senha: '',
-  };
+export class LoginComponent implements OnInit, OnDestroy {
+  loginData: LoginRequest = { email: '', senha: '' };
+  private authSubscription: Subscription | undefined;
 
   constructor(
     private authService: AuthService,
@@ -27,28 +23,38 @@ export class LoginComponent implements OnInit {
     private socialAuthService: SocialAuthService,
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/sistema/dashboard/home']);
       return;
     }
 
-    this.socialAuthService.authState.subscribe((user) => {
-      if (user && user.idToken) {
-        this.fazerLoginGoogleNoBackend(user.idToken);
-      }
-    });
+    try {
+      await this.socialAuthService.signOut();
+    } catch (error) {}
+
+    this.authSubscription = this.socialAuthService.authState.subscribe(
+      (user: SocialUser) => {
+        if (user && user.idToken) {
+          console.log('Usuário clicou no botão Google.');
+
+          if (!this.authService.isAuthenticated()) {
+            this.fazerLoginGoogleNoBackend(user.idToken);
+          }
+        }
+      },
+    );
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
   onSubmit() {
     this.authService.login(this.loginData).subscribe({
       next: (response) => {
-        localStorage.setItem('access_token', response.token);
-
-        if (response.nome) {
-          localStorage.setItem('user_nome', response.nome);
-        }
-
         this.snackBar.open('Login realizado com sucesso!', 'Fechar', {
           duration: 3000,
         });
@@ -76,6 +82,7 @@ export class LoginComponent implements OnInit {
         this.snackBar.open('Falha ao autenticar com Google.', 'Fechar', {
           duration: 4000,
         });
+        this.socialAuthService.signOut();
       },
     });
   }

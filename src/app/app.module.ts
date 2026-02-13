@@ -39,7 +39,6 @@ registerLocaleData(localePt);
       useClass: AuthInterceptor,
       multi: true,
     },
-
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     { provide: LOCALE_ID, useValue: 'pt-BR' },
     {
@@ -51,6 +50,10 @@ registerLocaleData(localePt);
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
               '801912870800-ettaegklrg135o1ec6prtkjspgdtlqj5.apps.googleusercontent.com',
+              {
+                oneTapEnabled: false,
+                scopes: 'email profile',
+              },
             ),
           },
         ],
