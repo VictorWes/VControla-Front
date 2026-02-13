@@ -24,14 +24,20 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
+   
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/sistema/dashboard/home']);
+
+      this.router.navigate(['/sistema/dashboard']);
       return;
     }
 
+
     try {
       await this.socialAuthService.signOut();
-    } catch (error) {}
+    } catch (error) {
+
+    }
+
 
     this.authSubscription = this.socialAuthService.authState.subscribe(
       (user: SocialUser) => {
@@ -58,6 +64,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.snackBar.open('Login realizado com sucesso!', 'Fechar', {
           duration: 3000,
         });
+
         this.router.navigate(['/sistema/dashboard']);
       },
       error: (erro) => {
@@ -75,7 +82,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.snackBar.open('Login com Google realizado!', 'Fechar', {
           duration: 3000,
         });
-        this.router.navigate(['/sistema/dashboard/home']);
+
+        this.router.navigate(['/sistema/dashboard']);
       },
       error: (erro) => {
         console.error('Erro Google:', erro);

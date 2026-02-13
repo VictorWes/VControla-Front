@@ -4,19 +4,40 @@
   <mat-sidenav-container class="sidenav-container">
     <mat-sidenav mode="side" opened class="sidenav">
       <mat-nav-list>
-        <a mat-list-item routerLink="/sistema/dashboard/home">
+        <a
+          mat-list-item
+          routerLink="/sistema/dashboard"
+          routerLinkActive="active-link"
+        >
           <mat-icon matListItemIcon>dashboard</mat-icon>
           <span matListItemTitle>Dashboard</span>
         </a>
 
-        <a mat-list-item routerLink="/sistema/transacoes">
+        <a
+          mat-list-item
+          routerLink="/sistema/transacoes"
+          routerLinkActive="active-link"
+        >
           <mat-icon matListItemIcon>swap_horiz</mat-icon>
           <span matListItemTitle>Transações</span>
         </a>
 
-        <a mat-list-item routerLink="/sistema/planejamento" class="menu-item">
-          <mat-icon>savings</mat-icon>
-          <span>Planejamento</span>
+        <a
+          mat-list-item
+          routerLink="/sistema/planejamento"
+          routerLinkActive="active-link"
+        >
+          <mat-icon matListItemIcon>savings</mat-icon>
+          <span matListItemTitle>Planejamento</span>
+        </a>
+
+        <a
+          mat-list-item
+          routerLink="/sistema/perfil"
+          routerLinkActive="active-link"
+        >
+          <mat-icon matListItemIcon>person</mat-icon>
+          <span matListItemTitle>Perfil</span>
         </a>
       </mat-nav-list>
     </mat-sidenav>
@@ -25,7 +46,6 @@
       <div class="page-content">
         <router-outlet></router-outlet>
       </div>
-      <app-footer></app-footer>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

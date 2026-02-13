@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-// Pode remover os imports de AuthService e Router se não for usar mais nada aqui
+import { Router } from '@angular/router';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +11,19 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'vcontrola-frontend';
 
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+  ) {}
 
-  constructor() {}
-
-  ngOnInit() {
+  ngOnInit(): void {
+    const path = window.location.pathname;
+    if (path === '' || path === '/') {
+      if (this.authService.isAuthenticated()) {
+        this.router.navigate(['/sistema/dashboard']);
+      } else {
+        this.router.navigate(['/auth/login']);
+      }
+    }
   }
 }

@@ -42,7 +42,11 @@
             <small>Saldo Geral</small>
             <strong>R$ {{ saldoTotal | number: "1.2-2" }}</strong>
           </div>
-          <button mat-button color="primary" routerLink="../contas">
+          <button
+            mat-button
+            color="primary"
+            routerLink="/sistema/dashboard/contas"
+          >
             Ver todas
           </button>
         </div>
@@ -51,7 +55,11 @@
       <div *ngIf="contas.length === 0" class="empty-state">
         <mat-icon>account_balance</mat-icon>
         <p>Adicione sua primeira conta</p>
-        <button mat-flat-button color="primary" routerLink="../contas">
+        <button
+          mat-flat-button
+          color="primary"
+          routerLink="/sistema/dashboard/contas"
+        >
           Gerenciar contas
         </button>
       </div>
