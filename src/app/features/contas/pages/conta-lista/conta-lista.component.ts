@@ -43,8 +43,29 @@ export class ContaListaComponent implements OnInit {
         this.contaService.criar(contaCriada).subscribe({
           next: () => {
             this.buscarContas();
+            this.snackBar.open('Conta criada com sucesso!', 'Ok', {
+              duration: 3000,
+              panelClass: ['success-snackbar'],
+              verticalPosition: 'top',
+            });
           },
-          error: (err) => alert('Erro ao criar conta: ' + err.message),
+          error: (err) => {
+            console.error('Erro ao criar conta', err);
+
+
+            let msgErro = 'Ocorreu um erro ao tentar criar a conta.';
+            if (typeof err.error === 'string') {
+              msgErro = err.error;
+            } else if (err.error?.message) {
+              msgErro = err.error.message;
+            }
+
+            this.snackBar.open(msgErro, 'Entendi', {
+              duration: 5000,
+              panelClass: ['warning-snackbar'],
+              verticalPosition: 'top',
+            });
+          },
         });
       }
     });
@@ -85,8 +106,30 @@ export class ContaListaComponent implements OnInit {
         this.contaService.atualizar(conta.id!, contaEditada).subscribe({
           next: () => {
             this.buscarContas();
+            this.snackBar.open('Conta atualizada com sucesso!', 'Ok', {
+              duration: 3000,
+              panelClass: ['success-snackbar'],
+              verticalPosition: 'top',
+            });
           },
-          error: (err) => alert('Erro ao atualizar: ' + err.message),
+          error: (err) => {
+            console.error('Erro ao atualizar', err);
+
+
+            let msgErro = 'Ocorreu um erro ao tentar atualizar a conta.';
+            if (typeof err.error === 'string') {
+              msgErro = err.error;
+            } else if (err.error?.message) {
+              msgErro = err.error.message;
+            }
+
+       
+            this.snackBar.open(msgErro, 'Entendi', {
+              duration: 5000,
+              panelClass: ['warning-snackbar'],
+              verticalPosition: 'top',
+            });
+          },
         });
       }
     });
