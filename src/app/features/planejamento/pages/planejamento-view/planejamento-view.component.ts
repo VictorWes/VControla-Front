@@ -316,21 +316,45 @@ export class PlanejamentoViewComponent implements OnInit {
     const ref = this.dialog.open(ModalDiminuirSaldoComponent, {
       width: '300px',
     });
+
     ref.afterClosed().subscribe((valor) => {
       if (valor) {
         const valorNegativo = valor * -1;
-        this.financeiroService.adicionarSaldo(valorNegativo).subscribe(() => {
-          this.carregarDadosResumo();
-          this.snackBar.open('Saldo diminuído com sucesso!', 'Ok', {
-            duration: 3000,
-            verticalPosition: 'top',
-            horizontalPosition: 'center',
-            panelClass: ['warning-snackbar'],
-          });
+
+
+        this.financeiroService.adicionarSaldo(valorNegativo).subscribe({
+          next: () => {
+            this.carregarDadosResumo();
+            this.snackBar.open('Saldo reduzido com sucesso!', 'Ok', {
+              duration: 3000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center',
+              panelClass: ['warning-snackbar'],
+            });
+          },
+          error: (err) => {
+            console.error('Erro ao reduzir saldo:', err);
+
+            let msgErro = 'Não foi possível reduzir o saldo.';
+            if (typeof err.error === 'string') {
+              msgErro = err.error;
+            } else if (err.error?.message) {
+              msgErro = err.error.message;
+            }
+
+
+            this.snackBar.open(msgErro, 'Entendi', {
+              duration: 5000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center',
+              panelClass: ['warning-snackbar'],
+            });
+          }
         });
       }
     });
   }
+
 
   editarItem(item: ItemPlanejamento) {
     const ref = this.dialog.open(ModalGastoComponent, {
