@@ -8,6 +8,8 @@ export interface ItemPlanejamento {
   status: StatusPlanejamento;
   contaDestinoId: string;
   nomeContaDestino: string;
+
+  valorGuardado?: number | string;
 }
 
 export interface ResumoFinanceiro {

@@ -77,7 +77,7 @@
                 mat-icon-button
                 class="lock-button"
                 [class.locked]="item.status === 'GUARDADO'"
-                (click)="alternarStatus(item)"
+                (click)="abrirModalGuardar(item)"
                 matTooltip="{{
                   item.status === 'GUARDADO' ? 'Desbloquear' : 'Guardar'
                 }}"
@@ -171,7 +171,7 @@
 
         <div class="lista-scroll">
           <ng-container *ngFor="let item of resumo?.itens">
-            <div class="reserva-row" *ngIf="item.status === 'GUARDADO'">
+            <div class="reserva-row" *ngIf="podeExibirNaDireita(item)">
               <div class="row-left">
                 <div class="icon-box check">
                   <mat-icon>check_circle</mat-icon>
@@ -183,7 +183,7 @@
               </div>
               <div class="row-right">
                 <span class="valor-verde"
-                  >+ R$ {{ item.valor | number: "1.2-2" }}</span
+                  >+ R$ {{ item.valorGuardado | number: "1.2-2" }}</span
                 >
                 <button mat-icon-button [matMenuTriggerFor]="menuResgate">
                   <mat-icon>more_vert</mat-icon>

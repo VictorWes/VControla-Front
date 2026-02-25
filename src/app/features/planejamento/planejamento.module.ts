@@ -23,6 +23,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ModalDiminuirSaldoComponent } from './components/modal-diminuir-saldo/modal-diminuir-saldo.component';
 import { ModalResgatarComponent } from './components/modal-resgatar/modal-resgatar.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { ModalGuardarComponent } from './components/modal-guardar/modal-guardar.component';
+
+
 
 @NgModule({
   declarations: [
@@ -31,6 +34,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ModalGastoComponent,
     ModalDiminuirSaldoComponent,
     ModalResgatarComponent,
+    ModalGuardarComponent,
   ],
   imports: [
     CommonModule,

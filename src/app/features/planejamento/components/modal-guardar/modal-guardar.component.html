@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Guardar Reserva</h2>
+
+<mat-dialog-content>
+  <p style="margin-bottom: 15px">
+    Quanto do valor planejado você deseja guardar agora?
+  </p>
+
+  <mat-form-field appearance="outline" style="width: 100%">
+    <mat-label>Valor (R$)</mat-label>
+    <input
+      matInput
+      type="number"
+      [(ngModel)]="valor"
+      placeholder="Ex: 100.00"
+    />
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="salvar()"
+    [disabled]="!valor || valor <= 0"
+  >
+    Guardar
+  </button>
+</mat-dialog-actions>

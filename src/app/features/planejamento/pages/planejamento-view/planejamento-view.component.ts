@@ -12,6 +12,7 @@ import { ModalSaldoComponent } from '../../components/modal-saldo/modal-saldo.co
 import { ModalGastoComponent } from '../../components/modal-gasto/modal-gasto.component';
 import { ModalDiminuirSaldoComponent } from '../../components/modal-diminuir-saldo/modal-diminuir-saldo.component';
 import { ModalResgatarComponent } from '../../components/modal-resgatar/modal-resgatar.component';
+import { ModalGuardarComponent } from '../../components/modal-guardar/modal-guardar.component'; // IMPORT NOVO
 import { TipoContaDialogComponent } from '../../../contas/components/tipo-conta-dialog/tipo-conta-dialog.component';
 import { PageEvent } from '@angular/material/paginator';
 
@@ -76,7 +77,6 @@ export class PlanejamentoViewComponent implements OnInit {
     this.financeiroService.buscarResumo().subscribe({
       next: (dados) => {
         this.resumo = dados;
-
         this.ordenarItens();
         this.carregando = false;
       },
@@ -104,93 +104,45 @@ export class PlanejamentoViewComponent implements OnInit {
     });
   }
 
-  alternarStatus(item: ItemPlanejamento) {
-    const statusAntigo = item.status;
-    const vaiGuardar = statusAntigo === 'PENDENTE';
-    const valorItem = Number(item.valor);
+  abrirModalGuardar(item: ItemPlanejamento) {
+    const dialogRef = this.dialog.open(ModalGuardarComponent, {
+      width: '300px',
+    });
 
-    if (vaiGuardar) {
-      const saldoVirtualDisponivel = Number(
-        this.resumo?.saldoDisponivelVirtual || 0,
-      );
+    dialogRef.afterClosed().subscribe((valorDigitado) => {
+      if (valorDigitado) {
+        this.financeiroService
+          .guardarParcial(item.id, valorDigitado)
+          .subscribe({
+            next: () => {
+              this.carregarDadosResumo();
+              this.carregarContasReais();
+              this.snackBar.open('Valor guardado com sucesso!', 'OK', {
+                duration: 3000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+                panelClass: ['success-snackbar'],
+              });
+            },
+            error: (err) => {
+              console.error('Erro ao guardar valor:', err);
+              let msgErro = 'Não foi possível guardar o valor.';
 
-      if (valorItem > saldoVirtualDisponivel) {
-        this.snackBar.open(
-          'Saldo fictício disponível insuficiente para esta reserva!',
-          'Entendi',
-          {
-            duration: 5000,
-            verticalPosition: 'top',
-            panelClass: ['warning-snackbar'],
-          },
-        );
-        return;
+              if (typeof err.error === 'string') {
+                msgErro = err.error;
+              } else if (err.error?.message) {
+                msgErro = err.error.message;
+              }
+
+              this.snackBar.open(msgErro, 'Entendi', {
+                duration: 5000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+                panelClass: ['warning-snackbar'],
+              });
+            },
+          });
       }
-    }
-
-    this.financeiroService.alternarStatus(item.id).subscribe({
-      next: () => {
-        item.status = vaiGuardar ? 'GUARDADO' : 'PENDENTE';
-
-        if (this.resumo) {
-          if (vaiGuardar) {
-            this.resumo.saldoDisponivelVirtual -= valorItem;
-          } else {
-            this.resumo.saldoDisponivelVirtual += valorItem;
-          }
-        }
-
-        const contaAlvo = this.listaContasReais.find(
-          (c) => c.id == item.contaDestinoId,
-        );
-
-        if (contaAlvo) {
-          const saldoContaAtual = Number(contaAlvo.saldo);
-
-          if (vaiGuardar) {
-            contaAlvo.saldo = saldoContaAtual + valorItem;
-          } else {
-            contaAlvo.saldo = saldoContaAtual - valorItem;
-          }
-        }
-
-        this.ordenarItens();
-
-        setTimeout(() => {
-          this.carregarDadosResumo();
-          this.carregarContasReais();
-        }, 200);
-
-        this.snackBar.open(
-          vaiGuardar ? 'Valor guardado!' : 'Valor estornado!',
-          'Ok',
-          {
-            duration: 3000,
-            verticalPosition: 'top',
-            panelClass: ['success-snackbar'],
-          },
-        );
-      },
-
-      error: (err) => {
-        item.status = statusAntigo;
-
-        console.error('Erro no alternarStatus:', err);
-
-        let msg = 'Erro ao atualizar.';
-
-        if (typeof err.error === 'string') {
-          msg = err.error;
-        } else if (err.error?.message) {
-          msg = err.error.message;
-        }
-
-        this.snackBar.open(msg, 'Entendi', {
-          duration: 5000,
-          verticalPosition: 'top',
-          panelClass: ['warning-snackbar'],
-        });
-      },
     });
   }
 
@@ -207,7 +159,6 @@ export class PlanejamentoViewComponent implements OnInit {
               duration: 3000,
               panelClass: ['success-snackbar'],
             });
-
             this.carregarCarteiras();
           },
           error: (err) => {
@@ -320,8 +271,6 @@ export class PlanejamentoViewComponent implements OnInit {
     ref.afterClosed().subscribe((valor) => {
       if (valor) {
         const valorNegativo = valor * -1;
-
-
         this.financeiroService.adicionarSaldo(valorNegativo).subscribe({
           next: () => {
             this.carregarDadosResumo();
@@ -334,27 +283,23 @@ export class PlanejamentoViewComponent implements OnInit {
           },
           error: (err) => {
             console.error('Erro ao reduzir saldo:', err);
-
             let msgErro = 'Não foi possível reduzir o saldo.';
             if (typeof err.error === 'string') {
               msgErro = err.error;
             } else if (err.error?.message) {
               msgErro = err.error.message;
             }
-
-
             this.snackBar.open(msgErro, 'Entendi', {
               duration: 5000,
               verticalPosition: 'top',
               horizontalPosition: 'center',
               panelClass: ['warning-snackbar'],
             });
-          }
+          },
         });
       }
     });
   }
-
 
   editarItem(item: ItemPlanejamento) {
     const ref = this.dialog.open(ModalGastoComponent, {
@@ -368,14 +313,28 @@ export class PlanejamentoViewComponent implements OnInit {
 
     ref.afterClosed().subscribe((result) => {
       if (result) {
-        this.financeiroService.atualizarItem(item.id, result).subscribe(() => {
-          this.carregarDadosResumo();
-          this.carregarContasReais();
-          this.snackBar.open('Item atualizado!', 'Ok', {
-            duration: 3000,
-            verticalPosition: 'top',
-            panelClass: ['success-snackbar'],
-          });
+        this.financeiroService.atualizarItem(item.id, result).subscribe({
+          next: () => {
+            this.carregarDadosResumo();
+            this.carregarContasReais();
+            this.snackBar.open('Item atualizado!', 'Ok', {
+              duration: 3000,
+              verticalPosition: 'top',
+              panelClass: ['success-snackbar'],
+            });
+          },
+
+          error: (err) => {
+            let msgErro = 'Erro ao atualizar item.';
+            if (typeof err.error === 'string') msgErro = err.error;
+            else if (err.error?.message) msgErro = err.error.message;
+
+            this.snackBar.open(msgErro, 'Entendi', {
+              duration: 5000,
+              verticalPosition: 'top',
+              panelClass: ['warning-snackbar'],
+            });
+          },
         });
       }
     });
@@ -411,7 +370,11 @@ export class PlanejamentoViewComponent implements OnInit {
   abrirResgate(item: ItemPlanejamento) {
     const ref = this.dialog.open(ModalResgatarComponent, {
       width: '350px',
-      data: { descricao: item.nomeCarteira, saldoAtual: item.valor },
+
+      data: {
+        descricao: item.nomeCarteira,
+        saldoAtual: item.valorGuardado || 0,
+      },
     });
 
     ref.afterClosed().subscribe((valorResgate) => {
@@ -420,11 +383,15 @@ export class PlanejamentoViewComponent implements OnInit {
           .resgatarParcial(item.id, valorResgate)
           .subscribe({
             next: () => {
-              item.valor = Number(item.valor) - Number(valorResgate);
+              item.valorGuardado =
+                Number(item.valorGuardado || 0) - Number(valorResgate);
+              item.valor = Number(item.valor || 0) + Number(valorResgate);
+
               setTimeout(() => {
                 this.carregarDadosResumo();
                 this.carregarContasReais();
               }, 500);
+
               this.snackBar.open('Resgate realizado com sucesso!', 'Ok', {
                 panelClass: ['success-snackbar'],
                 verticalPosition: 'top',
@@ -432,8 +399,15 @@ export class PlanejamentoViewComponent implements OnInit {
             },
             error: (err) => {
               console.error(err);
-              this.snackBar.open('Erro ao resgatar.', 'Fechar', {
+
+              let msgErro = 'Erro ao resgatar.';
+              if (typeof err.error === 'string') msgErro = err.error;
+              else if (err.error?.message) msgErro = err.error.message;
+
+              this.snackBar.open(msgErro, 'Fechar', {
+                duration: 5000,
                 panelClass: ['warning-snackbar'],
+                verticalPosition: 'top',
               });
             },
           });
@@ -442,14 +416,20 @@ export class PlanejamentoViewComponent implements OnInit {
   }
 
   temItensGuardados(): boolean {
-    return this.resumo?.itens?.some((i) => i.status === 'GUARDADO') ?? false;
+    return (
+      this.resumo?.itens?.some((i) => Number(i.valorGuardado || 0) > 0) ?? false
+    );
   }
 
   calcularTotalGuardado(): number {
     return (
       this.resumo?.itens
-        ?.filter((i) => i.status === 'GUARDADO')
-        .reduce((acc, curr) => acc + Number(curr.valor), 0) ?? 0
+        ?.filter((i) => Number(i.valorGuardado || 0) > 0)
+        .reduce((acc, curr) => acc + Number(curr.valorGuardado || 0), 0) ?? 0
     );
+  }
+
+  podeExibirNaDireita(item: any): boolean {
+    return Number(item.valorGuardado || 0) > 0;
   }
 }
